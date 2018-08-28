@@ -8,30 +8,31 @@
         android:layout_height="175dp"
         android:src="@drawable/inquirio"
         android:layout_marginTop="40dp"/>
-    <TextView
-        android:layout_marginTop="40dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="@string/welcome_msg"
-        android:textSize="18sp"
-        />
     <EditText
         android:id="@+id/email_field"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:hint="@string/email_placeholder"
-         />
-    <Button
-        android:id="@+id/btn_next"
+        />
+    <EditText
+        android:id="@+id/passwd_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:text="@string/next"
+        android:inputType="textPassword"
+        android:hint="@string/passwd"
+        />
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:text="@string/login"
         android:backgroundTint="@color/colorAccent"
         android:textColor="@color/white"
         />

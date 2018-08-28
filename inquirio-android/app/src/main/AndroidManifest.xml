@@ -9,34 +9,37 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".login" />
+        <activity android:name=".LoginHomeActivity" />
         <activity
-            android:name=".login_full"
-            android:parentActivityName=".login">
+            android:name=".LoginActivity"
+            android:parentActivityName=".LoginHomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".login" />
+                android:value=".LoginHomeActivity" />
         </activity>
         <activity
-            android:name=".signup"
-            android:parentActivityName=".login">
+            android:name=".SignupActivity"
+            android:parentActivityName=".LoginHomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".login" />
+                android:value=".LoginHomeActivity" />
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Home"
-            android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
+
+<!--
+<intent-filter>
+    <action android:name="android.intent.action.MAIN" />
+    <category android:name="android.intent.category.LAUNCHER" />
+</intent-filter>
+-->

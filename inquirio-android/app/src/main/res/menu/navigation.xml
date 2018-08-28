@@ -3,17 +3,17 @@
 
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/briefcase"
+        android:icon="@drawable/bag"
         android:title="@string/mesitems" />
 
     <item
         android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/flag"
+        android:icon="@drawable/notification"
         android:title="@string/notifications" />
 
     <item
         android:id="@+id/navigation_notifications"
-        android:icon="@drawable/account"
+        android:icon="@drawable/account2"
         android:title="@string/account" />
 
 </menu>

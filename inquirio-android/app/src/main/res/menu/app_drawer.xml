@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/ham_lostitem"
+            android:icon="@drawable/lost_item"
+            android:title="@string/lostsomething" />
+        <item
+            android:id="@+id/ham_myitems"
+            android:icon="@drawable/bag"
+            android:title="@string/myitems" />
+        <item
+            android:id="@+id/ham_mynotif"
+            android:icon="@drawable/notification"
+            android:title="@string/ham_notifications" />
+    </group>
+
+    <item android:title="Compte">
+        <menu>
+            <item
+                android:id="@+id/ham_account"
+                android:icon="@drawable/account2"
+                android:title="@string/account" />
+            <item
+                android:id="@+id/ham_logout"
+                android:icon="@drawable/logout"
+                android:title="@string/logout" />
+        </menu>
+    </item>
+
+</menu>
