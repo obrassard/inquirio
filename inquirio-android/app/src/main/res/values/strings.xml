@@ -1,3 +1,27 @@
 <resources>
-    <string name="app_name">inquirio</string>
+    <string name="app_name">Inquirio</string>
+    <string name="email_placeholder">Adresse e-mail</string>
+    <string name="welcome_msg">Accéder à Inquirio</string>
+    <string name="next">Suivant</string>
+    <string name="login">Se connecter</string>
+    <string name="signup">S\'inscrire</string>
+    <string name="fullname">Nom complet</string>
+    <string name="cell_num">Numéro de cellulaire</string>
+    <string name="passwd">Mot de passe</string>
+    <string name="confirmation">Confirmation du mot de passe</string>
+    <string name="copyright">© 2018&#8211;2019 Olivier Brassard</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="mesitems">Mes items</string>
+    <string name="notifications">Notifications</string>
+    <string name="account">Mon compte</string>
+    <string name="title_activity_home">Home</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 </resources>
