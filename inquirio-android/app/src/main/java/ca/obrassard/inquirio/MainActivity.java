@@ -15,9 +15,16 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.util.Date;
+
+import ca.obrassard.inquirio.model.LostItem;
+import ca.obrassard.inquirio.model.User;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     LostItemAdapter m_adapter;
+    Boolean m_isFirstConnection = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +49,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         m_adapter = new LostItemAdapter(this);
         lvNearItems.setAdapter(m_adapter);
         lvNearItems.setEmptyView(findViewById(R.id.empty_lv_placeholder));
+
+        //TODO Tests à effacer eventuellement
+        User testUser = new User(1,"Olivier Brassard","brassard.oli@gmail.com","5145782504",7);
+        m_adapter.add(new LostItem(1,"Macbook Pro Gris Foncé","Description test","Cégep Édouard-montpetit",80, Calendar.getInstance().getTime(),testUser));
+        m_adapter.add(new LostItem(2,"Mon chat Newton","Description test","Rue périgord, La Prairie",300, Calendar.getInstance().getTime(),testUser));
+        m_adapter.notifyDataSetChanged();
+
+        //Affichage du popup d'accueil si première connexion
+
     }
 
     //Gestion de la fermeture du tiroir

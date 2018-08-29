@@ -31,5 +31,5 @@
     <string name="myitems">Mes items</string>
     <string name="near_items_lbl">Objets perdus près de votre emplacement </string>
     <string name="no_items_near">Tous les objets perdus près de votre emplacement ont été retrouvés !</string>
-    <string name="congrats">Félicitation !</string>
+    <string name="congrats">Félicitations !</string>
 </resources>
