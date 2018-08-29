@@ -1,5 +1,6 @@
 package ca.obrassard.inquirio;
 
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -57,7 +58,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         m_adapter.notifyDataSetChanged();
 
         //Affichage du popup d'accueil si première connexion
-
+        if (m_isFirstConnection){
+            DialogFragment welcomeDialog = new WelcomeDialog();
+            welcomeDialog.show(getFragmentManager(), "welcomeDialog");
+        }
     }
 
     //Gestion de la fermeture du tiroir
