@@ -34,4 +34,9 @@
     <string name="congrats">Félicitations !</string>
     <string name="begin">Débuter</string>
     <string name="welcome">Bienvenue sur Inquirio !</string>
+    <string name="title_activity_my_items">Mes items</string>
+    <string name="YourLostObjects">Vos objets perdus</string>
+    <string name="YourObjectsFound">Vos objets retrouvés</string>
+    <string name="NoLostItemsHeader">On dirait que tous vos items ont été retrouvés!</string>
+    <string name="NoFoundItemsHeader">Personne n\'a encore trouvé d\'items qui vous appartiennent!</string>
 </resources>
