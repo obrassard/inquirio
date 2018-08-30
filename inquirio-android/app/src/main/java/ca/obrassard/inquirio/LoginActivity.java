@@ -32,12 +32,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
         passwordField.requestFocus();
-
     }
-
-
 
     public void login(String email, String passwd){
 
