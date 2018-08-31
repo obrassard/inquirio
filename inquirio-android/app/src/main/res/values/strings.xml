@@ -55,4 +55,6 @@
     <string name="defineLocation">Définir l\'emplacement</string>
     <string name="lipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut quis consequat risus. Suspendisse potenti. Suspendisse at arcu vitae urna metus.</string>
     <string name="title_activity_add_item">Déclarer un item perdu</string>
+    <string name="title_activity_notifications">Mes notifications</string>
+    <string name="title_activity_account">AccountActivity</string>
 </resources>

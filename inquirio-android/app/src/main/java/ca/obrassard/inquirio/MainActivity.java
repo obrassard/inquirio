@@ -1,6 +1,7 @@
 package ca.obrassard.inquirio;
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -51,18 +53,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         lvNearItems.setAdapter(m_adapter);
         lvNearItems.setEmptyView(findViewById(R.id.empty_lv_placeholder));
 
+        //Boutton j'ai perdu qqchose
+        findViewById(R.id.btn_ilostsomething).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iLostSomething();
+            }
+        });
 
-        //TODO Tests à effacer eventuellement
-        User testUser = new User(1,"Olivier Brassard","brassard.oli@gmail.com","5145782504",7);
-        m_adapter.add(new LostItem(1,"Macbook Pro Gris Foncé","Description test","Cégep Édouard-montpetit",80, Calendar.getInstance().getTime(),testUser));
-        m_adapter.add(new LostItem(2,"Mon chat Newton","Description test","Rue périgord, La Prairie",300, Calendar.getInstance().getTime(),testUser));
-        m_adapter.notifyDataSetChanged();
+        //Bouttons de la barre de menu
+
 
         //Affichage du popup d'accueil si première connexion
         if (m_isFirstConnection){
             DialogFragment welcomeDialog = new WelcomeDialog();
             welcomeDialog.show(getFragmentManager(), "welcomeDialog");
         }
+    }
+
+    private void iLostSomething(){
+        Intent intent = new Intent(this, AddItemActivity.class);
+        startActivity(intent);
     }
 
     //Gestion de la fermeture du tiroir
@@ -83,17 +94,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.ham_account) {
-            // Handle the camera action
+        Intent intent = new Intent();
+
+        if (id == R.id.ham_account || id == R.id.navigation_account) {
+            intent = new Intent(this, AccountActivity.class);
         } else if (id == R.id.ham_logout) {
-
+            return false;
         } else if (id == R.id.ham_lostitem) {
-
-        } else if (id == R.id.ham_myitems) {
-
-        } else if (id == R.id.ham_mynotif) {
-
+            intent = new Intent(this, AddItemActivity.class);
+        } else if (id == R.id.ham_myitems || id == R.id.navigation_myitem) {
+            intent = new Intent(this, MyItemsActivity.class);
+        } else if (id == R.id.ham_mynotif || id == R.id.navigation_notif) {
+            intent = new Intent(this, NotificationsActivity.class);
         }
+        startActivity(intent);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

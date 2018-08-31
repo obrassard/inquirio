@@ -38,7 +38,6 @@ public class LoginActivity extends AppCompatActivity {
     public void login(String email, String passwd){
 
         //Authenticate and retrieve userID
-
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
