@@ -39,4 +39,13 @@
     <string name="YourObjectsFound">Vos objets retrouvés</string>
     <string name="NoLostItemsHeader">On dirait que tous vos items ont été retrouvés!</string>
     <string name="NoFoundItemsHeader">Personne n\'a encore trouvé d\'items qui vous appartiennent!</string>
+    <string name="title_activity_items_detail">Nom de l\'item</string>
+    <string name="aproxlocation">Emplacement aproximatif :</string>
+    <string name="reward">Récompense : </string>
+    <string name="cash">%1$d $</string>
+    <string name="description">Descritpion</string>
+    <string name="ifoundthis">J\'ai trouvé cet item !</string>
+    <string name="update_item">Modifier les details de l\'item</string>
+    <string name="deleteitem">Supprimer cet item</string>
+    <string name="lipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut quis consequat risus. Suspendisse potenti. Suspendisse at arcu vitae urna metus.</string>
 </resources>

@@ -11,8 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginHomeActivity">
-        </activity>
+        <activity android:name=".LoginHomeActivity"></activity>
         <activity
             android:name=".LoginActivity"
             android:parentActivityName=".LoginHomeActivity">
@@ -30,14 +29,18 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MyItemsActivity"
             android:label="@string/title_activity_my_items"
             android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".ItemsDetailActivity"
+            android:label="@string/title_activity_items_detail"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
