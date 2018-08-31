@@ -72,6 +72,7 @@
             android:textColor="@color/white"
             android:drawableLeft="@drawable/google_map" />
         <TextView
+            android:id="@+id/selectedlocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
