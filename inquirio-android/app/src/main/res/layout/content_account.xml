@@ -53,6 +53,7 @@
             android:layout_height="wrap_content"
             android:text="@string/nbitems"/>
         <Button
+            android:id="@+id/btn_logout"
             android:layout_margin="22dp"
             android:padding="17dp"
             android:layout_width="match_parent"

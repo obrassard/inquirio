@@ -43,6 +43,7 @@
             android:orientation="vertical"
             android:paddingTop="50dp">
             <ImageView
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="150dp"
                 android:src="@drawable/community"
