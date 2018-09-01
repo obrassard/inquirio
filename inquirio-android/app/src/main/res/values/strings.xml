@@ -56,5 +56,9 @@
     <string name="lipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut quis consequat risus. Suspendisse potenti. Suspendisse at arcu vitae urna metus.</string>
     <string name="title_activity_add_item">Déclarer un item perdu</string>
     <string name="title_activity_notifications">Mes notifications</string>
-    <string name="title_activity_account">AccountActivity</string>
+    <string name="title_activity_account">Mon compte</string>
+    <string name="nbitems">Nombre d\'items retrouvés : %1$s</string>
+    <string name="notif_user_may_have_found">%1$s à peut-être retrouvé votre item</string>
+    <string name="notif_confirm_item_is_found">Cet item a-t-il été trouvé ?</string>
+    <string name="no_notification">Vous n\'avez actuellement aucune notification</string>
 </resources>

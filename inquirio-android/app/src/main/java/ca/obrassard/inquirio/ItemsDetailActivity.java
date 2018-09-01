@@ -1,5 +1,6 @@
 package ca.obrassard.inquirio;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,6 +19,7 @@ public class ItemsDetailActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //region [Initialisation des éléments de navigation]
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -31,8 +33,38 @@ public class ItemsDetailActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //endregion
     }
 
+    //region [Evennement du tirroir]
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        Intent intent = new Intent();
+
+        if (id == R.id.ham_account) {
+            intent = new Intent(this, AccountActivity.class);
+        } else if (id == R.id.ham_logout) {
+            return false;
+        } else if (id == R.id.ham_lostitem) {
+            intent = new Intent(this, AddItemActivity.class);
+        } else if (id == R.id.ham_myitems) {
+            intent = new Intent(this, MyItemsActivity.class);
+        } else if (id == R.id.ham_mynotif) {
+            intent = new Intent(this, NotificationsActivity.class);
+        }
+        startActivity(intent);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    //Gestion de la fermeture du tiroir
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -42,28 +74,5 @@ public class ItemsDetailActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
-    //Click sur les items du tiroir
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.ham_account) {
-            // Handle the camera action
-        } else if (id == R.id.ham_logout) {
-
-        } else if (id == R.id.ham_lostitem) {
-
-        } else if (id == R.id.ham_myitems) {
-
-        } else if (id == R.id.ham_mynotif) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
+    //endregion
 }

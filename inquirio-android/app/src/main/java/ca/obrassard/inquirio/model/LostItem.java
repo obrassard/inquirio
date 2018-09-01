@@ -1,17 +1,19 @@
 package ca.obrassard.inquirio.model;
 
+import com.google.android.gms.location.places.Place;
+
 import java.util.Date;
 
 public class LostItem {
     private long id;
     private String title;
     private String description;
-    private String location;
+    private Place location;
     private double reward;
     private Date date;
     private User owner;
 
-    public LostItem(long id, String title, String description, String location, double reward, Date date, User owner) {
+    public LostItem(long id, String title, String description, Place location, double reward, Date date, User owner) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -57,11 +59,11 @@ public class LostItem {
         return owner;
     }
 
-    public String getLocation() {
+    public Place getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Place location) {
         this.location = location;
     }
 }

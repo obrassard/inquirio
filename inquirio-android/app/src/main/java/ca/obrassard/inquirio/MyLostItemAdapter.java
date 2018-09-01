@@ -34,7 +34,7 @@ public class MyLostItemAdapter extends ArrayAdapter<LostItem>{
         //Item selectionné
         final LostItem item = getItem(position);
         title.setText(item.getTitle());
-        emplacement.setText(item.getLocation());
+        emplacement.setText(item.getLocation().getName());
 
         //OnClickListeners
        //TODO : Event du clic sur une des row / bouton
