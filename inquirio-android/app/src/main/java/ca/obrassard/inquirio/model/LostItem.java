@@ -11,16 +11,19 @@ public class LostItem {
     private Place location;
     private double reward;
     private Date date;
-    private User owner;
+    private long ownerId;
+    private boolean itemHasBeenFound;
 
-    public LostItem(long id, String title, String description, Place location, double reward, Date date, User owner) {
+    public LostItem(long id, String title, String description, Place location, double reward,
+                    Date date, long ownerId, boolean itemHasBeenFound) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.location = location;
         this.reward = reward;
         this.date = date;
-        this.owner = owner;
+        this.ownerId = ownerId;
+        this.itemHasBeenFound = itemHasBeenFound;
     }
 
     public long getId() {
@@ -55,8 +58,8 @@ public class LostItem {
         return date;
     }
 
-    public User getOwner() {
-        return owner;
+    public long getOwner() {
+        return ownerId;
     }
 
     public Place getLocation() {

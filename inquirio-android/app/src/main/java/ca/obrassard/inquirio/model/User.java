@@ -6,13 +6,15 @@ public class User {
     private String email;
     private String telephone;
     private int itemsFound;
+    private double rating;
 
-    public User(long id, String fullname, String email, String telephone, int itemsFound) {
+    public User(long id, String fullname, String email, String telephone, int itemsFound, double rating) {
         this.id = id;
         this.fullname = fullname;
         this.email = email;
         this.telephone = telephone;
         this.itemsFound = itemsFound;
+        this.rating = rating;
     }
 
     public long getId() {
@@ -49,5 +51,13 @@ public class User {
 
     public void incrementItemsFound() {
         this.itemsFound+=1;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }
