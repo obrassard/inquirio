@@ -1,18 +1,22 @@
 package ca.obrassard.inquirio.model;
 
+import android.media.Image;
+
 import java.util.Date;
 
 public class Notification {
     private long id;
     private User sender;
-    private LostItem item;
+    private String itemName;
+    private Image photo;
+    private String message;
     private EnuNotificationType type;
     private Date date;
 
-    public Notification(long id, User sender, LostItem item, EnuNotificationType type, Date date) {
+    public Notification(long id, User sender, String item, EnuNotificationType type, Date date) {
         this.id = id;
         this.sender = sender;
-        this.item = item;
+        this.itemName = item;
         this.type = type;
         this.date = date;
     }
@@ -25,8 +29,8 @@ public class Notification {
         return sender;
     }
 
-    public LostItem getItem() {
-        return item;
+    public String getItem() {
+        return itemName;
     }
 
     public EnuNotificationType getType() {
