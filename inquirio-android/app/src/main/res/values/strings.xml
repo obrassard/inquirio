@@ -70,4 +70,10 @@
     <string name="isthisyouritem">Est-ce bien votre item ?</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
+    <string name="title_activity_item_found">ItemFoundActivity</string>
+    <string name="send">Envoyer</string>
+    <string name="youfound">Vous pensez avoir trouvé l\'item :</string>
+    <string name="messagetodest">Ajouter un message pour le propriétaire</string>
+    <string name="addpic">Ajouter une photo</string>
+
 </resources>

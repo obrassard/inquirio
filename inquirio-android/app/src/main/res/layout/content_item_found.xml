@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ItemFoundActivity"
+    tools:showIn="@layout/app_bar_item_found">
+    <LinearLayout
+        android:padding="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:text="@string/youfound"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="Nom de l'item"/>
+
+        <android.support.design.widget.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/shipper_field"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:gravity="top"
+                android:hint="@string/messagetodest"
+                android:inputType="textMultiLine"
+                android:overScrollMode="always"
+
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical"
+                android:maxLength="140"/>
+        </android.support.design.widget.TextInputLayout>
+        <Button
+            android:id="@+id/btn_addlocation"
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="13dp"
+            android:text="@string/addpic"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:textColor="@color/white"
+            android:drawableLeft="@android:drawable/ic_menu_camera" />
+        <ImageView
+            android:layout_marginTop="20dp"
+            android:textSize="17sp"
+            android:id="@+id/txtphoto"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:src="@drawable/camera"
+            />
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/send"/>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -10,8 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import ca.obrassard.inquirio.model.LostItem;
-import ca.obrassard.inquirio.model.Notification;
+import ca.obrassard.inquirio.transfer.Notification;
 
 public class NotificationAdapter extends ArrayAdapter<Notification> {
 
@@ -33,8 +32,8 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
         //Item selectionné
         final Notification item = getItem(position);
 
-        title.setText(getContext().getString(R.string.notif_user_may_have_found, item.getSender().getFullname()));
-        itemDetail.setText(item.getItem());
+        title.setText(getContext().getString(R.string.notif_user_may_have_found, item.senderName));
+        itemDetail.setText(item.itemName);
 //        img.setImageResource(R.drawable.handshake);
         img.setImageResource(R.drawable.speaker);
 

@@ -7,10 +7,4 @@ public class LoginResponse {
     public String userFullName;
     public String userPhoneNumber;
 
-    public LoginResponse(boolean result, long userID, String userFullName, String userPhoneNumber) {
-        this.result = result;
-        this.userID = userID;
-        this.userFullName = userFullName;
-        this.userPhoneNumber = userPhoneNumber;
-    }
 }

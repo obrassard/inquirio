@@ -1,12 +1,9 @@
 package ca.obrassard.inquirio.services;
 
-import com.google.android.gms.location.places.Place;
-
 import java.util.List;
 
-import ca.obrassard.inquirio.ReportUserRequest;
 import ca.obrassard.inquirio.model.LostItem;
-import ca.obrassard.inquirio.model.Notification;
+import ca.obrassard.inquirio.transfer.Notification;
 import ca.obrassard.inquirio.model.User;
 import ca.obrassard.inquirio.transfer.*;
 
@@ -181,7 +178,7 @@ public interface RESTMethods {
      * @param report
      * @return
      */
-    ReportResponse reportUser(ReportUserRequest report);
+    //    ReportResponse reportUser(ReportUserRequest report);
 
     /**
      * Assigne une note de fiabilité(de 0 à 5) à un utilisateur

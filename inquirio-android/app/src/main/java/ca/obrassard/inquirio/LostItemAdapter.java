@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.List;
-
 import ca.obrassard.inquirio.model.LostItem;
 
 public class LostItemAdapter extends ArrayAdapter<LostItem>{
