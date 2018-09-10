@@ -1,9 +1,10 @@
-package ca.obrassard.inquirio;
+package ca.obrassard.inquirio.services;
 
 import com.google.android.gms.location.places.Place;
 
 import java.util.List;
 
+import ca.obrassard.inquirio.ReportUserRequest;
 import ca.obrassard.inquirio.model.LostItem;
 import ca.obrassard.inquirio.model.Notification;
 import ca.obrassard.inquirio.model.User;
@@ -11,7 +12,7 @@ import ca.obrassard.inquirio.transfer.*;
 
 public interface RESTMethods {
 
-    //==  Login/Signup/Logout  ============================================
+    //region [  Login/Signup/Logout  ]
 
     /**
      * Permet de savoir si une adresse courriel
@@ -43,9 +44,9 @@ public interface RESTMethods {
      * @return LogoutResponse
      */
     LogoutResponse logout(long userID);
+    //endregion
 
-
-    //==  MainActivity  ============================================
+    //region [  MainActivity  ]
 
     /**
      * Obtiens une liste des items perdus à proximité de l'emplacement
@@ -54,8 +55,9 @@ public interface RESTMethods {
      * @return Une liste sommaire des items perdus à proximité
      */
     List<LostItemSummary> getNearLostItems(LocationRequest currentLocation);
-
-    //==  AccountActivity  =========================================
+    //endregion
+    
+    //region[  AccountActivity  ]
 
     /**
      * Obtiens les details d'un utilisateur
@@ -63,8 +65,9 @@ public interface RESTMethods {
      * @return un objet User
      */
     User getUserDetail(long userID);
-
-    //==  AddItemActivity  =========================================
+    //endregion
+    
+    //region [  AddItemActivity  ]
 
     /**
      * Ajoute un nouvel item perdu
@@ -79,9 +82,9 @@ public interface RESTMethods {
      * @return True si la modification s'est effectuée avec succès
      */
     boolean updateItem(UpdateItemRequest item);
+    //endregion
 
-
-    //==  ItemsDetailActivity  =====================================
+    //region[  ItemsDetailActivity  ]
 
     /**
      * Obtiens les details d'un item
@@ -97,8 +100,6 @@ public interface RESTMethods {
      */
     boolean deleteItem(long itemID);
 
-    //== Item trouvé par un utilisateur
-
     /**
      * Permet d'ajouter un candidat à l'objet retrouvé
      * (Dire que l'item a été retrouvé, en attente d'aprobabtion par le propriétaire)
@@ -106,9 +107,9 @@ public interface RESTMethods {
      * @return True si la requête s'est bien déroulée
      */
     boolean addFoundCandidate(FoundCandidate candidate);
+    //endregion
 
-
-    //==  MyItemsActivity ==========================================
+    //region [  MyItemsActivity ]
 
     /**
      * Obtien une liste sommarisée des items
@@ -125,8 +126,9 @@ public interface RESTMethods {
      * @return Une liste de LostItemSummary
      */
     List<LostItemSummary> getFoundItemsByOwner(long userID);
-
-    //==  NotificationActivity =====================================
+    //endregion
+    
+    // region [  NotificationActivity ]
 
     /**
      * Obtiens une liste sommarisée de notifications
@@ -169,8 +171,9 @@ public interface RESTMethods {
      * @return FinderContactDetail
      */
     FinderContactDetail getFinderContactDetail(long notificationID);
-
-    //== À voir ... =====================================
+    //endregion
+    
+    // region [ À voir ... ]
 
     /**
      * Signale un utilisateur / sa notification comme innaproprié ou
@@ -192,5 +195,5 @@ public interface RESTMethods {
      *  TODO : Trouver une manière de faire noter les gens plus tard sur la fiabilité du Finder...
      */
 
-
+    //endregion
 }

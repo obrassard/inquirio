@@ -10,14 +10,12 @@ public class Notification {
     private String itemName;
     private Image photo;
     private String message;
-    private EnuNotificationType type;
     private Date date;
 
-    public Notification(long id, User sender, String item, EnuNotificationType type, Date date) {
+    public Notification(long id, User sender, String item, Date date) {
         this.id = id;
         this.sender = sender;
         this.itemName = item;
-        this.type = type;
         this.date = date;
     }
 
@@ -31,10 +29,6 @@ public class Notification {
 
     public String getItem() {
         return itemName;
-    }
-
-    public EnuNotificationType getType() {
-        return type;
     }
 
     public Date getDate() {

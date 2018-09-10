@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import ca.obrassard.inquirio.model.LostItem;
@@ -34,6 +35,10 @@ public class MyLostItemAdapter extends ArrayAdapter<LostItem>{
         //Item selectionné
         final LostItem item = getItem(position);
         title.setText(item.getTitle());
+        if(item.isItemHasBeenFound()){
+            ImageView i = vue.findViewById(R.id.img_category);
+            i.setImageResource(R.drawable.handshake);
+        }
         emplacement.setText(item.getLocation().getName());
 
         //OnClickListeners

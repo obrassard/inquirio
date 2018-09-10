@@ -61,4 +61,13 @@
     <string name="notif_user_may_have_found">%1$s à peut-être retrouvé votre item</string>
     <string name="notif_confirm_item_is_found">Cet item a-t-il été trouvé ?</string>
     <string name="no_notification">Vous n\'avez actuellement aucune notification</string>
+    <string name="title_activity_map_detail">Détail de l\'emplacement de l'item</string>
+    <string name="date">Date: %1$n</string>
+    <string name="user_and_rating">%1$n (%2$n/5)</string>
+    <string name="mayhavefnd">à peut-être retrouvé votre item :</string>
+    <string name="heresthephoto">Voici la photo de l\'objet retrouvé :</string>
+    <string name="msgforyou">Message à votre intention :</string>
+    <string name="isthisyouritem">Est-ce bien votre item ?</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
 </resources>

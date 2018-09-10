@@ -69,5 +69,13 @@ public class LostItem {
     public void setLocation(Place location) {
         this.location = location;
     }
+
+    public long getOwnerId() {
+        return ownerId;
+    }
+
+    public boolean isItemHasBeenFound() {
+        return itemHasBeenFound;
+    }
 }
 

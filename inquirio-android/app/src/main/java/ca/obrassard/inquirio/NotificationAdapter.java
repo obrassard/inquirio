@@ -33,18 +33,10 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
         //Item selectionné
         final Notification item = getItem(position);
 
-        switch (item.getType()) {
-            case ItemMightBeFound:
-                title.setText(getContext().getString(R.string.notif_user_may_have_found, item.getSender().getFullname()));
-                itemDetail.setText(item.getItem().getTitle());
-                img.setImageResource(R.drawable.speaker);
-                break;
-            case ConfirmItemIsFound:
-                title.setText(getContext().getString(R.string.notif_confirm_item_is_found));
-                itemDetail.setText(item.getItem().getTitle());
-                img.setImageResource(R.drawable.handshake);
-                break;
-        }
+        title.setText(getContext().getString(R.string.notif_user_may_have_found, item.getSender().getFullname()));
+        itemDetail.setText(item.getItem());
+//        img.setImageResource(R.drawable.handshake);
+        img.setImageResource(R.drawable.speaker);
 
         //OnClickListeners
         //TODO : Event du clic sur une des row
