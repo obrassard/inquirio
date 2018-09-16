@@ -11,7 +11,7 @@ public class Notification {
     public String senderName;
     public double senderRating;
     public String itemName;
-    public Image photo;
+    public byte[] photo;
     public String message;
     public Date date;
 }

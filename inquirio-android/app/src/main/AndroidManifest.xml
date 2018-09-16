@@ -41,7 +41,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MyItemsActivity"
             android:label="@string/title_activity_my_items"
@@ -102,13 +102,6 @@
                 android:value="ca.obrassard.inquirio.ItemsDetailActivity" />
         </activity>
         <activity
-            android:name=".NotificationDetailActivity"
-            android:parentActivityName=".NotificationsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ca.obrassard.inquirio.NotificationsActivity" />
-        </activity>
-        <activity
             android:name=".ItemFoundActivity"
             android:label="@string/title_activity_item_found"
             android:parentActivityName=".ItemsDetailActivity"
@@ -116,6 +109,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.obrassard.inquirio.ItemsDetailActivity" />
+        </activity>
+        <activity
+            android:name=".NotificationDetailsActivity"
+            android:label="@string/title_activity_notification_details"
+            android:parentActivityName=".NotificationsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ca.obrassard.inquirio.NotificationsActivity" />
         </activity>
     </application>
 

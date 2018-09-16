@@ -125,7 +125,7 @@ public interface RESTMethods {
     List<LostItemSummary> getFoundItemsByOwner(long userID);
     //endregion
     
-    // region [  NotificationActivity ]
+    //region [  Notifications ]
 
     /**
      * Obtiens une liste sommarisée de notifications
@@ -170,15 +170,7 @@ public interface RESTMethods {
     FinderContactDetail getFinderContactDetail(long notificationID);
     //endregion
     
-    // region [ À voir ... ]
-
-    /**
-     * Signale un utilisateur / sa notification comme innaproprié ou
-     * problématique
-     * @param report
-     * @return
-     */
-    //    ReportResponse reportUser(ReportUserRequest report);
+    // region [ Noter un utilisateur ]
 
     /**
      * Assigne une note de fiabilité(de 0 à 5) à un utilisateur

@@ -62,8 +62,8 @@
     <string name="notif_confirm_item_is_found">Cet item a-t-il été trouvé ?</string>
     <string name="no_notification">Vous n\'avez actuellement aucune notification</string>
     <string name="title_activity_map_detail">Détail de l\'emplacement de l'item</string>
-    <string name="date">Date: %1$n</string>
-    <string name="user_and_rating">%1$n (%2$n/5)</string>
+    <string name="date">Date: %1$s</string>
+    <string name="user_and_rating">%1$s (%2$d/5)</string>
     <string name="mayhavefnd">à peut-être retrouvé votre item :</string>
     <string name="heresthephoto">Voici la photo de l\'objet retrouvé :</string>
     <string name="msgforyou">Message à votre intention :</string>
@@ -75,5 +75,11 @@
     <string name="youfound">Vous pensez avoir trouvé l\'item :</string>
     <string name="messagetodest">Ajouter un message pour le propriétaire</string>
     <string name="addpic">Ajouter une photo</string>
+    <string name="contact">Contacter l\'utilisateur</string>
+    <string name="title_activity_notification_details">NotificationDetails</string>
+    <string name="thanks">Merci !</string>
+    <string name="thanks_dialog_txt">Une notification a bien été envoyée au propriétaire de l\'objet perdu! Celui-ci vous contactera sous peu s'il s'agit bien de son objet.</string>
+    <string name="rate">Notez %1$s</string>
+    <string name="rate_dialog_txt">Si vous rencontré %1$s pour récupérer votre item %2$s, nous aimerions que vous lui attribuiez une note :</string>
 
 </resources>

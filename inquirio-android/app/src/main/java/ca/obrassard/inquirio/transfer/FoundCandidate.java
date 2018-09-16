@@ -5,6 +5,6 @@ import android.media.Image;
 public class FoundCandidate {
     public long itemID;
     public long finderID;
-    public Image image;
+    public byte[] image;
     public String message;
 }
