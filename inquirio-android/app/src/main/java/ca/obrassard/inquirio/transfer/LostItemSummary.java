@@ -4,6 +4,5 @@ public class LostItemSummary {
     public int itemID;
     public String itemName;
     public String locationName;
-    public String location;
     public boolean found;
 }

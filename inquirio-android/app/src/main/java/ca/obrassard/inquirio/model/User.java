@@ -1,63 +1,10 @@
 package ca.obrassard.inquirio.model;
 
 public class User {
-    private long id;
-    private String fullname;
-    private String email;
-    private String telephone;
-    private int itemsFound;
-    private double rating;
-
-    public User(long id, String fullname, String email, String telephone, int itemsFound, double rating) {
-        this.id = id;
-        this.fullname = fullname;
-        this.email = email;
-        this.telephone = telephone;
-        this.itemsFound = itemsFound;
-        this.rating = rating;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getFullname() {
-        return fullname;
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public int getItemsFound() {
-        return itemsFound;
-    }
-
-    public void incrementItemsFound() {
-        this.itemsFound+=1;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
+    public long id;
+    public String fullname;
+    public String email;
+    public String telephone;
+    public int itemsFound;
+    public double rating;
 }

@@ -6,8 +6,10 @@ import ca.obrassard.inquirio.model.LostItem;
 import ca.obrassard.inquirio.transfer.Notification;
 import ca.obrassard.inquirio.model.User;
 import ca.obrassard.inquirio.transfer.*;
+import retrofit2.Call;
+import retrofit2.http.GET;
 
-public interface RESTMethods {
+public interface InquirioService {
 
     //region [  Login/Signup/Logout  ]
 
@@ -17,7 +19,8 @@ public interface RESTMethods {
      * @param email adresse à vérifier
      * @return True si un compte correspond à l'adresse
      */
-    boolean isSubscribed(String email);
+    @GET("/")
+    Call<Boolean> isSubscribed(String email);
 
     /**
      * Tente une authentfication au service d'un utilisateur
@@ -26,21 +29,24 @@ public interface RESTMethods {
      * @param password mot de passe de l'utilisateur
      * @return LoginResponse
      */
-    LoginResponse login(String email, String password);
+    @GET("/")
+    Call<LoginResponse> login(String email, String password);
 
     /**
      * Inscrit un nouvel utilisateur au service
      * @param userInfos Données d'utlisateurs pour l'inscription
      * @return LoginResponse
      */
-    LoginResponse signup(SignupRequest userInfos);
+    @GET("/")
+    Call<LoginResponse> signup(SignupRequest userInfos);
 
     /**
      * Effectue une déconnexion de l'utlisateur spécifié
      * @param userID Id de l'utilisateur à déconnecter
      * @return LogoutResponse
      */
-    LogoutResponse logout(long userID);
+    @GET("/")
+    Call<LogoutResponse> logout(long userID);
     //endregion
 
     //region [  MainActivity  ]
@@ -51,7 +57,7 @@ public interface RESTMethods {
      * @param currentLocation Emplacement de l'appareil
      * @return Une liste sommaire des items perdus à proximité
      */
-    List<LostItemSummary> getNearLostItems(LocationRequest currentLocation);
+    Call<List<LostItemSummary>> getNearLostItems(LocationRequest currentLocation);
     //endregion
     
     //region[  AccountActivity  ]
@@ -61,7 +67,7 @@ public interface RESTMethods {
      * @param userID identifiant de l'utilsateur
      * @return un objet User
      */
-    User getUserDetail(long userID);
+    Call<User> getUserDetail(long userID);
     //endregion
     
     //region [  AddItemActivity  ]
@@ -71,14 +77,14 @@ public interface RESTMethods {
      * @param item Detail de l'item à ajouter
      * @return L'ID de l'item ajouté ou -1
      */
-    long addNewItem(NewItemRequest item);
+    Call<Long> addNewItem(NewItemRequest item);
 
     /**
      * Modifie les details d'un item
      * @param item Item a modifier, avec ces nouvelles informations
      * @return True si la modification s'est effectuée avec succès
      */
-    boolean updateItem(UpdateItemRequest item);
+    Call<Boolean> updateItem(UpdateItemRequest item);
     //endregion
 
     //region[  ItemsDetailActivity  ]
@@ -88,14 +94,14 @@ public interface RESTMethods {
      * @param itemID Identifiant de l'item
      * @return Les details de l'item
      */
-    LostItem getItemDetail(long itemID);
+    Call<LostItem> getItemDetail(long itemID);
 
     /**
      * Supprime un item
      * @param itemID identifiant de l'id
      * @return True si la suppression s'est bien déroulée
      */
-    boolean deleteItem(long itemID);
+    Call<Boolean> deleteItem(long itemID);
 
     /**
      * Permet d'ajouter un candidat à l'objet retrouvé
@@ -103,7 +109,7 @@ public interface RESTMethods {
      * @param candidate Information relative a l'objet retrouvé
      * @return True si la requête s'est bien déroulée
      */
-    boolean addFoundCandidate(FoundCandidate candidate);
+    Call<Boolean> addFoundCandidate(FoundCandidate candidate);
     //endregion
 
     //region [  MyItemsActivity ]
@@ -114,7 +120,7 @@ public interface RESTMethods {
      * @param userID Identifiant de l'utilisateur
      * @return Une liste de LostItemSummary
      */
-    List<LostItemSummary> getLostItemsByOwner(long userID);
+    Call<List<LostItemSummary>> getLostItemsByOwner(long userID);
 
     /**
      * Obtien une liste sommarisée des items
@@ -122,7 +128,7 @@ public interface RESTMethods {
      * @param userID Identifiant de l'utilisateur
      * @return Une liste de LostItemSummary
      */
-    List<LostItemSummary> getFoundItemsByOwner(long userID);
+    Call<List<LostItemSummary>> getFoundItemsByOwner(long userID);
     //endregion
     
     //region [  Notifications ]
@@ -133,7 +139,7 @@ public interface RESTMethods {
      * @param userID Utilisateur a qui les notifs sont adressées
      * @return Une liste de NotificationSummary
      */
-    List<NotificationSummary> getCandidateNotifications(long userID);
+    Call<List<NotificationSummary>> getCandidateNotifications(long userID);
 
     /**
      * Obtiens les details d'une notification
@@ -141,7 +147,7 @@ public interface RESTMethods {
      * @param notificationID identifiant de la notif de candidat
      * @return Details de la Notification
      */
-    Notification getNotificationDetail(long notificationID);
+    Call<Notification> getNotificationDetail(long notificationID);
 
     /**
      * Défini une notification d'objet potentillement trouvé
@@ -149,7 +155,7 @@ public interface RESTMethods {
      * @param notificationID identifiant de la notif de candidat
      * @return True si la requête s'est bien déroulée
      */
-    boolean denyCandidateNotification(long notificationID);
+    Call<Boolean> denyCandidateNotification(long notificationID);
 
     /**
      * Défini l'objet candidat comme accepté
@@ -159,7 +165,7 @@ public interface RESTMethods {
      * @param notificationID identifiant de la notif de candidat
      * @return Les informations de contact du 'Finder'
      */
-    FinderContactDetail acceptCandidateNotification(long notificationID);
+    Call<FinderContactDetail> acceptCandidateNotification(long notificationID);
 
     /**
      * Obtiens les details de contact de l'utlisateur
@@ -167,7 +173,7 @@ public interface RESTMethods {
      * @param notificationID identifiant de la notif candidate
      * @return FinderContactDetail
      */
-    FinderContactDetail getFinderContactDetail(long notificationID);
+    Call<FinderContactDetail> getFinderContactDetail(long notificationID);
     //endregion
     
     // region [ Noter un utilisateur ]
@@ -178,7 +184,7 @@ public interface RESTMethods {
      * @param rating note de 0 à 5 reporésentant la fiabilité
      * @return True si la requête s'est bien déroulée;
      */
-    boolean rateUser(long userId, int rating);
+    Call<Boolean> rateUser(long userId, int rating);
 
     /*
      *  TODO : Trouver une manière de faire noter les gens plus tard sur la fiabilité du Finder...
