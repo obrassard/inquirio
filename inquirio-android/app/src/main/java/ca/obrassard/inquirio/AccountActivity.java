@@ -21,6 +21,7 @@ import org.w3c.dom.Text;
 import ca.obrassard.inquirio.model.User;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
+import ca.obrassard.inquirio.transfer.LogoutResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -85,8 +86,25 @@ public class AccountActivity extends AppCompatActivity
     }
 
     private void logout (){
-        Intent i = new Intent(this,LoginHomeActivity.class);
-        startActivity(i);
+        service.logout(LoggedUserData.data.userID).enqueue(new Callback<LogoutResponse>() {
+            @Override
+            public void onResponse(Call<LogoutResponse> call, Response<LogoutResponse> response) {
+                LogoutResponse lr = response.body();
+                if (lr.success){
+                    LoggedUserData.data = null;
+                    Intent i = new Intent(AccountActivity.this.getApplicationContext(),LoginHomeActivity.class);
+                    startActivity(i);
+                } else {
+                    Toast.makeText(AccountActivity.this, lr.message, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LogoutResponse> call, Throwable t) {
+                Toast.makeText(AccountActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     //region [Evennement du tirroir]

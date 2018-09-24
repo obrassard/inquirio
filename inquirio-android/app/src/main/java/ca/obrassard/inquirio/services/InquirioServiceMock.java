@@ -56,7 +56,7 @@ public class InquirioServiceMock implements InquirioService {
     public Call<LoginResponse> login(String email, String password) {
         LoginResponse lr = new LoginResponse();
         lr.userFullName = "Olivier Brassard";
-        lr.result = false;
+        lr.result = true;
         lr.userID = 1;
         lr.userPhoneNumber= "51457825404";
 
@@ -138,11 +138,11 @@ public class InquirioServiceMock implements InquirioService {
     @Override
     public Call<User> getUserDetail(long userID) {
         User u = new User();
-        u.email = "brassard.oli@gmail.com";
-        u.fullname = "Olivier Brassard";
+        u.email = "tester.roger@obrassard.ca";
+        u.fullname = "Roger Tester";
         u.id = 1;
-        u.itemsFound = 3;
-        u.rating = 4.5;
+        u.itemsFound = 5;
+        u.rating = 3;
         u.telephone = "5145782504";
 
         return delegate.returningResponse(u).getUserDetail(userID);
@@ -282,12 +282,13 @@ public class InquirioServiceMock implements InquirioService {
         NotificationSummary n2 = new NotificationSummary();
 
         n1.itemName = "Porte feuille";
+        n1.userName = "Christopher St-Pierre";
         n1.notificationID = 1;
-        n1.notificationTitle = "Quelqu'un à peut-être retrouvé votre item";
 
         n2.itemName = "Écouteurs";
         n2.notificationID = 2;
-        n2.notificationTitle = "Quelqu'un à peut-être retrouvé votre item";
+        n2.userName = "Rogert Tester";
+
 
         notificationSummaries.add(n1);
         notificationSummaries.add(n2);

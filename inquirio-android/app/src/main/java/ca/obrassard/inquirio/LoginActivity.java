@@ -57,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                 } else {
                     //Erreur d'authentification
+                    Toast.makeText(LoginActivity.this, "Le nom d'utilisateur ou mot de passe est incorrect", Toast.LENGTH_LONG).show();
                 }
             }
 
