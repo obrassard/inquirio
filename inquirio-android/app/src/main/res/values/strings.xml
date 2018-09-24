@@ -72,14 +72,15 @@
     <string name="no">Non</string>
     <string name="title_activity_item_found">ItemFoundActivity</string>
     <string name="send">Envoyer</string>
+    <string name="end">Terminer</string>
     <string name="youfound">Vous pensez avoir trouvé l\'item :</string>
     <string name="messagetodest">Ajouter un message pour le propriétaire</string>
     <string name="addpic">Ajouter une photo</string>
     <string name="contact">Contacter l\'utilisateur</string>
     <string name="title_activity_notification_details">NotificationDetails</string>
     <string name="thanks">Merci !</string>
-    <string name="thanks_dialog_txt">Une notification a bien été envoyée au propriétaire de l\'objet perdu! Celui-ci vous contactera sous peu s'il s'agit bien de son objet.</string>
+    <string name="thanks_dialog_txt">Une notification a bien été envoyée au propriétaire de l\'objet perdu! Celui-ci vous contactera sous peu s\'il s\'agit bien de son objet.</string>
     <string name="rate">Notez %1$s</string>
-    <string name="rate_dialog_txt">Si vous rencontré %1$s pour récupérer votre item %2$s, nous aimerions que vous lui attribuiez une note :</string>
-
+    <string name="rate_dialog_txt">Si vous avez rencontré %1$s pour récupérer votre item %2$s, nous aimerions que vous lui attribuiez une note :</string>
+    <string name="later">Plus tard</string>
 </resources>
