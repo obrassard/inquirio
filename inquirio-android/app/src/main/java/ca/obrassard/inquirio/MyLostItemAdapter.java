@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ca.obrassard.inquirio.model.LostItem;
+import ca.obrassard.inquirio.transfer.LostItemSummary;
 
 public class MyLostItemAdapter extends ArrayAdapter<LostItem>{
 
@@ -34,12 +35,12 @@ public class MyLostItemAdapter extends ArrayAdapter<LostItem>{
 
         //Item selectionné
         final LostItem item = getItem(position);
-        title.setText(item.getTitle());
-        if(item.isItemHasBeenFound()){
+        title.setText(item.title);
+        if(item.itemHasBeenFound){
             ImageView i = vue.findViewById(R.id.img_category);
             i.setImageResource(R.drawable.handshake);
         }
-        emplacement.setText(item.getLocation().getName());
+        emplacement.setText(item.location.Name);
 
         //OnClickListeners
        //TODO : Event du clic sur une des row / bouton

@@ -12,7 +12,7 @@ import retrofit2.mock.NetworkBehavior;
 public class RetrofitUtil {
     public static InquirioService get(){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("")
+                .baseUrl("http://localhost:8080")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
@@ -22,7 +22,7 @@ public class RetrofitUtil {
 
     public static InquirioService getMock(){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("")
+                .baseUrl("http://localhost:8080")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();

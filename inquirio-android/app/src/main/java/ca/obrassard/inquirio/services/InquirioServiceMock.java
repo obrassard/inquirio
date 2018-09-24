@@ -63,6 +63,7 @@ public class InquirioServiceMock implements InquirioService {
         return delegate.returningResponse(lr).login(email,password);
     }
 
+
     /**
      * Inscrit un nouvel utilisateur au service
      * @param userInfos Données d'utlisateurs pour l'inscription
@@ -291,7 +292,7 @@ public class InquirioServiceMock implements InquirioService {
         notificationSummaries.add(n1);
         notificationSummaries.add(n2);
 
-        delegate.returningResponse(notificationSummaries).getCandidateNotifications(userID);
+        return delegate.returningResponse(notificationSummaries).getCandidateNotifications(userID);
     }
 
     /**

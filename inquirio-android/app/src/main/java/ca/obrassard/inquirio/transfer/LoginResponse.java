@@ -6,5 +6,6 @@ public class LoginResponse {
     public long userID;
     public String userFullName;
     public String userPhoneNumber;
+    public boolean isFirstLogin;
 
 }

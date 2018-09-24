@@ -19,12 +19,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.List;
+
+import ca.obrassard.inquirio.services.InquirioService;
+import ca.obrassard.inquirio.services.RetrofitUtil;
+import ca.obrassard.inquirio.transfer.LocationRequest;
+import ca.obrassard.inquirio.transfer.LostItemSummary;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    InquirioService service = RetrofitUtil.getMock();
     LostItemAdapter m_adapter;
     BottomNavigationView bottomNavigationView;
-    Boolean m_isFirstConnection = false;
+    Boolean m_isFirstConnection = LoggedUserData.data.isFirstLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +97,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             DialogFragment welcomeDialog = new WelcomeDialog();
             welcomeDialog.show(getFragmentManager(), "welcomeDialog");
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocationRequest request = new LocationRequest();
+
+        service.getNearLostItems(request).enqueue(new Callback<List<LostItemSummary>>() {
+            @Override
+            public void onResponse(Call<List<LostItemSummary>> call, Response<List<LostItemSummary>> response) {
+                List<LostItemSummary> items = response.body();
+                m_adapter.clear();
+                m_adapter.addAll(items);
+                m_adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<LostItemSummary>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Une erreur est survenue lors du chargement des données", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

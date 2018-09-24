@@ -10,8 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import ca.obrassard.inquirio.model.LostItem;
+import ca.obrassard.inquirio.transfer.LostItemSummary;
 
-public class LostItemAdapter extends ArrayAdapter<LostItem>{
+public class LostItemAdapter extends ArrayAdapter<LostItemSummary>{
 
     public LostItem getItem(long id){
         throw new UnsupportedOperationException();
@@ -32,9 +33,9 @@ public class LostItemAdapter extends ArrayAdapter<LostItem>{
         TextView emplacement = vue.findViewById(R.id.item_location);
 
         //Item selectionné
-        final LostItem item = getItem(position);
-        title.setText(item.getTitle());
-        emplacement.setText(item.getLocation().getName());
+        final LostItemSummary item = getItem(position);
+        title.setText(item.itemName);
+        emplacement.setText(item.locationName);
 
         //OnClickListeners
        //TODO : Event du clic sur une des row / bouton

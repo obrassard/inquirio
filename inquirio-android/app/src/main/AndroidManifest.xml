@@ -23,7 +23,13 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBRL-StZql-y3WrTrrEX-6vFUDaU-2E5bg" />
 
-        <activity android:name=".LoginHomeActivity" />
+        <activity android:name=".LoginHomeActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".LoginActivity"
             android:parentActivityName=".LoginHomeActivity">
@@ -50,12 +56,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ca.obrassard.inquirio.MainActivity" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ItemsDetailActivity"

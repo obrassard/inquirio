@@ -45,13 +45,15 @@
             android:rating="4.5"
             android:isIndicator="true"
             />
+
         <TextView
-            android:textSize="20sp"
-            android:textColor="#000"
-            android:textAlignment="center"
+            android:id="@+id/nbidtem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/nbitems"/>
+            android:text="@string/nbitems"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textSize="20sp" />
         <Button
             android:id="@+id/btn_logout"
             android:layout_margin="22dp"

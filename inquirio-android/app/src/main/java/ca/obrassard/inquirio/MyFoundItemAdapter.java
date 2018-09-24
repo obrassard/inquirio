@@ -33,7 +33,7 @@ public class MyFoundItemAdapter extends ArrayAdapter<LostItem>{
 
         //Item selectionné
         final LostItem item = getItem(position);
-        title.setText(item.getTitle());
+        title.setText(item.title);
         emplacement.setText("Trouvé par ...");
 
         //OnClickListeners

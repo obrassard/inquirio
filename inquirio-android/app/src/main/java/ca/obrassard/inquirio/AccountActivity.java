@@ -2,8 +2,6 @@ package ca.obrassard.inquirio;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,12 +9,31 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RatingBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
+
+import ca.obrassard.inquirio.model.User;
+import ca.obrassard.inquirio.services.InquirioService;
+import ca.obrassard.inquirio.services.RetrofitUtil;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccountActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    InquirioService service = RetrofitUtil.getMock();
+    TextView txtName;
+    TextView txtEmail;
+    RatingBar ratingBar;
+    TextView nbItemTFound;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +54,32 @@ public class AccountActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         //endregion
 
+        txtEmail = findViewById(R.id.email);
+        txtName = findViewById(R.id.name);
+        ratingBar = findViewById(R.id.user_rating);
+        nbItemTFound = findViewById(R.id.nbidtem);
+
         Button btn_logout = findViewById(R.id.btn_logout);
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 logout();
+            }
+        });
+
+        service.getUserDetail(LoggedUserData.data.userID).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                User u = response.body();
+                txtEmail.setText(u.email);
+                txtName.setText(u.fullname);
+                ratingBar.setRating((float)u.rating);
+                nbItemTFound.setText(getString(R.string.nbitems, String.valueOf(u.itemsFound)));
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(AccountActivity.this, "Une erreur est survenue", Toast.LENGTH_SHORT).show();
             }
         });
     }

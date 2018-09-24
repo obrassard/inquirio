@@ -6,9 +6,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import ca.obrassard.inquirio.services.InquirioService;
+import ca.obrassard.inquirio.services.RetrofitUtil;
+import ca.obrassard.inquirio.transfer.LoginResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
+    InquirioService service = RetrofitUtil.getMock();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +47,26 @@ public class LoginActivity extends AppCompatActivity {
     public void login(String email, String passwd){
 
         //Authenticate and retrieve userID
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        service.login(email,passwd).enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                LoginResponse loginResponse = response.body();
+                if (loginResponse.result){
+                    LoggedUserData.data = loginResponse;
+                    Intent intent = new Intent(LoginActivity.this.getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    //Erreur d'authentification
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Impossible de contacter le serveur", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
     }
 }
