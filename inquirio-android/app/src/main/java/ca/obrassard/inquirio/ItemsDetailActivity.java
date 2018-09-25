@@ -3,13 +3,11 @@ package ca.obrassard.inquirio;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.CoordinatorLayout;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +28,7 @@ import ca.obrassard.inquirio.model.LostItem;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
 import ca.obrassard.inquirio.transfer.Location;
+import ca.obrassard.inquirio.transfer.RequestResult;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -136,22 +135,21 @@ public class ItemsDetailActivity extends AppCompatActivity
         btnDeleteItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                service.deleteItem(itemId).enqueue(new Callback<Boolean>() {
+                service.deleteItem(itemId).enqueue(new Callback<RequestResult>() {
                     @Override
-                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                        boolean deleteIsSuccessful = response.body();
+                    public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
+                        boolean deleteIsSuccessful = response.body().result;
                         if (deleteIsSuccessful){
                             Intent i = new Intent(ItemsDetailActivity.this.getApplicationContext(),MainActivity.class);
                             startActivity(i);
                             Toast.makeText(ItemsDetailActivity.this, "L'item " + itemName.getText()+ " à été supprimé d'Inquirio", Toast.LENGTH_LONG).show();
-
                         } else {
                             Toast.makeText(ItemsDetailActivity.this, "Impossible de supprimer l'item. Veuillez réésayer", Toast.LENGTH_LONG).show();
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Boolean> call, Throwable t) {
+                    public void onFailure(Call<RequestResult> call, Throwable t) {
                         Toast.makeText(ItemsDetailActivity.this, "Impossible de supprimer l'item. Veuillex réésayer", Toast.LENGTH_LONG).show();
                        }
                 });

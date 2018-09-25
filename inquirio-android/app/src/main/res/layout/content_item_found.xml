@@ -17,14 +17,16 @@
             android:layout_height="wrap_content"
             android:textSize="17sp"
             android:text="@string/youfound"/>
+
         <TextView
+            android:id="@+id/txt_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="13dp"
+            android:text="Nom de l'item"
             android:textColor="#000"
             android:textSize="17sp"
-            android:textStyle="bold"
-            android:text="Nom de l'item"
-            android:layout_marginBottom="13dp"/>
+            android:textStyle="bold" />
 
         <android.support.design.widget.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -35,38 +37,39 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <EditText
-                android:id="@+id/shipper_field"
+                android:id="@+id/txt_message"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:gravity="top"
                 android:hint="@string/messagetodest"
                 android:inputType="textMultiLine"
-                android:overScrollMode="always"
+                android:maxLength="140"
 
+                android:overScrollMode="always"
                 android:scrollbarStyle="insideInset"
-                android:scrollbars="vertical"
-                android:maxLength="140"/>
+                android:scrollbars="vertical" />
         </android.support.design.widget.TextInputLayout>
+
         <Button
-            android:id="@+id/btn_addlocation"
-            android:layout_marginTop="15dp"
+            android:id="@+id/btn_add_photo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:drawableLeft="@android:drawable/ic_menu_camera"
             android:padding="13dp"
             android:text="@string/addpic"
-            android:backgroundTint="@color/colorPrimaryDark"
-            android:textColor="@color/white"
-            android:drawableLeft="@android:drawable/ic_menu_camera" />
+            android:textColor="@color/white" />
+
         <ImageView
-            android:layout_marginTop="20dp"
-            android:textSize="17sp"
-            android:id="@+id/txtphoto"
+            android:id="@+id/imgPreview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="20dp"
             android:layout_weight="1"
-            android:textAlignment="center"
             android:src="@drawable/camera"
-            />
+            android:textAlignment="center"
+            android:textSize="17sp" />
         <Button
             android:id="@+id/btn_send"
             android:layout_width="match_parent"

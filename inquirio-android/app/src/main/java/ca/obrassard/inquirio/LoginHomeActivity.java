@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
+import ca.obrassard.inquirio.transfer.RequestResult;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,11 +39,11 @@ public class LoginHomeActivity extends AppCompatActivity {
     }
 
     public void LoginStepOne(final String email){
-        service.isSubscribed(email).enqueue(new Callback<Boolean>() {
+        service.isSubscribed(email).enqueue(new Callback<RequestResult>() {
             @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+            public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
                 Intent intent = new Intent();
-                if (response.body()){
+                if (response.body().result){
                     intent = new Intent(LoginHomeActivity.this.getApplicationContext(), LoginActivity.class);
                 } else {
                     intent = new Intent(LoginHomeActivity.this.getApplicationContext(), SignupActivity.class);
@@ -51,7 +52,7 @@ public class LoginHomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
             @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
+            public void onFailure(Call<RequestResult> call, Throwable t) {
                 Toast.makeText(LoginHomeActivity.this, "Impossible de contacter le serveur", Toast.LENGTH_SHORT).show();
             }
         });

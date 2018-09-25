@@ -1,7 +1,5 @@
 package ca.obrassard.inquirio.services;
 
-import com.google.android.gms.location.places.internal.PlaceEntity;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +8,7 @@ import ca.obrassard.inquirio.model.LostItem;
 import ca.obrassard.inquirio.model.User;
 import ca.obrassard.inquirio.transfer.FinderContactDetail;
 import ca.obrassard.inquirio.transfer.FoundCandidate;
+import ca.obrassard.inquirio.transfer.FoundRequest;
 import ca.obrassard.inquirio.transfer.Location;
 import ca.obrassard.inquirio.transfer.LocationRequest;
 import ca.obrassard.inquirio.transfer.LoginResponse;
@@ -18,8 +17,8 @@ import ca.obrassard.inquirio.transfer.LostItemSummary;
 import ca.obrassard.inquirio.transfer.NewItemRequest;
 import ca.obrassard.inquirio.transfer.Notification;
 import ca.obrassard.inquirio.transfer.NotificationSummary;
+import ca.obrassard.inquirio.transfer.RequestResult;
 import ca.obrassard.inquirio.transfer.SignupRequest;
-import ca.obrassard.inquirio.transfer.UpdateItemRequest;
 import retrofit2.Call;
 import retrofit2.mock.BehaviorDelegate;
 
@@ -40,8 +39,8 @@ public class InquirioServiceMock implements InquirioService {
      * @return True si un compte correspond à l'adresse
      */
     @Override
-    public Call<Boolean> isSubscribed(String email) {
-        return delegate.returningResponse(true).isSubscribed(email);
+    public Call<RequestResult> isSubscribed(String email) {
+        return delegate.returningResponse(new RequestResult(true)).isSubscribed(email);
     }
 
     /**
@@ -173,7 +172,7 @@ public class InquirioServiceMock implements InquirioService {
         li.description = "Il a un étuis rouge et coute très très cher...";
         li.id = 1;
         li.itemHasBeenFound = false;
-        li.ownerId = 1;
+        li.ownerId = 2;
         li.reward = 200;
         li.title = "iPhone XS [Max]";
 
@@ -201,8 +200,8 @@ public class InquirioServiceMock implements InquirioService {
      * @return True si la suppression s'est bien déroulée
      */
     @Override
-    public Call<Boolean> deleteItem(long itemID) {
-        return delegate.returningResponse(true).deleteItem(itemID);
+    public Call<RequestResult> deleteItem(long itemID) {
+        return delegate.returningResponse(new RequestResult(true)).deleteItem(itemID);
     }
 
     /**
@@ -213,8 +212,8 @@ public class InquirioServiceMock implements InquirioService {
      * @return True si la requête s'est bien déroulée
      */
     @Override
-    public Call<Boolean> addFoundCandidate(FoundCandidate candidate) {
-        return delegate.returningResponse(true).addFoundCandidate(candidate);
+    public Call<RequestResult> addFoundCandidate(FoundCandidate candidate) {
+        return delegate.returningResponse(new RequestResult(true)).addFoundCandidate(candidate);
     }
 
     /**
@@ -305,8 +304,14 @@ public class InquirioServiceMock implements InquirioService {
      */
     @Override
     public Call<Notification> getNotificationDetail(long notificationID) {
-        return null;
-        //TODO : Comment moquer une image ?
+        Notification notif = new Notification();
+        notif.date = new Date();
+        notif.id = 1;
+        notif.itemName = "Mon chihuahua et son colier de diamants";
+        notif.message = "Je l'ai trouvé près de la garre !!! Mais je garde le colier";
+        notif.senderName = "Jean Pierre";
+        notif.senderRating = 2.5;
+        return delegate.returningResponse(notif).getNotificationDetail(notificationID);
     }
 
     /**
@@ -359,7 +364,29 @@ public class InquirioServiceMock implements InquirioService {
      * @return True si la requête s'est bien déroulée;
      */
     @Override
-    public Call<Boolean> rateUser(long userId, int rating) {
-        return delegate.returningResponse(false).rateUser(userId, rating);
+    public Call<RequestResult> rateUser(long userId, int rating) {
+        return delegate.returningResponse(new RequestResult(true)).rateUser(userId, rating);
     }
+
+    /**
+     * Obtiens le nom d'un item
+     * @param itemID id
+     * @return nom de l'item
+     */
+    @Override
+    public Call<String> getItemName(long itemID){
+        return delegate.returningResponse("Iphone XS").getItemName(itemID);
+    }
+
+    /**
+     * Permet d'envoyer une requete pour signifier
+     * qu'un objet à potentiellement été trouvé
+     * @param request
+     * @return True si tout s'est déroulé correctement
+     */
+    @Override
+    public Call<RequestResult> sendFoundRequest(FoundRequest request){
+        return delegate.returningResponse(new RequestResult(true)).sendFoundRequest(request);
+    }
+
 }

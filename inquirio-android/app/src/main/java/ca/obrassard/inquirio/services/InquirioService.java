@@ -20,7 +20,7 @@ public interface InquirioService {
      * @return True si un compte correspond à l'adresse
      */
     @GET("/")
-    Call<Boolean> isSubscribed(String email);
+    Call<RequestResult> isSubscribed(String email);
 
     /**
      * Tente une authentfication au service d'un utilisateur
@@ -103,7 +103,7 @@ public interface InquirioService {
      * @param itemID identifiant de l'id
      * @return True si la suppression s'est bien déroulée
      */
-    Call<Boolean> deleteItem(long itemID);
+    Call<RequestResult> deleteItem(long itemID);
 
     /**
      * Permet d'ajouter un candidat à l'objet retrouvé
@@ -111,7 +111,26 @@ public interface InquirioService {
      * @param candidate Information relative a l'objet retrouvé
      * @return True si la requête s'est bien déroulée
      */
-    Call<Boolean> addFoundCandidate(FoundCandidate candidate);
+    Call<RequestResult> addFoundCandidate(FoundCandidate candidate);
+    //endregion
+
+    // region [ ItemFoundActivity ]
+
+    /**
+     * Obtiens le nom d'un item
+     * @param itemID id
+     * @return nom de l'item
+     */
+    Call<String> getItemName(long itemID);
+
+    /**
+     * Permet d'envoyer une requete pour signifier
+     * qu'un objet à potentiellement été trouvé
+     * @param resquest
+     * @return True si tout s'est déroulé correctement
+     */
+    Call<RequestResult> sendFoundRequest(FoundRequest resquest);
+
     //endregion
 
     //region [  MyItemsActivity ]
@@ -186,7 +205,7 @@ public interface InquirioService {
      * @param rating note de 0 à 5 reporésentant la fiabilité
      * @return True si la requête s'est bien déroulée;
      */
-    Call<Boolean> rateUser(long userId, int rating);
+    Call<RequestResult> rateUser(long userId, int rating);
 
     /*
      *  TODO : Trouver une manière de faire noter les gens plus tard sur la fiabilité du Finder...
