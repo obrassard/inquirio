@@ -18,6 +18,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -92,6 +93,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         lvNearItems.setAdapter(m_adapter);
         lvNearItems.setEmptyView(findViewById(R.id.empty_lv_placeholder));
 
+        lvNearItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                LostItemSummary selecteditem = m_adapter.getItem(position);
+                Intent i = new Intent(MainActivity.this.getApplicationContext(),ItemsDetailActivity.class);
+                i.putExtra("item.id",selecteditem.itemID);
+                startActivity(i);
+            }
+        });
+
 //        DialogFragment rateTest = new RateUserDialog();
 //        Bundle arg = new Bundle();
 //        arg.putLong("notifId",1L);
@@ -109,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         LocationRequest request = new LocationRequest();
-
+        //TODO : Obtenir les coordonnées GPS de l'Appareil
         service.getNearLostItems(request).enqueue(new Callback<List<LostItemSummary>>() {
             @Override
             public void onResponse(Call<List<LostItemSummary>> call, Response<List<LostItemSummary>> response) {

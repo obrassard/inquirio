@@ -14,10 +14,6 @@ import ca.obrassard.inquirio.transfer.LostItemSummary;
 
 public class LostItemAdapter extends ArrayAdapter<LostItemSummary>{
 
-    public LostItem getItem(long id){
-        throw new UnsupportedOperationException();
-    }
-
     public LostItemAdapter(Context context) {
         super(context, R.layout.lost_items_listrow);
     }
@@ -36,10 +32,8 @@ public class LostItemAdapter extends ArrayAdapter<LostItemSummary>{
         final LostItemSummary item = getItem(position);
         title.setText(item.itemName);
         emplacement.setText(item.locationName);
-
-        //OnClickListeners
-       //TODO : Event du clic sur une des row / bouton
-
         return vue;
     }
+
+
 }
