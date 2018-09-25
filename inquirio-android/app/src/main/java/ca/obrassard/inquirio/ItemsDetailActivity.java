@@ -2,17 +2,20 @@ package ca.obrassard.inquirio;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
+import android.support.design.widget.CoordinatorLayout;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,11 +24,33 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.SimpleDateFormat;
+
+import ca.obrassard.inquirio.model.LostItem;
+import ca.obrassard.inquirio.services.InquirioService;
+import ca.obrassard.inquirio.services.RetrofitUtil;
+import ca.obrassard.inquirio.transfer.Location;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ItemsDetailActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
+
     private MapView mapView;
     private static final String MAP_VIEW_BUNDLE_KEY = "MAPKEY";
+
+    private InquirioService service = RetrofitUtil.getMock();
+    private long itemId;
+    TextView itemName;
+    TextView locationName;
+    ImageView statusIcon;
+    TextView reward;
+    TextView description;
+    TextView lostDate;
+    Button btnIFoundThis;
+    Button btnDeleteItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,27 +79,129 @@ public class ItemsDetailActivity extends AppCompatActivity
         mapView.onCreate(mapViewBundle);
         mapView.getMapAsync(this);
 
+        itemName = findViewById(R.id.item_name);
+        locationName = findViewById(R.id.txtlocation);
+        statusIcon = findViewById(R.id.statusicon);
+        reward = findViewById(R.id.reward_amount);
+        description = findViewById(R.id.description);
+        lostDate = findViewById(R.id.lost_date);
+
+        btnIFoundThis = findViewById(R.id.btn_itemfound);
+        btnDeleteItem = findViewById(R.id.btn_deleteItem);
+
         //endregion
-    }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-
-        googleMap.setMinZoomPreference(16);
-        final LatLng edouard = new LatLng(45.536286, -73.493004);
-        googleMap.addMarker(new MarkerOptions().position(edouard));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(edouard));
-
-        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        //Affichage des details de l'item
+        itemId = getIntent().getLongExtra("item.id",0);
+        service.getItemDetail(itemId).enqueue(new Callback<LostItem>() {
             @Override
-            public void onMapClick(LatLng latLng) {
-                Intent i = new Intent(getBaseContext(),MapDetail.class);
-                i.putExtra("lat",edouard.latitude);
-                i.putExtra("lng",edouard.longitude);
+            public void onResponse(Call<LostItem> call, Response<LostItem> response) {
+                LostItem lostItem = response.body();
+                itemName.setText(lostItem.title);
+                if (lostItem.itemHasBeenFound){
+                    statusIcon.setImageResource(R.drawable.checked);
+                } else {
+                    statusIcon.setImageResource(R.drawable.wanted_2);
+                }
+                reward.setText(getString(R.string.cash, lostItem.reward));
+                description.setText(lostItem.description);
+
+                SimpleDateFormat simpleDateFormat =
+                        new SimpleDateFormat("yyyy-MM-dd' 'HH:mm");
+                lostDate.setText(getString(R.string.date,simpleDateFormat.format(lostItem.date)));
+
+                //Afichage des bons boutons selon l'utilisateur
+                if (lostItem.ownerId == LoggedUserData.data.userID){
+                    btnIFoundThis.setVisibility(View.GONE);
+                    btnDeleteItem.setVisibility(View.VISIBLE);
+                } else {
+                    btnIFoundThis.setVisibility(View.VISIBLE);
+                    btnDeleteItem.setVisibility(View.GONE);
+                }
+
+                if(lostItem.itemHasBeenFound){
+                    btnIFoundThis.setVisibility(View.GONE);
+                    btnDeleteItem.setVisibility(View.GONE);
+                    findViewById(R.id.txtfound).setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LostItem> call, Throwable t) {
+                Toast.makeText(ItemsDetailActivity.this, "Une erreur est survenue lors du chargement des données", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //Actions des deux boutons
+        btnDeleteItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                service.deleteItem(itemId).enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        boolean deleteIsSuccessful = response.body();
+                        if (deleteIsSuccessful){
+                            Intent i = new Intent(ItemsDetailActivity.this.getApplicationContext(),MainActivity.class);
+                            startActivity(i);
+                            Toast.makeText(ItemsDetailActivity.this, "L'item " + itemName.getText()+ " à été supprimé d'Inquirio", Toast.LENGTH_LONG).show();
+
+                        } else {
+                            Toast.makeText(ItemsDetailActivity.this, "Impossible de supprimer l'item. Veuillez réésayer", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+                        Toast.makeText(ItemsDetailActivity.this, "Impossible de supprimer l'item. Veuillex réésayer", Toast.LENGTH_LONG).show();
+                       }
+                });
+            }
+        });
+
+        btnIFoundThis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ItemsDetailActivity.this.getApplicationContext(),ItemFoundActivity.class);
+                i.putExtra("item.id",itemId);
                 startActivity(i);
             }
         });
 
+
+    }
+
+    @Override
+    public void onMapReady(final GoogleMap googleMap) {
+
+
+        service.getItemLocation(itemId).enqueue(new Callback<Location>() {
+            @Override
+            public void onResponse(Call<Location> call, Response<Location> response) {
+                Location location = response.body();
+
+                locationName.setText(location.Name);
+
+                googleMap.setMinZoomPreference(16);
+                final LatLng postion = new LatLng(location.Lattitude, location.Longittude);
+                googleMap.addMarker(new MarkerOptions().position(postion));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(postion));
+
+                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                    @Override
+                    public void onMapClick(LatLng latLng) {
+                        Intent i = new Intent(getBaseContext(),MapDetail.class);
+                        i.putExtra("lat",postion.latitude);
+                        i.putExtra("lng",postion.longitude);
+                        startActivity(i);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<Location> call, Throwable t) {
+                Toast.makeText(ItemsDetailActivity.this, "Impossible d'obtenir l'emplacement de l'objet", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
     }

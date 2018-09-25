@@ -8,4 +8,11 @@ public class LoginResponse {
     public String userPhoneNumber;
     public boolean isFirstLogin;
 
+    public LoginResponse() {
+        this.result = true;
+        this.userID = 1;
+        this.userFullName = "TEST";
+        this.userPhoneNumber = "TEST";
+        this.isFirstLogin = false;
+    }
 }

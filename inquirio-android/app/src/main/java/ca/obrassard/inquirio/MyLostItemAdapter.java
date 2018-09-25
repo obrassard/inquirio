@@ -13,7 +13,7 @@ import android.widget.TextView;
 import ca.obrassard.inquirio.model.LostItem;
 import ca.obrassard.inquirio.transfer.LostItemSummary;
 
-public class MyLostItemAdapter extends ArrayAdapter<LostItem>{
+public class MyLostItemAdapter extends ArrayAdapter<LostItemSummary>{
 
     public LostItem getItem(long id){
         throw new UnsupportedOperationException();
@@ -34,13 +34,13 @@ public class MyLostItemAdapter extends ArrayAdapter<LostItem>{
         TextView emplacement = vue.findViewById(R.id.item_location);
 
         //Item selectionné
-        final LostItem item = getItem(position);
-        title.setText(item.title);
-        if(item.itemHasBeenFound){
+        final LostItemSummary item = getItem(position);
+        title.setText(item.itemName);
+        if(item.found){
             ImageView i = vue.findViewById(R.id.img_category);
             i.setImageResource(R.drawable.handshake);
         }
-        emplacement.setText(item.location.Name);
+        emplacement.setText(item.locationName);
 
         //OnClickListeners
        //TODO : Event du clic sur une des row / bouton

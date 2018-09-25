@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ItemsDetailActivity"
-    tools:showIn="@layout/app_bar_items_detail">
+    tools:showIn="@layout/app_bar_items_detail"
+    android:id="@+id/rootview">
     <LinearLayout
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
@@ -110,6 +111,14 @@
                         android:layout_height="wrap_content"
                         android:text="@string/lipsum"
                         android:textSize="17sp" />
+                <TextView
+                    android:id="@+id/lost_date"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/date"
+                    android:textColor="#000"
+                    android:textSize="17sp" />
                     <Button
                         android:layout_marginTop="15dp"
                         android:id="@+id/btn_itemfound"
@@ -121,16 +130,6 @@
                         android:visibility="visible"
                         />
                     <Button
-                        android:layout_marginTop="15dp"
-                        android:id="@+id/btn_modifyItem"
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:text="@string/update_item"
-                        android:backgroundTint="@color/colorAccent"
-                        android:textColor="@color/white"
-                        android:visibility="gone"
-                        />
-                    <Button
                         android:layout_marginTop="5dp"
                         android:id="@+id/btn_deleteItem"
                         android:layout_width="match_parent"
@@ -140,6 +139,16 @@
                         android:textColor="@color/white"
                         android:visibility="gone"
                         />
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/txtfound"
+                    android:textAlignment="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_found"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="17sp"
+                    android:visibility="gone"/>
                 </LinearLayout>
         </ScrollView>
     </LinearLayout>

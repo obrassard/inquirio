@@ -10,7 +10,6 @@ public class LostItem {
     public long id;
     public String title;
     public String description;
-    public Location location;
     public double reward;
     public Date date;
     public long ownerId;

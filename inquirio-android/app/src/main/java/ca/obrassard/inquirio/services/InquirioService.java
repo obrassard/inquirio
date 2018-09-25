@@ -79,12 +79,7 @@ public interface InquirioService {
      */
     Call<Long> addNewItem(NewItemRequest item);
 
-    /**
-     * Modifie les details d'un item
-     * @param item Item a modifier, avec ces nouvelles informations
-     * @return True si la modification s'est effectuée avec succès
-     */
-    Call<Boolean> updateItem(UpdateItemRequest item);
+
     //endregion
 
     //region[  ItemsDetailActivity  ]
@@ -95,6 +90,13 @@ public interface InquirioService {
      * @return Les details de l'item
      */
     Call<LostItem> getItemDetail(long itemID);
+
+    /**
+     * Obtiens la location (lat + lng) d'un item
+     * @param itemID Identifiant de l'item
+     * @return L'emplacement de l'item
+     */
+    Call<Location> getItemLocation(long itemID);
 
     /**
      * Supprime un item

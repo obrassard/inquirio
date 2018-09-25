@@ -159,16 +159,6 @@ public class InquirioServiceMock implements InquirioService {
         return delegate.returningResponse(2L).addNewItem(item);
     }
 
-    /**
-     * Modifie les details d'un item
-     *
-     * @param item Item a modifier, avec ces nouvelles informations
-     * @return True si la modification s'est effectuée avec succès
-     */
-    @Override
-    public Call<Boolean> updateItem(UpdateItemRequest item) {
-        return delegate.returningResponse(true).updateItem(item);
-    }
 
     /**
      * Obtiens les details d'un item
@@ -183,15 +173,25 @@ public class InquirioServiceMock implements InquirioService {
         li.description = "Il a un étuis rouge et coute très très cher...";
         li.id = 1;
         li.itemHasBeenFound = false;
-        li.location = new Location();
-        li.location.Lattitude = 45.536286;
-        li.location.Longittude = -73.493004;
-        li.location.Name = "Cégep Édouard-Montpetit";
         li.ownerId = 1;
         li.reward = 200;
         li.title = "iPhone XS [Max]";
 
         return delegate.returningResponse(li).getItemDetail(itemID);
+    }
+
+    /**
+     * Obtiens la location (lat + lng) d'un item
+     * @param itemID Identifiant de l'item
+     * @return L'emplacement de l'item
+     */
+    @Override
+    public Call<Location> getItemLocation(long itemID){
+        Location location = new Location();
+        location.Lattitude = 45.536286;
+        location.Longittude = -73.493004;
+        location.Name = "Cégep Édouard-Montpetit";
+        return  delegate.returningResponse(location).getItemLocation(itemID);
     }
 
     /**

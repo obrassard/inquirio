@@ -42,7 +42,7 @@
     <string name="title_activity_items_detail">Nom de l\'item</string>
     <string name="aproxlocation">Emplacement aproximatif :</string>
     <string name="reward">Récompense : </string>
-    <string name="cash">%1$d $</string>
+    <string name="cash">%1$.2f $</string>
     <string name="description">Description</string>
     <string name="ifoundthis">J\'ai trouvé cet item !</string>
     <string name="update_item">Modifier les details de l\'item</string>
@@ -71,6 +71,7 @@
     <string name="yes">Oui</string>
     <string name="no">Non</string>
     <string name="title_activity_item_found">ItemFoundActivity</string>
+    <string name="item_found">Cet item à été retrouvé !</string>
     <string name="send">Envoyer</string>
     <string name="end">Terminer</string>
     <string name="youfound">Vous pensez avoir trouvé l\'item :</string>
