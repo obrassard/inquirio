@@ -2,8 +2,6 @@ package ca.obrassard.inquirio;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -12,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,14 +21,29 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
+import java.util.Date;
+
+import ca.obrassard.inquirio.model.LostItem;
+import ca.obrassard.inquirio.services.InquirioService;
+import ca.obrassard.inquirio.services.RetrofitUtil;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class AddItemActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     TextView txtSelectedLocation;
+    EditText txtTitle;
+    EditText txtDescription;
+    EditText txtReward;
     Place selectedplace;
+    InquirioService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        service = RetrofitUtil.getMock();
 
         //region [Initialisation des éléments de navigation]
         super.onCreate(savedInstanceState);
@@ -53,11 +65,63 @@ public class AddItemActivity extends AppCompatActivity
         txtSelectedLocation = findViewById(R.id.selectedlocation);
         txtSelectedLocation.setText("");
 
+        txtTitle = findViewById(R.id.txtTitle);
+        txtDescription = findViewById(R.id.txtDescription);
+        txtReward = findViewById(R.id.txtReward);
+
         Button btn_setLocation = findViewById(R.id.btn_addlocation);
         btn_setLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getLocationWithPlacePicker();
+            }
+        });
+
+        Button btn_send = findViewById(R.id.btnSend);
+        btn_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (txtTitle.getText().toString().trim().equals("")){
+                    Toast.makeText(AddItemActivity.this, "Veuillez fournir le titre de votre item", Toast.LENGTH_SHORT).show();
+                }
+                else if (txtDescription.getText().toString().trim().equals("")){
+                    Toast.makeText(AddItemActivity.this, "Veuillez entrer une description", Toast.LENGTH_SHORT).show();
+                }
+                else if (txtReward.getText().toString().trim().equals("")){
+                    Toast.makeText(AddItemActivity.this, "Veuillez spécifier une récompense (ou 0$)", Toast.LENGTH_SHORT).show();
+                }
+                else if (selectedplace == null){
+                    Toast.makeText(AddItemActivity.this, "Veuillez séléctionner l'emplacement approximatif de la perte", Toast.LENGTH_SHORT).show();
+                } else {
+                    final LostItem item = new LostItem();
+
+                    item.description = txtDescription.getText().toString();
+                    item.itemHasBeenFound = false;
+                    item.ownerId = LoggedUser.data.userID;
+                    item.title = txtTitle.getText().toString();
+                    item.reward = Double.parseDouble(txtReward.getText().toString());
+                    item.latitude = selectedplace.getLatLng().latitude;
+                    item.longitude = selectedplace.getLatLng().longitude;
+                    item.locationName = selectedplace.getName().toString();
+
+                    service.addNewItem(item).enqueue(new Callback<Long>() {
+                        @Override
+                        public void onResponse(Call<Long> call, Response<Long> response) {
+                            Long itemId = response.body();
+                            ItemAddedDialog dialog = new ItemAddedDialog();
+                            Bundle args = new Bundle();
+                            args.putString("itemplace",item.locationName);
+                            args.putLong("itemid",itemId);
+                            dialog.setArguments(args);
+                            dialog.show(getFragmentManager(),"dialog");
+                        }
+
+                        @Override
+                        public void onFailure(Call<Long> call, Throwable t) {
+                            Toast.makeText(AddItemActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
     }
@@ -79,8 +143,7 @@ public class AddItemActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(data, this);
-                selectedplace = place;
+                selectedplace = PlacePicker.getPlace(this,data);
                 txtSelectedLocation.setText(selectedplace.getName());
             }
         }

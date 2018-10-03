@@ -10,9 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import ca.obrassard.inquirio.transfer.Notification;
+import ca.obrassard.inquirio.transfer.NotificationSummary;
 
-public class NotificationAdapter extends ArrayAdapter<Notification> {
+public class NotificationAdapter extends ArrayAdapter<NotificationSummary> {
 
     public NotificationAdapter(Context context) {
         super(context, R.layout.notification_listrow);
@@ -30,15 +30,11 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
         ImageView img = vue.findViewById(R.id.img_type);
 
         //Item selectionné
-        final Notification item = getItem(position);
+        final NotificationSummary item = getItem(position);
 
         title.setText(getContext().getString(R.string.notif_user_may_have_found, item.senderName));
         itemDetail.setText(item.itemName);
-//        img.setImageResource(R.drawable.handshake);
         img.setImageResource(R.drawable.speaker);
-
-        //OnClickListeners
-        //TODO : Event du clic sur une des row
 
         return vue;
     }

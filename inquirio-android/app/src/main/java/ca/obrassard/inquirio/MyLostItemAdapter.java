@@ -1,6 +1,7 @@
 package ca.obrassard.inquirio;
 
 import android.content.Context;
+import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -33,17 +34,14 @@ public class MyLostItemAdapter extends ArrayAdapter<LostItemSummary>{
         TextView title = vue.findViewById(R.id.item_name);
         TextView emplacement = vue.findViewById(R.id.item_location);
 
-        //Item selectionné
+        ImageView i = vue.findViewById(R.id.img_category);
+        i.setImageResource(R.drawable.wanted_2);
+
+        //Item
         final LostItemSummary item = getItem(position);
         title.setText(item.itemName);
-        if(item.found){
-            ImageView i = vue.findViewById(R.id.img_category);
-            i.setImageResource(R.drawable.handshake);
-        }
-        emplacement.setText(item.locationName);
 
-        //OnClickListeners
-       //TODO : Event du clic sur une des row / bouton
+        emplacement.setText(item.locationName);
 
         return vue;
     }

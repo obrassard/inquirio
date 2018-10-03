@@ -7,13 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import ca.obrassard.inquirio.model.LostItem;
+import ca.obrassard.inquirio.transfer.FoundItemSummary;
+import ca.obrassard.inquirio.transfer.LostItemSummary;
 
-public class MyFoundItemAdapter extends ArrayAdapter<LostItem>{
+public class MyFoundItemAdapter extends ArrayAdapter<FoundItemSummary>{
 
-    public LostItem getItem(long id){
+    public LostItemSummary getItem(long id){
         throw new UnsupportedOperationException();
     }
 
@@ -31,13 +34,14 @@ public class MyFoundItemAdapter extends ArrayAdapter<LostItem>{
         TextView title = vue.findViewById(R.id.item_name);
         TextView emplacement = vue.findViewById(R.id.item_location);
 
-        //Item selectionné
-        final LostItem item = getItem(position);
-        title.setText(item.title);
-        emplacement.setText("Trouvé par ...");
+        ImageView i = vue.findViewById(R.id.img_category);
+        i.setImageResource(R.drawable.handshake);
 
-        //OnClickListeners
-       //TODO : Event du clic sur une des row / bouton
+        //Item
+        final FoundItemSummary item = getItem(position);
+        title.setText(item.itemName);
+
+        emplacement.setText(getContext().getString(R.string.foundby,item.finderName));
 
         return vue;
     }

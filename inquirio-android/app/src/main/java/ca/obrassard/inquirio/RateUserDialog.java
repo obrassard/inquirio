@@ -4,12 +4,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.media.Rating;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -30,10 +27,10 @@ public class RateUserDialog extends DialogFragment {
         long id = this.getArguments().getLong("notifId");
         // TODO -> Obtention des details selon l'id de la notification
         NotificationSummary ns = new NotificationSummary();
-        ns.userName = "Olivier"; ns.itemName="Caniche royal";
+        ns.senderName = "Olivier"; ns.itemName="Caniche royal";
 
-        title.setText(getString(R.string.rate, ns.userName));
-        message.setText(getString(R.string.rate_dialog_txt, ns.userName, ns.itemName));
+        title.setText(getString(R.string.rate, ns.senderName));
+        message.setText(getString(R.string.rate_dialog_txt, ns.senderName, ns.itemName));
 
 
         builder.setView(v);

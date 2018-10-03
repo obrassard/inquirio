@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 LoginResponse loginResponse = response.body();
                 if (loginResponse.result){
-                    LoggedUserData.data = loginResponse;
+                    LoggedUser.data = loginResponse;
                     Intent intent = new Intent(LoginActivity.this.getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                 } else {

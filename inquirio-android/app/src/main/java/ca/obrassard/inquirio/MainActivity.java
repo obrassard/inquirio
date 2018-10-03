@@ -2,14 +2,9 @@ package ca.obrassard.inquirio;
 
 import android.app.DialogFragment;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.design.internal.BottomNavigationItemView;
-import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -37,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     InquirioService service = RetrofitUtil.getMock();
     LostItemAdapter m_adapter;
     BottomNavigationView bottomNavigationView;
-    Boolean m_isFirstConnection = LoggedUserData.data.isFirstLogin;
+    Boolean m_isFirstConnection = LoggedUser.data.isFirstLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

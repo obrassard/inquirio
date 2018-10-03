@@ -11,12 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import ca.obrassard.inquirio.model.User;
 import ca.obrassard.inquirio.services.InquirioService;
@@ -68,7 +65,7 @@ public class AccountActivity extends AppCompatActivity
             }
         });
 
-        service.getUserDetail(LoggedUserData.data.userID).enqueue(new Callback<User>() {
+        service.getUserDetail(LoggedUser.data.userID).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 User u = response.body();
@@ -86,12 +83,12 @@ public class AccountActivity extends AppCompatActivity
     }
 
     private void logout (){
-        service.logout(LoggedUserData.data.userID).enqueue(new Callback<LogoutResponse>() {
+        service.logout(LoggedUser.data.userID).enqueue(new Callback<LogoutResponse>() {
             @Override
             public void onResponse(Call<LogoutResponse> call, Response<LogoutResponse> response) {
                 LogoutResponse lr = response.body();
                 if (lr.success){
-                    LoggedUserData.data = null;
+                    LoggedUser.data = null;
                     Intent i = new Intent(AccountActivity.this.getApplicationContext(),LoginHomeActivity.class);
                     startActivity(i);
                 } else {

@@ -77,7 +77,7 @@ public interface InquirioService {
      * @param item Detail de l'item à ajouter
      * @return L'ID de l'item ajouté ou -1
      */
-    Call<Long> addNewItem(NewItemRequest item);
+    Call<Long> addNewItem(LostItem item);
 
 
     //endregion
@@ -104,14 +104,6 @@ public interface InquirioService {
      * @return True si la suppression s'est bien déroulée
      */
     Call<RequestResult> deleteItem(long itemID);
-
-    /**
-     * Permet d'ajouter un candidat à l'objet retrouvé
-     * (Dire que l'item a été retrouvé, en attente d'aprobabtion par le propriétaire)
-     * @param candidate Information relative a l'objet retrouvé
-     * @return True si la requête s'est bien déroulée
-     */
-    Call<RequestResult> addFoundCandidate(FoundCandidate candidate);
     //endregion
 
     // region [ ItemFoundActivity ]
@@ -149,18 +141,18 @@ public interface InquirioService {
      * @param userID Identifiant de l'utilisateur
      * @return Une liste de LostItemSummary
      */
-    Call<List<LostItemSummary>> getFoundItemsByOwner(long userID);
+    Call<List<FoundItemSummary>> getFoundItemsByOwner(long userID);
     //endregion
     
     //region [  Notifications ]
 
     /**
      * Obtiens une liste sommarisée de notifications
-     * de nouveaux candidats retrouvés
+     * de nouveaux items potentiellements retrouvés
      * @param userID Utilisateur a qui les notifs sont adressées
      * @return Une liste de NotificationSummary
      */
-    Call<List<NotificationSummary>> getCandidateNotifications(long userID);
+    Call<List<NotificationSummary>> getPotentiallyFoundItems(long userID);
 
     /**
      * Obtiens les details d'une notification

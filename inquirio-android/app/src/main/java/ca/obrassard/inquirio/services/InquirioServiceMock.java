@@ -7,14 +7,13 @@ import java.util.List;
 import ca.obrassard.inquirio.model.LostItem;
 import ca.obrassard.inquirio.model.User;
 import ca.obrassard.inquirio.transfer.FinderContactDetail;
-import ca.obrassard.inquirio.transfer.FoundCandidate;
+import ca.obrassard.inquirio.transfer.FoundItemSummary;
 import ca.obrassard.inquirio.transfer.FoundRequest;
 import ca.obrassard.inquirio.transfer.Location;
 import ca.obrassard.inquirio.transfer.LocationRequest;
 import ca.obrassard.inquirio.transfer.LoginResponse;
 import ca.obrassard.inquirio.transfer.LogoutResponse;
 import ca.obrassard.inquirio.transfer.LostItemSummary;
-import ca.obrassard.inquirio.transfer.NewItemRequest;
 import ca.obrassard.inquirio.transfer.Notification;
 import ca.obrassard.inquirio.transfer.NotificationSummary;
 import ca.obrassard.inquirio.transfer.RequestResult;
@@ -154,7 +153,7 @@ public class InquirioServiceMock implements InquirioService {
      * @return L'ID de l'item ajouté ou -1
      */
     @Override
-    public Call<Long> addNewItem(NewItemRequest item) {
+    public Call<Long> addNewItem(LostItem item) {
         return delegate.returningResponse(2L).addNewItem(item);
     }
 
@@ -205,18 +204,6 @@ public class InquirioServiceMock implements InquirioService {
     }
 
     /**
-     * Permet d'ajouter un candidat à l'objet retrouvé
-     * (Dire que l'item a été retrouvé, en attente d'aprobabtion par le propriétaire)
-     *
-     * @param candidate Information relative a l'objet retrouvé
-     * @return True si la requête s'est bien déroulée
-     */
-    @Override
-    public Call<RequestResult> addFoundCandidate(FoundCandidate candidate) {
-        return delegate.returningResponse(new RequestResult(true)).addFoundCandidate(candidate);
-    }
-
-    /**
      * Obtien une liste sommarisée des items
      * actuellement perdus d'un utilisateur
      *
@@ -253,46 +240,45 @@ public class InquirioServiceMock implements InquirioService {
      * @return Une liste de LostItemSummary
      */
     @Override
-    public Call<List<LostItemSummary>> getFoundItemsByOwner(long userID) {
-        ArrayList<LostItemSummary> Lostitems = new ArrayList<>();
+    public Call<List<FoundItemSummary>> getFoundItemsByOwner(long userID) {
+        ArrayList<FoundItemSummary> FoundItem = new ArrayList<>();
 
-        LostItemSummary lis3 = new LostItemSummary();
-        lis3.found = false;
+        FoundItemSummary lis3 = new FoundItemSummary();
+        lis3.found = true;
         lis3.itemID = 3;
         lis3.itemName = "Disque dur externe SanDisk";
-        lis3.locationName = "Cégep Édouard-Montpetit";
+        lis3.finderName = "Roger Tester";
 
-        Lostitems.add(lis3);
+        FoundItem.add(lis3);
 
-        return delegate.returningResponse(Lostitems).getFoundItemsByOwner(userID);
+        return delegate.returningResponse(FoundItem).getFoundItemsByOwner(userID);
     }
 
     /**
      * Obtiens une liste sommarisée de notifications
-     * de nouveaux candidats retrouvés
-     *
+     * d'item potentiellement trouvé
      * @param userID Utilisateur a qui les notifs sont adressées
      * @return Une liste de NotificationSummary
      */
     @Override
-    public Call<List<NotificationSummary>> getCandidateNotifications(long userID) {
+    public Call<List<NotificationSummary>> getPotentiallyFoundItems(long userID) {
         ArrayList<NotificationSummary> notificationSummaries = new ArrayList<>();
         NotificationSummary n1 = new NotificationSummary();
         NotificationSummary n2 = new NotificationSummary();
 
         n1.itemName = "Porte feuille";
-        n1.userName = "Christopher St-Pierre";
+        n1.senderName = "Christopher St-Pierre";
         n1.notificationID = 1;
 
         n2.itemName = "Écouteurs";
         n2.notificationID = 2;
-        n2.userName = "Rogert Tester";
+        n2.senderName = "Rogert Tester";
 
 
         notificationSummaries.add(n1);
         notificationSummaries.add(n2);
 
-        return delegate.returningResponse(notificationSummaries).getCandidateNotifications(userID);
+        return delegate.returningResponse(notificationSummaries).getPotentiallyFoundItems(userID);
     }
 
     /**

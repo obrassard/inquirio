@@ -13,11 +13,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.List;
+
+import ca.obrassard.inquirio.services.InquirioService;
+import ca.obrassard.inquirio.services.RetrofitUtil;
+import ca.obrassard.inquirio.transfer.NotificationSummary;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NotificationsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    InquirioService service = RetrofitUtil.getMock();
     NotificationAdapter m_adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +53,35 @@ public class NotificationsActivity extends AppCompatActivity
         m_adapter = new NotificationAdapter(this);
         lvNearItems.setAdapter(m_adapter);
         lvNearItems.setEmptyView(findViewById(R.id.no_notif_ph));
+
+        lvNearItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                NotificationSummary summary = m_adapter.getItem(position);
+                Intent i = new Intent(NotificationsActivity.this.getApplicationContext(),NotificationDetailsActivity.class);
+                i.putExtra("notification.id", summary.notificationID);
+                startActivity(i);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        service.getPotentiallyFoundItems(LoggedUser.data.userID).enqueue(new Callback<List<NotificationSummary>>() {
+            @Override
+            public void onResponse(Call<List<NotificationSummary>> call, Response<List<NotificationSummary>> response) {
+                List<NotificationSummary> list = response.body();
+                m_adapter.clear();
+                m_adapter.addAll(list);
+                m_adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<NotificationSummary>> call, Throwable t) {
+                Toast.makeText(NotificationsActivity.this, "Une erreur s'est produite", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     //region [Evennement du tirroir]

@@ -12,11 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <EditText
+            android:id="@+id/txtTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/title"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:hint="@string/title" />
 
         <android.support.design.widget.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -27,17 +29,17 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <EditText
-                android:id="@+id/shipper_field"
+                android:id="@+id/txtDescription"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:gravity="top"
                 android:hint="@string/desc"
                 android:inputType="textMultiLine"
-                android:overScrollMode="always"
+                android:maxLength="140"
 
+                android:overScrollMode="always"
                 android:scrollbarStyle="insideInset"
-                android:scrollbars="vertical"
-                android:maxLength="140"/>
+                android:scrollbars="vertical" />
         </android.support.design.widget.TextInputLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,11 +52,13 @@
                 android:layout_height="wrap_content"
                 android:text="@string/addreward"
                 />
+
             <EditText
-                android:id="@+id/reward_amount"
-                android:layout_width="0dp" android:layout_weight="3"
+                android:id="@+id/txtReward"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"/>
+                android:layout_weight="3"
+                android:inputType="numberDecimal" />
             <TextView
                 android:textSize="17sp"
                 android:layout_marginTop="10dp"
@@ -80,12 +84,14 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:text="Emplacement selectionné"/>
+
         <Button
+            android:id="@+id/btnSend"
             android:layout_width="match_parent"
             android:layout_height="53dp"
             android:layout_marginTop="40dp"
-            android:textColor="@color/white"
             android:backgroundTint="@color/colorAccent"
-            android:text="@string/additem"/>
+            android:text="@string/additem"
+            android:textColor="@color/white" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

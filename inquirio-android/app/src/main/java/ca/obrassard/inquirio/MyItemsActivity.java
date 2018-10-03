@@ -11,12 +11,26 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.List;
+
+import ca.obrassard.inquirio.services.InquirioService;
+import ca.obrassard.inquirio.services.RetrofitUtil;
+import ca.obrassard.inquirio.transfer.FoundItemSummary;
+import ca.obrassard.inquirio.transfer.LostItemSummary;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyItemsActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+implements NavigationView.OnNavigationItemSelectedListener {
     MyLostItemAdapter m_adapterLostItems;
     MyFoundItemAdapter m_adapterFoundItems;
+    InquirioService service = RetrofitUtil.getMock();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //region [Initialisation des éléments de navigation]
@@ -42,6 +56,7 @@ public class MyItemsActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //endregion
+
         //Initialisation des listes
         ListView lvMyLostItems = findViewById(R.id.lv_mylostitems);
         m_adapterLostItems = new MyLostItemAdapter(this);
@@ -53,6 +68,60 @@ public class MyItemsActivity extends AppCompatActivity
         lvMyFoundItem.setAdapter(m_adapterFoundItems);
         lvMyFoundItem.setEmptyView(findViewById(R.id.noFoundItems));
 
+
+        lvMyFoundItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FoundItemSummary selecteditem = m_adapterFoundItems.getItem(position);
+                Intent i = new Intent(MyItemsActivity.this.getApplicationContext(),ItemsDetailActivity.class);
+                i.putExtra("item.id",selecteditem.itemID);
+                startActivity(i);
+            }
+        });
+
+        lvMyLostItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                LostItemSummary selecteditem = m_adapterLostItems.getItem(position);
+                Intent i = new Intent(MyItemsActivity.this.getApplicationContext(),ItemsDetailActivity.class);
+                i.putExtra("item.id",selecteditem.itemID);
+                startActivity(i);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        service.getLostItemsByOwner(LoggedUser.data.userID).enqueue(new Callback<List<LostItemSummary>>() {
+            @Override
+            public void onResponse(Call<List<LostItemSummary>> call, Response<List<LostItemSummary>> response) {
+                List<LostItemSummary> li = response.body();
+                m_adapterLostItems.clear();
+                m_adapterLostItems.addAll(li);
+                m_adapterLostItems.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<LostItemSummary>> call, Throwable t) {
+                Toast.makeText(MyItemsActivity.this, "Une erreur est survenue", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        service.getFoundItemsByOwner(LoggedUser.data.userID).enqueue(new Callback<List<FoundItemSummary>>() {
+            @Override
+            public void onResponse(Call<List<FoundItemSummary>> call, Response<List<FoundItemSummary>> response) {
+                List<FoundItemSummary> li = response.body();
+                m_adapterFoundItems.clear();
+                m_adapterFoundItems.addAll(li);
+                m_adapterFoundItems.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<FoundItemSummary>> call, Throwable t) {
+                Toast.makeText(MyItemsActivity.this, "Une erreur est survenue", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     //region [Evennement du tirroir]

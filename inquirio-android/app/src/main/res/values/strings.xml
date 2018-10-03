@@ -84,4 +84,7 @@
     <string name="rate">Notez %1$s</string>
     <string name="rate_dialog_txt">Si vous avez rencontré %1$s pour récupérer votre item %2$s, nous aimerions que vous lui attribuiez une note :</string>
     <string name="later">Plus tard</string>
+    <string name="foundby">Trouvé par %1$s</string>
+    <string name="itemadded">Votre item a été enregistré!</string>
+    <string name="itemaddeddesc">Les utilisateur situés près de l\'emplacement %1$s seront averti que vous avez perdu un item!</string>
 </resources>

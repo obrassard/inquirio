@@ -14,5 +14,8 @@ public class LostItem {
     public Date date;
     public long ownerId;
     public boolean itemHasBeenFound;
+    public double longitude;
+    public double latitude;
+    public String locationName;
 }
 
