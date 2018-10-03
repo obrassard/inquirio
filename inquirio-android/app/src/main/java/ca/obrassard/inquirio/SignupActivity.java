@@ -67,6 +67,7 @@ public class SignupActivity extends AppCompatActivity {
                     startActivity(intent);
                 } else {
                     //Ereur d'authentification
+                    Toast.makeText(SignupActivity.this, "Impossible de vous connecter, veuillez réésayer.", Toast.LENGTH_LONG).show();
                 }
             }
 
