@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
@@ -15,6 +16,8 @@ public class DrawerUtils {
         LoggedUser.data = null;
         Intent i = new Intent(a.getApplicationContext(),LoginHomeActivity.class);
         a.startActivity(i);
+        a.finishAffinity();
+        ActivityCompat.finishAffinity(a);
     }
 
     public static void handleDrawerClick(int id, Activity a){
