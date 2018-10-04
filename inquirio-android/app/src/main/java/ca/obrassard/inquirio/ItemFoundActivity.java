@@ -50,6 +50,7 @@ public class ItemFoundActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        DrawerUtils.prepareHeader(navigationView);
 
         final long itemID = getIntent().getLongExtra("item.id",0);
         service.getItemName(itemID).enqueue(new Callback<String>() {
@@ -142,24 +143,7 @@ public class ItemFoundActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        Intent intent = new Intent();
-
-        if (id == R.id.ham_account) {
-            intent = new Intent(this, AccountActivity.class);
-        } else if (id == R.id.ham_logout) {
-            return false;
-        } else if (id == R.id.ham_lostitem) {
-            intent = new Intent(this, AddItemActivity.class);
-        } else if (id == R.id.ham_myitems) {
-            intent = new Intent(this, MyItemsActivity.class);
-        } else if (id == R.id.ham_mynotif) {
-            intent = new Intent(this, NotificationsActivity.class);
-        }
-        startActivity(intent);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        DrawerUtils.handleDrawerClick(id,this);
         return true;
     }
 

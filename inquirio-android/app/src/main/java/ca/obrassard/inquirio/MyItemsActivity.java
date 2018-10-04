@@ -55,6 +55,7 @@ implements NavigationView.OnNavigationItemSelectedListener {
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        DrawerUtils.prepareHeader(navigationView);
         //endregion
 
         //Initialisation des listes
@@ -124,35 +125,18 @@ implements NavigationView.OnNavigationItemSelectedListener {
         });
     }
 
-    //region [Evennement du tirroir]
     private void LaunchILostSomething(){
         Intent intent = new Intent(this, AddItemActivity.class);
         startActivity(intent);
     }
 
+    //region [Evennement du tirroir]
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        Intent intent = new Intent();
-
-        if (id == R.id.ham_account) {
-            intent = new Intent(this, AccountActivity.class);
-        } else if (id == R.id.ham_logout) {
-            return false;
-        } else if (id == R.id.ham_lostitem) {
-            intent = new Intent(this, AddItemActivity.class);
-        } else if (id == R.id.ham_myitems) {
-            intent = new Intent(this, MyItemsActivity.class);
-        } else if (id == R.id.ham_mynotif) {
-            intent = new Intent(this, NotificationsActivity.class);
-        }
-        startActivity(intent);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        DrawerUtils.handleDrawerClick(id,this);
         return true;
     }
 

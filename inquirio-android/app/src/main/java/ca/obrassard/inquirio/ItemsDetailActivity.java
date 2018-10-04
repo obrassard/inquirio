@@ -60,6 +60,7 @@ public class ItemsDetailActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -68,6 +69,7 @@ public class ItemsDetailActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        DrawerUtils.prepareHeader(navigationView);
 
         Bundle mapViewBundle = null;
         if (savedInstanceState != null) {
@@ -165,9 +167,8 @@ public class ItemsDetailActivity extends AppCompatActivity
                 startActivity(i);
             }
         });
-
-
     }
+
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
@@ -217,6 +218,7 @@ public class ItemsDetailActivity extends AppCompatActivity
         }
         mapView.onSaveInstanceState(mapViewBundle);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -258,24 +260,7 @@ public class ItemsDetailActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        Intent intent = new Intent();
-
-        if (id == R.id.ham_account) {
-            intent = new Intent(this, AccountActivity.class);
-        } else if (id == R.id.ham_logout) {
-            return false;
-        } else if (id == R.id.ham_lostitem) {
-            intent = new Intent(this, AddItemActivity.class);
-        } else if (id == R.id.ham_myitems) {
-            intent = new Intent(this, MyItemsActivity.class);
-        } else if (id == R.id.ham_mynotif) {
-            intent = new Intent(this, NotificationsActivity.class);
-        }
-        startActivity(intent);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        DrawerUtils.handleDrawerClick(id,this);
         return true;
     }
 
@@ -289,8 +274,5 @@ public class ItemsDetailActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
-
-
     //endregion
 }
