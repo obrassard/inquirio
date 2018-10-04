@@ -1,6 +1,7 @@
 package ca.obrassard.inquirio;
 
 import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -70,6 +71,9 @@ public class SignupActivity extends AppCompatActivity {
                     LoggedUser.data = loginResponse;
                     Intent intent = new Intent(SignupActivity.this.getApplicationContext(), MainActivity.class);
                     startActivity(intent);
+                    SignupActivity.this.finishAffinity();
+                    ActivityCompat.finishAffinity(SignupActivity.this);
+
                 } else {
                     //Ereur d'authentification
                     Toast.makeText(SignupActivity.this, "Impossible de vous connecter, veuillez réésayer.", Toast.LENGTH_LONG).show();

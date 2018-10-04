@@ -1,8 +1,10 @@
 package ca.obrassard.inquirio;
 
 import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -60,6 +62,8 @@ public class LoginActivity extends AppCompatActivity {
                     LoggedUser.data = loginResponse;
                     Intent intent = new Intent(LoginActivity.this.getApplicationContext(), MainActivity.class);
                     startActivity(intent);
+                    LoginActivity.this.finishAffinity();
+                    ActivityCompat.finishAffinity(LoginActivity.this);
                 } else {
                     //Erreur d'authentification
                     Toast.makeText(LoginActivity.this, "Le nom d'utilisateur ou mot de passe est incorrect", Toast.LENGTH_LONG).show();
