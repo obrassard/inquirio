@@ -116,6 +116,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onResponse(Call<List<LostItemSummary>> call, Response<List<LostItemSummary>> response) {
                 List<LostItemSummary> items = response.body();
+
+                if (items == null){
+                    Toast.makeText(MainActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 m_adapter.clear();
                 m_adapter.addAll(items);
                 m_adapter.notifyDataSetChanged();

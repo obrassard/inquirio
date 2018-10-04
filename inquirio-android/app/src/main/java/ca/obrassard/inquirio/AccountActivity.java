@@ -69,10 +69,14 @@ public class AccountActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 User u = response.body();
-                txtEmail.setText(u.email);
-                txtName.setText(u.fullname);
-                ratingBar.setRating((float)u.rating);
-                nbItemTFound.setText(getString(R.string.nbitems, String.valueOf(u.itemsFound)));
+                if (u != null) {
+                    txtEmail.setText(u.email);
+                    txtName.setText(u.fullname);
+                    ratingBar.setRating((float)u.rating);
+                    nbItemTFound.setText(getString(R.string.nbitems, String.valueOf(u.itemsFound)));
+                }  else {
+                    Toast.makeText(AccountActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -87,10 +91,12 @@ public class AccountActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<LogoutResponse> call, Response<LogoutResponse> response) {
                 LogoutResponse lr = response.body();
-                if (lr.success){
-                    DrawerUtils.logout(AccountActivity.this);
-                } else {
-                    Toast.makeText(AccountActivity.this, lr.message, Toast.LENGTH_SHORT).show();
+                if (lr != null) {
+                    if (lr.success){
+                        DrawerUtils.logout(AccountActivity.this);
+                    } else {
+                        Toast.makeText(AccountActivity.this, lr.message, Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 

@@ -109,6 +109,11 @@ public class AddItemActivity extends AppCompatActivity
                         @Override
                         public void onResponse(Call<Long> call, Response<Long> response) {
                             Long itemId = response.body();
+                            if (itemId == null){
+                                Toast.makeText(AddItemActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
                             ItemAddedDialog dialog = new ItemAddedDialog();
                             Bundle args = new Bundle();
                             args.putString("itemplace",item.locationName);

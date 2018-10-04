@@ -98,6 +98,10 @@ implements NavigationView.OnNavigationItemSelectedListener {
             @Override
             public void onResponse(Call<List<LostItemSummary>> call, Response<List<LostItemSummary>> response) {
                 List<LostItemSummary> li = response.body();
+                if (li == null){
+                    Toast.makeText(MyItemsActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 m_adapterLostItems.clear();
                 m_adapterLostItems.addAll(li);
                 m_adapterLostItems.notifyDataSetChanged();
@@ -113,6 +117,10 @@ implements NavigationView.OnNavigationItemSelectedListener {
             @Override
             public void onResponse(Call<List<FoundItemSummary>> call, Response<List<FoundItemSummary>> response) {
                 List<FoundItemSummary> li = response.body();
+                if (li == null){
+                    Toast.makeText(MyItemsActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 m_adapterFoundItems.clear();
                 m_adapterFoundItems.addAll(li);
                 m_adapterFoundItems.notifyDataSetChanged();

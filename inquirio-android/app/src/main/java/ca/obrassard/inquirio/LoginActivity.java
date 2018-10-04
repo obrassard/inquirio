@@ -51,6 +51,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 LoginResponse loginResponse = response.body();
+                if (loginResponse == null){
+                    Toast.makeText(LoginActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (loginResponse.result){
                     LoggedUser.data = loginResponse;
                     Intent intent = new Intent(LoginActivity.this.getApplicationContext(), MainActivity.class);

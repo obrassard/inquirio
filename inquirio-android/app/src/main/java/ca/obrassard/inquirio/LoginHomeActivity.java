@@ -42,7 +42,12 @@ public class LoginHomeActivity extends AppCompatActivity {
         service.isSubscribed(email).enqueue(new Callback<RequestResult>() {
             @Override
             public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
-                Intent intent = new Intent();
+                Intent intent;
+                if (response.body() == null){
+                    Toast.makeText(LoginHomeActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (response.body().result){
                     intent = new Intent(LoginHomeActivity.this.getApplicationContext(), LoginActivity.class);
                 } else {

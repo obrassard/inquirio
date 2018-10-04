@@ -98,6 +98,12 @@ public class ItemsDetailActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<LostItem> call, Response<LostItem> response) {
                 LostItem lostItem = response.body();
+
+                if (lostItem == null){
+                    Toast.makeText(ItemsDetailActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 setTitle(lostItem.title);
                 itemName.setText(lostItem.title);
                 if (lostItem.itemHasBeenFound){
@@ -141,6 +147,10 @@ public class ItemsDetailActivity extends AppCompatActivity
                 service.deleteItem(itemId).enqueue(new Callback<RequestResult>() {
                     @Override
                     public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
+                        if (response.body() == null){
+                            Toast.makeText(ItemsDetailActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         boolean deleteIsSuccessful = response.body().result;
                         if (deleteIsSuccessful){
                             Intent i = new Intent(ItemsDetailActivity.this.getApplicationContext(),MainActivity.class);
@@ -178,6 +188,10 @@ public class ItemsDetailActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<Location> call, Response<Location> response) {
                 Location location = response.body();
+                if (location == null){
+                    Toast.makeText(ItemsDetailActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 locationName.setText(location.Name);
 

@@ -28,9 +28,8 @@ public class RetrofitUtil {
                 .build();
 
         NetworkBehavior networkBehavior = NetworkBehavior.create();
-        networkBehavior.setDelay(500, TimeUnit.MILLISECONDS);
+        networkBehavior.setDelay(1000, TimeUnit.MILLISECONDS);
         networkBehavior.setVariancePercent(90);
-        networkBehavior.setErrorPercent(10);
 
         MockRetrofit mock = new MockRetrofit.Builder(retrofit).networkBehavior(networkBehavior).build();
 

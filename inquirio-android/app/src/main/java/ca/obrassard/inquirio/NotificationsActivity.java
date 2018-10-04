@@ -59,6 +59,11 @@ public class NotificationsActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 NotificationSummary summary = m_adapter.getItem(position);
+                if (summary == null){
+                    Toast.makeText(NotificationsActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Intent i = new Intent(NotificationsActivity.this.getApplicationContext(),NotificationDetailsActivity.class);
                 i.putExtra("notification.id", summary.notificationID);
                 startActivity(i);
@@ -73,6 +78,10 @@ public class NotificationsActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<List<NotificationSummary>> call, Response<List<NotificationSummary>> response) {
                 List<NotificationSummary> list = response.body();
+                if (list == null){
+                    Toast.makeText(NotificationsActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 m_adapter.clear();
                 m_adapter.addAll(list);
                 m_adapter.notifyDataSetChanged();

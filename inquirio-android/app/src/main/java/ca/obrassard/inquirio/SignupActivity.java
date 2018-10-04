@@ -61,6 +61,11 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 LoginResponse loginResponse = response.body();
+                if (loginResponse == null){
+                    Toast.makeText(SignupActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (loginResponse.result){
                     LoggedUser.data = loginResponse;
                     Intent intent = new Intent(SignupActivity.this.getApplicationContext(), MainActivity.class);

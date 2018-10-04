@@ -109,7 +109,7 @@ public class ItemFoundActivity extends AppCompatActivity
                 service.sendFoundRequest(request).enqueue(new Callback<RequestResult>() {
                     @Override
                     public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
-                        if (response.body().result) {
+                        if (response.body() != null && response.body().result) {
                             DialogFragment dialog = new ThanksDialog();
                             dialog.show(getFragmentManager(), "ThanksDialog");
                         }

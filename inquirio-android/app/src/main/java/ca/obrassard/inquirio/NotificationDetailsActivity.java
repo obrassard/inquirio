@@ -91,7 +91,7 @@ public class NotificationDetailsActivity extends AppCompatActivity
                 service.denyCandidateNotification(notifID).enqueue(new Callback<Boolean>() {
                     @Override
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                        if (response.body()){
+                        if (response.body() !=null && response.body()){
                             NotificationDetailsActivity.this.finish();
                         }
                     }
@@ -111,6 +111,11 @@ public class NotificationDetailsActivity extends AppCompatActivity
                     @Override
                     public void onResponse(Call<FinderContactDetail> call, Response<FinderContactDetail> response) {
                         FinderContactDetail finderContactDetail = response.body();
+                        if (finderContactDetail == null){
+                            Toast.makeText(NotificationDetailsActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         findViewById(R.id.ll_btn_yn).setVisibility(View.GONE);
                         findViewById(R.id.ll_btn_contact).setVisibility(View.VISIBLE);
                         telephone = finderContactDetail.phoneNumber;
