@@ -16,10 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import java.text.SimpleDateFormat;
 
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
+import ca.obrassard.inquirio.transfer.FinderContactDetail;
 import ca.obrassard.inquirio.transfer.Notification;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +30,7 @@ public class NotificationDetailsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     InquirioService service = RetrofitUtil.getMock();
+    String telephone = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,21 +56,25 @@ public class NotificationDetailsActivity extends AppCompatActivity
         final TextView txtItem = findViewById(R.id.txt_itemtitle);
         ImageView img = findViewById(R.id.img_notif);
         final TextView txtDesc = findViewById(R.id.txtMessage);
-        Button btnOui = findViewById(R.id.btn_yes);
+        final Button btnOui = findViewById(R.id.btn_yes);
         Button btnNon = findViewById(R.id.btn_no);
         Button btnContact = findViewById(R.id.btn_contactFinder);
 
-        long notifID = getIntent().getLongExtra("notification.id",1);
+        final long notifID = getIntent().getLongExtra("notification.id",1);
 
         service.getNotificationDetail(notifID).enqueue(new Callback<Notification>() {
             @Override
             public void onResponse(Call<Notification> call, Response<Notification> response) {
                 Notification notification = response.body();
-                txtDate.setText(getString(R.string.date, notification.date));
+                SimpleDateFormat simpleDateFormat =
+                        new SimpleDateFormat("yyyy-MM-dd' 'HH:mm");
+                txtDate.setText(getString(R.string.date, simpleDateFormat.format(notification.date)));
                 txtUser.setText(notification.senderName);
                 txtItem.setText(notification.itemName);
                 txtDesc.setText(notification.message);
                 //TODO Obtenir l'image
+
+                setTitle(notification.senderName);
             }
 
             @Override
@@ -78,13 +84,53 @@ public class NotificationDetailsActivity extends AppCompatActivity
             }
         });
 
+        btnNon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                service.denyCandidateNotification(notifID).enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        if (response.body()){
+                            NotificationDetailsActivity.this.finish();
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+                        Toast.makeText(NotificationDetailsActivity.this, "Une erreur s'est produite", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
 
+        btnOui.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                service.acceptCandidateNotification(notifID).enqueue(new Callback<FinderContactDetail>() {
+                    @Override
+                    public void onResponse(Call<FinderContactDetail> call, Response<FinderContactDetail> response) {
+                        FinderContactDetail finderContactDetail = response.body();
+                        findViewById(R.id.ll_btn_yn).setVisibility(View.GONE);
+                        findViewById(R.id.ll_btn_contact).setVisibility(View.VISIBLE);
+                        telephone = finderContactDetail.phoneNumber;
+                    }
 
+                    @Override
+                    public void onFailure(Call<FinderContactDetail> call, Throwable t) {
+                        Toast.makeText(NotificationDetailsActivity.this, "Une erreur s'est produite", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
 
-
-
-        //sendSMS(12345678);
+        btnContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!telephone.trim().equals("")){
+                    sendSMS(telephone);
+                }
+            }
+        });
     }
 
     public void sendSMS(String number)

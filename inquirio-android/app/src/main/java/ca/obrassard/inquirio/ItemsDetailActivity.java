@@ -96,6 +96,7 @@ public class ItemsDetailActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<LostItem> call, Response<LostItem> response) {
                 LostItem lostItem = response.body();
+                setTitle(lostItem.title);
                 itemName.setText(lostItem.title);
                 if (lostItem.itemHasBeenFound){
                     statusIcon.setImageResource(R.drawable.checked);
@@ -288,5 +289,8 @@ public class ItemsDetailActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
+
+
     //endregion
 }

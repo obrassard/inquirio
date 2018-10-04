@@ -88,9 +88,7 @@ public class AccountActivity extends AppCompatActivity
             public void onResponse(Call<LogoutResponse> call, Response<LogoutResponse> response) {
                 LogoutResponse lr = response.body();
                 if (lr.success){
-                    LoggedUser.data = null;
-                    Intent i = new Intent(AccountActivity.this.getApplicationContext(),LoginHomeActivity.class);
-                    startActivity(i);
+                    DrawerUtils.logout(AccountActivity.this);
                 } else {
                     Toast.makeText(AccountActivity.this, lr.message, Toast.LENGTH_SHORT).show();
                 }
