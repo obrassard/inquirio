@@ -70,7 +70,7 @@ public class NotificationDetailsActivity extends AppCompatActivity
                 SimpleDateFormat simpleDateFormat =
                         new SimpleDateFormat("yyyy-MM-dd' 'HH:mm");
                 txtDate.setText(getString(R.string.date, simpleDateFormat.format(notification.date)));
-                txtUser.setText(notification.senderName);
+                txtUser.setText(getString(R.string.user_and_rating, notification.senderName, notification.senderRating));
                 txtItem.setText(notification.itemName);
                 txtDesc.setText(notification.message);
                 //TODO Obtenir l'image

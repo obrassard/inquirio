@@ -39,7 +39,7 @@
     <string name="YourObjectsFound">Vos objets retrouvés</string>
     <string name="NoLostItemsHeader">On dirait que tous vos items ont été retrouvés!</string>
     <string name="NoFoundItemsHeader">Personne n\'a encore trouvé d\'items qui vous appartiennent!</string>
-    <string name="title_activity_items_detail">Nom de l\'item</string>
+    <string name="title_activity_items_detail">Inquirio</string>
     <string name="aproxlocation">Emplacement aproximatif :</string>
     <string name="reward">Récompense : </string>
     <string name="cash">%1$.2f $</string>
@@ -63,7 +63,7 @@
     <string name="no_notification">Vous n\'avez actuellement aucune notification</string>
     <string name="title_activity_map_detail">Détail de l\'emplacement de l'item</string>
     <string name="date">Date: %1$s</string>
-    <string name="user_and_rating">%1$s (%2$d/5)</string>
+    <string name="user_and_rating">%1$s (%2$.1f/5)</string>
     <string name="mayhavefnd">à peut-être retrouvé votre item :</string>
     <string name="heresthephoto">Voici la photo de l\'objet retrouvé :</string>
     <string name="msgforyou">Message à votre intention :</string>

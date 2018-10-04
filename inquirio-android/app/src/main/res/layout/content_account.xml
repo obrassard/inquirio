@@ -17,40 +17,39 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:src="@drawable/account"/>
+
         <TextView
             android:id="@+id/name"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#000"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textAlignment="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Olivier Brassard"/>
+            android:textColor="#000"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/email"
-            android:textAlignment="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="brassard.oli@gmail.com"/>
+            android:textAlignment="center" />
+
         <RatingBar
-            android:layout_gravity="center"
             android:id="@+id/user_rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleX=".6"
-            android:scaleY=".6"
+            android:layout_gravity="center"
+            android:isIndicator="true"
             android:max="5"
             android:numStars="5"
-            android:rating="4.5"
-            android:isIndicator="true"
-            />
+            android:rating="5"
+            android:scaleX=".6"
+            android:scaleY=".6" />
 
         <TextView
             android:id="@+id/nbidtem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/nbitems"
             android:textAlignment="center"
             android:textColor="#000"
             android:textSize="20sp" />
