@@ -99,11 +99,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-//        DialogFragment rateTest = new RateUserDialog();
-//        Bundle arg = new Bundle();
-//        arg.putLong("notifId",1L);
-//        rateTest.setArguments(arg);
-//        rateTest.show(getFragmentManager(),"rate");
 
         //Affichage du popup d'accueil si première connexion
         if (m_isFirstConnection){

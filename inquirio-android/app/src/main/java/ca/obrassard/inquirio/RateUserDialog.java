@@ -32,7 +32,6 @@ public class RateUserDialog extends DialogFragment {
         title.setText(getString(R.string.rate, ns.senderName));
         message.setText(getString(R.string.rate_dialog_txt, ns.senderName, ns.itemName));
 
-
         builder.setView(v);
         builder.setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
             @Override
