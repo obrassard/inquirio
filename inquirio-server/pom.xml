@@ -32,7 +32,6 @@
       <artifactId>jersey-container-servlet-core</artifactId>
       <version>2.23</version>
     </dependency>
-
       <dependency>
           <groupId>org.jooq</groupId>
           <artifactId>jooq</artifactId>
@@ -48,8 +47,28 @@
           <artifactId>jooq-codegen</artifactId>
           <version>3.11.5</version>
       </dependency>
+      <dependency>
+          <groupId>mysql</groupId>
+          <artifactId>mysql-connector-java</artifactId>
+          <version>8.0.12</version>
+      </dependency>
+      <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+      <dependency>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+          <version>2.8.5</version>
+      </dependency>
+      <dependency>
+          <groupId>joda-time</groupId>
+          <artifactId>joda-time</artifactId>
+          <version>2.8.2</version>
+      </dependency>
+      <dependency>
+          <groupId>com.google.guava</groupId>
+          <artifactId>guava</artifactId>
+          <version>19.0</version>
+      </dependency>
   </dependencies>
-
   <build>
     <finalName>inquirioServer</finalName>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
@@ -89,11 +108,61 @@
         <plugin>
           <groupId>org.apache.tomcat.maven</groupId>
           <artifactId>tomcat7-maven-plugin</artifactId>
-          <version>2.1</version> <!-- TODO 2.2 not found ??-->
+          <version>2.2</version>
           <configuration>
               <path>/</path>
+              <port>7015</port>
           </configuration>
         </plugin>
+          <plugin>
+              <groupId>org.jooq</groupId>
+              <artifactId>jooq-codegen-maven</artifactId>
+              <version>3.11.4</version>
+              <!-- The plugin should hook into the generate goal -->
+              <executions>
+                  <execution>
+                      <goals>
+                          <goal>generate</goal>
+                      </goals>
+                  </execution>
+              </executions>
+
+              <dependencies>
+                  <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+                  <dependency>
+                      <groupId>mysql</groupId>
+                      <artifactId>mysql-connector-java</artifactId>
+                      <version>8.0.12</version>
+                  </dependency>
+              </dependencies>
+
+              <!-- Specify the plugin configuration.
+                   The configuration format is the same as for the standalone code generator -->
+              <configuration>
+
+                  <!-- JDBC connection parameters -->
+                  <jdbc>
+                      <driver>com.mysql.cj.jdbc.Driver</driver>
+                      <url>jdbc:mysql://debian.obrassard.ca:3306</url>
+                      <user>inquirioauth</user>
+                      <password>5kvvpz4HiktywVcq</password>
+                  </jdbc>
+
+                  <!-- Generator parameters -->
+                  <generator>
+                      <database>
+                          <name>org.jooq.meta.mysql.MySQLDatabase</name>
+                          <includes>.*</includes>
+                          <excludes></excludes>
+                          <inputSchema>inquirio</inputSchema>
+                      </database>
+                      <target>
+                          <packageName>ca.obrassard.jooqentities</packageName>
+                          <directory>src/main/java</directory>
+                      </target>
+                  </generator>
+              </configuration>
+          </plugin>
       </plugins>
   </build>
 </project>

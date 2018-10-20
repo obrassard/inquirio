@@ -59,3 +59,12 @@ freeline_project_description.json
 \.idea/runConfigurations\.xml
 
 \.idea/
+
+inqirio-server/target/
+
+
+inquirio-server/target/tomcat/logs/
+
+inquirio-server/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles\.lst
+
+inquirio-server/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles\.lst
