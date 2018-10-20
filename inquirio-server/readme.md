@@ -1,5 +1,5 @@
 
-<img src="./icons/inquirio.png" width="200">
+<img src="../icons/inquirio.png" width="200">
 
 ### Inquirio Server - Technologies Mobiles CEM
 
