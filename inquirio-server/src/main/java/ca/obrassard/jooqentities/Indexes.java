@@ -4,6 +4,8 @@
 package ca.obrassard.jooqentities;
 
 
+import ca.obrassard.jooqentities.tables.Lostitems;
+import ca.obrassard.jooqentities.tables.Notification;
 import ca.obrassard.jooqentities.tables.Users;
 
 import javax.annotation.Generated;
@@ -30,6 +32,8 @@ public class Indexes {
     // INDEX definitions
     // -------------------------------------------------------------------------
 
+    public static final Index LOSTITEMS_PRIMARY = Indexes0.LOSTITEMS_PRIMARY;
+    public static final Index NOTIFICATION_PRIMARY = Indexes0.NOTIFICATION_PRIMARY;
     public static final Index USERS_PRIMARY = Indexes0.USERS_PRIMARY;
 
     // -------------------------------------------------------------------------
@@ -37,6 +41,8 @@ public class Indexes {
     // -------------------------------------------------------------------------
 
     private static class Indexes0 {
+        public static Index LOSTITEMS_PRIMARY = Internal.createIndex("PRIMARY", Lostitems.LOSTITEMS, new OrderField[] { Lostitems.LOSTITEMS.ID }, true);
+        public static Index NOTIFICATION_PRIMARY = Internal.createIndex("PRIMARY", Notification.NOTIFICATION, new OrderField[] { Notification.NOTIFICATION.ID }, true);
         public static Index USERS_PRIMARY = Internal.createIndex("PRIMARY", Users.USERS, new OrderField[] { Users.USERS.ID }, true);
     }
 }

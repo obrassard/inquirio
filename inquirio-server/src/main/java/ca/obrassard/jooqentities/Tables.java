@@ -4,6 +4,8 @@
 package ca.obrassard.jooqentities;
 
 
+import ca.obrassard.jooqentities.tables.Lostitems;
+import ca.obrassard.jooqentities.tables.Notification;
 import ca.obrassard.jooqentities.tables.Users;
 
 import javax.annotation.Generated;
@@ -21,6 +23,16 @@ import javax.annotation.Generated;
 )
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {
+
+    /**
+     * The table <code>inquirio.LostItems</code>.
+     */
+    public static final Lostitems LOSTITEMS = ca.obrassard.jooqentities.tables.Lostitems.LOSTITEMS;
+
+    /**
+     * The table <code>inquirio.Notification</code>.
+     */
+    public static final Notification NOTIFICATION = ca.obrassard.jooqentities.tables.Notification.NOTIFICATION;
 
     /**
      * The table <code>inquirio.Users</code>.

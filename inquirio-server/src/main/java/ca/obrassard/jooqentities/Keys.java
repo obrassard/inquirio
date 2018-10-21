@@ -4,7 +4,11 @@
 package ca.obrassard.jooqentities;
 
 
+import ca.obrassard.jooqentities.tables.Lostitems;
+import ca.obrassard.jooqentities.tables.Notification;
 import ca.obrassard.jooqentities.tables.Users;
+import ca.obrassard.jooqentities.tables.records.LostitemsRecord;
+import ca.obrassard.jooqentities.tables.records.NotificationRecord;
 import ca.obrassard.jooqentities.tables.records.UsersRecord;
 
 import javax.annotation.Generated;
@@ -32,12 +36,16 @@ public class Keys {
     // IDENTITY definitions
     // -------------------------------------------------------------------------
 
+    public static final Identity<LostitemsRecord, Integer> IDENTITY_LOSTITEMS = Identities0.IDENTITY_LOSTITEMS;
+    public static final Identity<NotificationRecord, Integer> IDENTITY_NOTIFICATION = Identities0.IDENTITY_NOTIFICATION;
     public static final Identity<UsersRecord, Integer> IDENTITY_USERS = Identities0.IDENTITY_USERS;
 
     // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final UniqueKey<LostitemsRecord> KEY_LOSTITEMS_PRIMARY = UniqueKeys0.KEY_LOSTITEMS_PRIMARY;
+    public static final UniqueKey<NotificationRecord> KEY_NOTIFICATION_PRIMARY = UniqueKeys0.KEY_NOTIFICATION_PRIMARY;
     public static final UniqueKey<UsersRecord> KEY_USERS_PRIMARY = UniqueKeys0.KEY_USERS_PRIMARY;
 
     // -------------------------------------------------------------------------
@@ -50,10 +58,14 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     private static class Identities0 {
+        public static Identity<LostitemsRecord, Integer> IDENTITY_LOSTITEMS = Internal.createIdentity(Lostitems.LOSTITEMS, Lostitems.LOSTITEMS.ID);
+        public static Identity<NotificationRecord, Integer> IDENTITY_NOTIFICATION = Internal.createIdentity(Notification.NOTIFICATION, Notification.NOTIFICATION.ID);
         public static Identity<UsersRecord, Integer> IDENTITY_USERS = Internal.createIdentity(Users.USERS, Users.USERS.ID);
     }
 
     private static class UniqueKeys0 {
+        public static final UniqueKey<LostitemsRecord> KEY_LOSTITEMS_PRIMARY = Internal.createUniqueKey(Lostitems.LOSTITEMS, "KEY_LostItems_PRIMARY", Lostitems.LOSTITEMS.ID);
+        public static final UniqueKey<NotificationRecord> KEY_NOTIFICATION_PRIMARY = Internal.createUniqueKey(Notification.NOTIFICATION, "KEY_Notification_PRIMARY", Notification.NOTIFICATION.ID);
         public static final UniqueKey<UsersRecord> KEY_USERS_PRIMARY = Internal.createUniqueKey(Users.USERS, "KEY_Users_PRIMARY", Users.USERS.ID);
     }
 }

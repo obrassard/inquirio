@@ -4,6 +4,8 @@
 package ca.obrassard.jooqentities;
 
 
+import ca.obrassard.jooqentities.tables.Lostitems;
+import ca.obrassard.jooqentities.tables.Notification;
 import ca.obrassard.jooqentities.tables.Users;
 
 import java.util.ArrayList;
@@ -30,12 +32,22 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Inquirio extends SchemaImpl {
 
-    private static final long serialVersionUID = 2012492242;
+    private static final long serialVersionUID = 1399301714;
 
     /**
      * The reference instance of <code>inquirio</code>
      */
     public static final Inquirio INQUIRIO = new Inquirio();
+
+    /**
+     * The table <code>inquirio.LostItems</code>.
+     */
+    public final Lostitems LOSTITEMS = ca.obrassard.jooqentities.tables.Lostitems.LOSTITEMS;
+
+    /**
+     * The table <code>inquirio.Notification</code>.
+     */
+    public final Notification NOTIFICATION = ca.obrassard.jooqentities.tables.Notification.NOTIFICATION;
 
     /**
      * The table <code>inquirio.Users</code>.
@@ -67,6 +79,8 @@ public class Inquirio extends SchemaImpl {
 
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
+            Lostitems.LOSTITEMS,
+            Notification.NOTIFICATION,
             Users.USERS);
     }
 }

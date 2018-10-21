@@ -1,7 +1,5 @@
 package ca.obrassard;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -21,16 +19,6 @@ import java.sql.SQLException;
 // https://www.youtube.com/watch?v=__QxqLGVDbg
 public class DatasourceConfig {
     public static DSLContext getContext() throws SQLException {
-//        try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        HikariConfig config = new HikariConfig();
-//        config.setJdbcUrl("jdbc:mysql://debian.obrassard.ca:3306");
-//        config.setSchema("inquirio");
-//        config.setUsername("inquirioauth");
-//        config.setPassword("5kvvpz4HiktywVcq");
 
         String userName = "inquirioauth";
         String password = "5kvvpz4HiktywVcq";
