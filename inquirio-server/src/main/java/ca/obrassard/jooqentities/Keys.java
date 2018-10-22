@@ -13,6 +13,7 @@ import ca.obrassard.jooqentities.tables.records.UsersRecord;
 
 import javax.annotation.Generated;
 
+import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.UniqueKey;
 import org.jooq.impl.Internal;
@@ -52,6 +53,10 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final ForeignKey<LostitemsRecord, UsersRecord> FK_USERS_OWNERID = ForeignKeys0.FK_USERS_OWNERID;
+    public static final ForeignKey<LostitemsRecord, UsersRecord> FK_USERS_FINDERID = ForeignKeys0.FK_USERS_FINDERID;
+    public static final ForeignKey<NotificationRecord, LostitemsRecord> FK_LOSTITEMS_ITEMID = ForeignKeys0.FK_LOSTITEMS_ITEMID;
+    public static final ForeignKey<NotificationRecord, UsersRecord> FK_USERS_SENDERID = ForeignKeys0.FK_USERS_SENDERID;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
@@ -64,8 +69,15 @@ public class Keys {
     }
 
     private static class UniqueKeys0 {
-        public static final UniqueKey<LostitemsRecord> KEY_LOSTITEMS_PRIMARY = Internal.createUniqueKey(Lostitems.LOSTITEMS, "KEY_LostItems_PRIMARY", Lostitems.LOSTITEMS.ID);
-        public static final UniqueKey<NotificationRecord> KEY_NOTIFICATION_PRIMARY = Internal.createUniqueKey(Notification.NOTIFICATION, "KEY_Notification_PRIMARY", Notification.NOTIFICATION.ID);
-        public static final UniqueKey<UsersRecord> KEY_USERS_PRIMARY = Internal.createUniqueKey(Users.USERS, "KEY_Users_PRIMARY", Users.USERS.ID);
+        public static final UniqueKey<LostitemsRecord> KEY_LOSTITEMS_PRIMARY = Internal.createUniqueKey(Lostitems.LOSTITEMS, "KEY_lostitems_PRIMARY", Lostitems.LOSTITEMS.ID);
+        public static final UniqueKey<NotificationRecord> KEY_NOTIFICATION_PRIMARY = Internal.createUniqueKey(Notification.NOTIFICATION, "KEY_notification_PRIMARY", Notification.NOTIFICATION.ID);
+        public static final UniqueKey<UsersRecord> KEY_USERS_PRIMARY = Internal.createUniqueKey(Users.USERS, "KEY_users_PRIMARY", Users.USERS.ID);
+    }
+
+    private static class ForeignKeys0 {
+        public static final ForeignKey<LostitemsRecord, UsersRecord> FK_USERS_OWNERID = Internal.createForeignKey(ca.obrassard.jooqentities.Keys.KEY_USERS_PRIMARY, Lostitems.LOSTITEMS, "FK_Users_OwnerID", Lostitems.LOSTITEMS.OWNERID);
+        public static final ForeignKey<LostitemsRecord, UsersRecord> FK_USERS_FINDERID = Internal.createForeignKey(ca.obrassard.jooqentities.Keys.KEY_USERS_PRIMARY, Lostitems.LOSTITEMS, "FK_Users_FinderID", Lostitems.LOSTITEMS.FINDERID);
+        public static final ForeignKey<NotificationRecord, LostitemsRecord> FK_LOSTITEMS_ITEMID = Internal.createForeignKey(ca.obrassard.jooqentities.Keys.KEY_LOSTITEMS_PRIMARY, Notification.NOTIFICATION, "FK_LostItems_ItemID", Notification.NOTIFICATION.ITEMID);
+        public static final ForeignKey<NotificationRecord, UsersRecord> FK_USERS_SENDERID = Internal.createForeignKey(ca.obrassard.jooqentities.Keys.KEY_USERS_PRIMARY, Notification.NOTIFICATION, "FK_Users_SenderID", Notification.NOTIFICATION.ITEMID);
     }
 }

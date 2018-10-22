@@ -3,12 +3,19 @@ package ca.obrassard;
 import ca.obrassard.inquirioCommons.*;
 import ca.obrassard.model.LostItem;
 import ca.obrassard.model.User;
+import com.google.common.hash.Hashing;
 import org.jooq.DSLContext;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.xml.ws.http.HTTPException;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.List;
+
+import static ca.obrassard.jooqentities.tables.Users.*;
+import static org.jooq.impl.DSL.field;
 
 /**
  * Created by Olivier Brassard.
@@ -35,24 +42,31 @@ public class InquirioWebService implements InquirioService {
      * Permet de savoir si une adresse courriel
      * est associé à un compte d'utlisateur
      *
-     * @param email adresse à vérifier
+     * @param request adresse à vérifier
      * @return True si un compte correspond à l'adresse
      */
-    @Override
-    public RequestResult isSubscribed(String email) {
-        return null;
+    @POST
+    @Path("checksubscription")
+    public RequestResult isSubscribed(SubscriptionCheckRequest request) {
+        boolean exists = context.fetchExists(context.selectOne().from(USERS).where(USERS.EMAIL.eq(request.email)));
+        return new RequestResult(exists);
     }
 
     /**
      * Tente une authentfication au service d'un utilisateur
      * existant
      *
-     * @param email    adresse couriel de l'utlilisateur
-     * @param password mot de passe de l'utilisateur
+     * @param loginRequest adresse couriel de l'utlilisateur mot de passe de l'utilisateur
      * @return LoginResponse
      */
-    @Override
-    public LoginResponse login(String email, String password) {
+    
+    public LoginResponse login(LoginRequest loginRequest) {
+        if (!ValidationUtil.isValidEmail(loginRequest.email) || loginRequest.password.trim().equals("")){
+            throw new HTTPException(400);
+        }
+
+        String hashedPasswd = Hashing.sha256().hashString(loginRequest.password, StandardCharsets.UTF_8).toString();
+        //TODO : A compléter
         return null;
     }
 
@@ -62,8 +76,10 @@ public class InquirioWebService implements InquirioService {
      * @param userInfos Données d'utlisateurs pour l'inscription
      * @return LoginResponse
      */
-    @Override
+    
     public LoginResponse signup(SignupRequest userInfos) {
+
+        //context.insertInto(USERS, USERS. )
         return null;
     }
 
@@ -73,7 +89,7 @@ public class InquirioWebService implements InquirioService {
      * @param userID Id de l'utilisateur à déconnecter
      * @return LogoutResponse
      */
-    @Override
+    
     public LogoutResponse logout(long userID) {
         return null;
     }
@@ -85,7 +101,7 @@ public class InquirioWebService implements InquirioService {
      * @param currentLocation Emplacement de l'appareil
      * @return Une liste sommaire des items perdus à proximité
      */
-    @Override
+    
     public List<LostItemSummary> getNearLostItems(LocationRequest currentLocation) {
         return null;
     }
@@ -96,7 +112,7 @@ public class InquirioWebService implements InquirioService {
      * @param userID identifiant de l'utilsateur
      * @return un objet User
      */
-    @Override
+    
     public User getUserDetail(long userID) {
         return null;
     }
@@ -107,7 +123,7 @@ public class InquirioWebService implements InquirioService {
      * @param item Detail de l'item à ajouter
      * @return L'ID de l'item ajouté ou -1
      */
-    @Override
+    
     public Long addNewItem(LostItem item) {
         return null;
     }
@@ -118,7 +134,7 @@ public class InquirioWebService implements InquirioService {
      * @param itemID Identifiant de l'item
      * @return Les details de l'item
      */
-    @Override
+    
     public LostItem getItemDetail(long itemID) {
         return null;
     }
@@ -128,7 +144,7 @@ public class InquirioWebService implements InquirioService {
      * @param itemID Identifiant de l'item
      * @return L'emplacement de l'item
      */
-    @Override
+    
     public Location getItemLocation(long itemID) {
         return null;
     }
@@ -138,7 +154,7 @@ public class InquirioWebService implements InquirioService {
      * @param itemID identifiant de l'id
      * @return True si la suppression s'est bien déroulée
      */
-    @Override
+    
     public RequestResult deleteItem(long itemID) {
         return null;
     }
@@ -149,7 +165,7 @@ public class InquirioWebService implements InquirioService {
      * @param itemID id
      * @return nom de l'item
      */
-    @Override
+    
     public String getItemName(long itemID) {
         return null;
     }
@@ -161,7 +177,7 @@ public class InquirioWebService implements InquirioService {
      * @param resquest
      * @return True si tout s'est déroulé correctement
      */
-    @Override
+    
     public RequestResult sendFoundRequest(FoundRequest resquest) {
         return null;
     }
@@ -173,7 +189,7 @@ public class InquirioWebService implements InquirioService {
      * @param userID Identifiant de l'utilisateur
      * @return Une liste de LostItemSummary
      */
-    @Override
+    
     public List<LostItemSummary> getLostItemsByOwner(long userID) {
         return null;
     }
@@ -185,7 +201,7 @@ public class InquirioWebService implements InquirioService {
      * @param userID Identifiant de l'utilisateur
      * @return Une liste de LostItemSummary
      */
-    @Override
+    
     public List<FoundItemSummary> getFoundItemsByOwner(long userID) {
         return null;
     }
@@ -197,7 +213,7 @@ public class InquirioWebService implements InquirioService {
      * @param userID Utilisateur a qui les notifs sont adressées
      * @return Une liste de NotificationSummary
      */
-    @Override
+    
     public List<NotificationSummary> getPotentiallyFoundItems(long userID) {
         return null;
     }
@@ -209,7 +225,7 @@ public class InquirioWebService implements InquirioService {
      * @param notificationID identifiant de la notif de candidat
      * @return Details de la Notification
      */
-    @Override
+    
     public Notification getNotificationDetail(long notificationID) {
         return null;
     }
@@ -221,7 +237,7 @@ public class InquirioWebService implements InquirioService {
      * @param notificationID identifiant de la notif de candidat
      * @return True si la requête s'est bien déroulée
      */
-    @Override
+    
     public Boolean denyCandidateNotification(long notificationID) {
         return null;
     }
@@ -235,7 +251,7 @@ public class InquirioWebService implements InquirioService {
      * @param notificationID identifiant de la notif de candidat
      * @return Les informations de contact du 'Finder'
      */
-    @Override
+    
     public FinderContactDetail acceptCandidateNotification(long notificationID) {
         return null;
     }
@@ -247,7 +263,7 @@ public class InquirioWebService implements InquirioService {
      * @param notificationID identifiant de la notif candidate
      * @return FinderContactDetail
      */
-    @Override
+    
     public FinderContactDetail getFinderContactDetail(long notificationID) {
         return null;
     }
@@ -259,7 +275,7 @@ public class InquirioWebService implements InquirioService {
      * @param rating note de 0 à 5 reporésentant la fiabilité
      * @return True si la requête s'est bien déroulée;
      */
-    @Override
+    
     public RequestResult rateUser(long userId, int rating) {
         return null;
     }

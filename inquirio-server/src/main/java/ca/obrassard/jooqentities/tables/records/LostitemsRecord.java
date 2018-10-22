@@ -30,157 +30,157 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class LostitemsRecord extends UpdatableRecordImpl<LostitemsRecord> implements Record11<Integer, String, String, Double, Timestamp, Integer, Byte, Double, Double, String, Integer> {
 
-    private static final long serialVersionUID = 174149332;
+    private static final long serialVersionUID = -1017133356;
 
     /**
-     * Setter for <code>inquirio.LostItems.Id</code>.
+     * Setter for <code>inquirio.lostitems.Id</code>.
      */
     public void setId(Integer value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>inquirio.LostItems.Id</code>.
+     * Getter for <code>inquirio.lostitems.Id</code>.
      */
     public Integer getId() {
         return (Integer) get(0);
     }
 
     /**
-     * Setter for <code>inquirio.LostItems.Title</code>.
+     * Setter for <code>inquirio.lostitems.Title</code>.
      */
     public void setTitle(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>inquirio.LostItems.Title</code>.
+     * Getter for <code>inquirio.lostitems.Title</code>.
      */
     public String getTitle() {
         return (String) get(1);
     }
 
     /**
-     * Setter for <code>inquirio.LostItems.Description</code>.
+     * Setter for <code>inquirio.lostitems.Description</code>.
      */
     public void setDescription(String value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>inquirio.LostItems.Description</code>.
+     * Getter for <code>inquirio.lostitems.Description</code>.
      */
     public String getDescription() {
         return (String) get(2);
     }
 
     /**
-     * Setter for <code>inquirio.LostItems.Reward</code>.
+     * Setter for <code>inquirio.lostitems.Reward</code>.
      */
     public void setReward(Double value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>inquirio.LostItems.Reward</code>.
+     * Getter for <code>inquirio.lostitems.Reward</code>.
      */
     public Double getReward() {
         return (Double) get(3);
     }
 
     /**
-     * Setter for <code>inquirio.LostItems.Date</code>.
+     * Setter for <code>inquirio.lostitems.Date</code>.
      */
     public void setDate(Timestamp value) {
         set(4, value);
     }
 
     /**
-     * Getter for <code>inquirio.LostItems.Date</code>.
+     * Getter for <code>inquirio.lostitems.Date</code>.
      */
     public Timestamp getDate() {
         return (Timestamp) get(4);
     }
 
     /**
-     * Setter for <code>inquirio.LostItems.OwnerId</code>.
+     * Setter for <code>inquirio.lostitems.OwnerId</code>.
      */
     public void setOwnerid(Integer value) {
         set(5, value);
     }
 
     /**
-     * Getter for <code>inquirio.LostItems.OwnerId</code>.
+     * Getter for <code>inquirio.lostitems.OwnerId</code>.
      */
     public Integer getOwnerid() {
         return (Integer) get(5);
     }
 
     /**
-     * Setter for <code>inquirio.LostItems.ItemHasBeenFound</code>.
+     * Setter for <code>inquirio.lostitems.ItemHasBeenFound</code>.
      */
     public void setItemhasbeenfound(Byte value) {
         set(6, value);
     }
 
     /**
-     * Getter for <code>inquirio.LostItems.ItemHasBeenFound</code>.
+     * Getter for <code>inquirio.lostitems.ItemHasBeenFound</code>.
      */
     public Byte getItemhasbeenfound() {
         return (Byte) get(6);
     }
 
     /**
-     * Setter for <code>inquirio.LostItems.Longitude</code>.
+     * Setter for <code>inquirio.lostitems.Longitude</code>.
      */
     public void setLongitude(Double value) {
         set(7, value);
     }
 
     /**
-     * Getter for <code>inquirio.LostItems.Longitude</code>.
+     * Getter for <code>inquirio.lostitems.Longitude</code>.
      */
     public Double getLongitude() {
         return (Double) get(7);
     }
 
     /**
-     * Setter for <code>inquirio.LostItems.Lattitude</code>.
+     * Setter for <code>inquirio.lostitems.Lattitude</code>.
      */
     public void setLattitude(Double value) {
         set(8, value);
     }
 
     /**
-     * Getter for <code>inquirio.LostItems.Lattitude</code>.
+     * Getter for <code>inquirio.lostitems.Lattitude</code>.
      */
     public Double getLattitude() {
         return (Double) get(8);
     }
 
     /**
-     * Setter for <code>inquirio.LostItems.LocationName</code>.
+     * Setter for <code>inquirio.lostitems.LocationName</code>.
      */
     public void setLocationname(String value) {
         set(9, value);
     }
 
     /**
-     * Getter for <code>inquirio.LostItems.LocationName</code>.
+     * Getter for <code>inquirio.lostitems.LocationName</code>.
      */
     public String getLocationname() {
         return (String) get(9);
     }
 
     /**
-     * Setter for <code>inquirio.LostItems.FinderID</code>.
+     * Setter for <code>inquirio.lostitems.FinderID</code>.
      */
     public void setFinderid(Integer value) {
         set(10, value);
     }
 
     /**
-     * Getter for <code>inquirio.LostItems.FinderID</code>.
+     * Getter for <code>inquirio.lostitems.FinderID</code>.
      */
     public Integer getFinderid() {
         return (Integer) get(10);

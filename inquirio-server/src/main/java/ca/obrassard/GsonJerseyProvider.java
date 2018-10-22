@@ -13,6 +13,7 @@ import com.google.common.io.BaseEncoding;
 import com.google.gson.*;
 import org.joda.time.DateTime;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -23,6 +24,7 @@ import javax.ws.rs.ext.Provider;
 
 @Provider
 @Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class GsonJerseyProvider implements MessageBodyWriter<Object>,
         MessageBodyReader<Object> {
     private static final String UTF_8 = "UTF-8";
@@ -33,14 +35,12 @@ public class GsonJerseyProvider implements MessageBodyWriter<Object>,
     private Gson getGson() {
         if (gson == null) {
             final GsonBuilder gsonBuilder = new GsonBuilder();
-            gson = gsonBuilder.disableHtmlEscaping()
-                    .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+            gson = gsonBuilder
                     .enableComplexMapKeySerialization() // permet de serialiser des Map avec des cles definies par vous
                     .registerTypeAdapter(DateTime.class, new CodecDateTime())
                     .registerTypeAdapter(Date.class, new DateSerialiser())
                     .registerTypeAdapter(byte[].class, new CodecByteArray())
                     .setPrettyPrinting()
-                    .serializeNulls()
                     .create();
         }
         return gson;

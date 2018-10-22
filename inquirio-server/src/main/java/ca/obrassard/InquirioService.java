@@ -20,19 +20,18 @@ public interface InquirioService {
     /**
      * Permet de savoir si une adresse courriel
      * est associé à un compte d'utlisateur
-     * @param email adresse à vérifier
+     * @param request adresse à vérifier
      * @return True si un compte correspond à l'adresse
      */
-    RequestResult isSubscribed(String email);
+    RequestResult isSubscribed(SubscriptionCheckRequest request);
 
     /**
      * Tente une authentfication au service d'un utilisateur
      * existant
-     * @param email adresse couriel de l'utlilisateur
-     * @param password mot de passe de l'utilisateur
+     * @param loginRequest adresse couriel de l'utlilisateur et mot de passe de l'utilisateur
      * @return LoginResponse
      */
-    LoginResponse login(String email, String password);
+    LoginResponse login(LoginRequest loginRequest);
 
     /**
      * Inscrit un nouvel utilisateur au service

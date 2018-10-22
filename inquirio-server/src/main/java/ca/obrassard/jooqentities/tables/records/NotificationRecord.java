@@ -30,87 +30,87 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class NotificationRecord extends UpdatableRecordImpl<NotificationRecord> implements Record6<Integer, Integer, Integer, byte[], String, Timestamp> {
 
-    private static final long serialVersionUID = 1247554226;
+    private static final long serialVersionUID = -392433806;
 
     /**
-     * Setter for <code>inquirio.Notification.Id</code>.
+     * Setter for <code>inquirio.notification.Id</code>.
      */
     public void setId(Integer value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>inquirio.Notification.Id</code>.
+     * Getter for <code>inquirio.notification.Id</code>.
      */
     public Integer getId() {
         return (Integer) get(0);
     }
 
     /**
-     * Setter for <code>inquirio.Notification.SenderId</code>.
+     * Setter for <code>inquirio.notification.SenderId</code>.
      */
     public void setSenderid(Integer value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>inquirio.Notification.SenderId</code>.
+     * Getter for <code>inquirio.notification.SenderId</code>.
      */
     public Integer getSenderid() {
         return (Integer) get(1);
     }
 
     /**
-     * Setter for <code>inquirio.Notification.ItemId</code>.
+     * Setter for <code>inquirio.notification.ItemId</code>.
      */
     public void setItemid(Integer value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>inquirio.Notification.ItemId</code>.
+     * Getter for <code>inquirio.notification.ItemId</code>.
      */
     public Integer getItemid() {
         return (Integer) get(2);
     }
 
     /**
-     * Setter for <code>inquirio.Notification.Photo</code>.
+     * Setter for <code>inquirio.notification.Photo</code>.
      */
     public void setPhoto(byte... value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>inquirio.Notification.Photo</code>.
+     * Getter for <code>inquirio.notification.Photo</code>.
      */
     public byte[] getPhoto() {
         return (byte[]) get(3);
     }
 
     /**
-     * Setter for <code>inquirio.Notification.Message</code>.
+     * Setter for <code>inquirio.notification.Message</code>.
      */
     public void setMessage(String value) {
         set(4, value);
     }
 
     /**
-     * Getter for <code>inquirio.Notification.Message</code>.
+     * Getter for <code>inquirio.notification.Message</code>.
      */
     public String getMessage() {
         return (String) get(4);
     }
 
     /**
-     * Setter for <code>inquirio.Notification.Date</code>.
+     * Setter for <code>inquirio.notification.Date</code>.
      */
     public void setDate(Timestamp value) {
         set(5, value);
     }
 
     /**
-     * Getter for <code>inquirio.Notification.Date</code>.
+     * Getter for <code>inquirio.notification.Date</code>.
      */
     public Timestamp getDate() {
         return (Timestamp) get(5);
