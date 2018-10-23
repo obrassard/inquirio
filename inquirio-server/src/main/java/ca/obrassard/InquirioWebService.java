@@ -1,6 +1,9 @@
 package ca.obrassard;
 
+import ca.obrassard.exception.APIErrorCodes;
+import ca.obrassard.exception.APIRequestException;
 import ca.obrassard.inquirioCommons.*;
+import ca.obrassard.jooqentities.tables.records.UsersRecord;
 import ca.obrassard.model.LostItem;
 import ca.obrassard.model.User;
 import com.google.common.hash.Hashing;
@@ -9,13 +12,12 @@ import org.jooq.DSLContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.xml.ws.http.HTTPException;
+import javax.ws.rs.PathParam;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.List;
 
 import static ca.obrassard.jooqentities.tables.Users.*;
-import static org.jooq.impl.DSL.field;
 
 /**
  * Created by Olivier Brassard.
@@ -25,7 +27,7 @@ import static org.jooq.impl.DSL.field;
  */
 
 @Path("/")
-public class InquirioWebService implements InquirioService {
+public class InquirioWebService {
 
     private DSLContext context;
 
@@ -41,46 +43,80 @@ public class InquirioWebService implements InquirioService {
     /**
      * Permet de savoir si une adresse courriel
      * est associé à un compte d'utlisateur
-     *
      * @param request adresse à vérifier
      * @return True si un compte correspond à l'adresse
      */
     @POST
     @Path("checksubscription")
-    public RequestResult isSubscribed(SubscriptionCheckRequest request) {
+    public RequestResult isSubscribed(SubscriptionCheckRequest request) throws APIRequestException {
+        ValidationUtil.validateEmail(request.email);
         boolean exists = context.fetchExists(context.selectOne().from(USERS).where(USERS.EMAIL.eq(request.email)));
         return new RequestResult(exists);
     }
 
     /**
-     * Tente une authentfication au service d'un utilisateur
-     * existant
-     *
+     * Tente une authentfication au service d'un utilisateur existant
      * @param loginRequest adresse couriel de l'utlilisateur mot de passe de l'utilisateur
      * @return LoginResponse
      */
-    
-    public LoginResponse login(LoginRequest loginRequest) {
-        if (!ValidationUtil.isValidEmail(loginRequest.email) || loginRequest.password.trim().equals("")){
-            throw new HTTPException(400);
-        }
+
+    @POST
+    @Path("login")
+    public LoginResponse login(LoginRequest loginRequest) throws APIRequestException {
+
+        ValidationUtil.validateEmail(loginRequest.email);
 
         String hashedPasswd = Hashing.sha256().hashString(loginRequest.password, StandardCharsets.UTF_8).toString();
-        //TODO : A compléter
-        return null;
+
+        UsersRecord usersRecord = context.selectFrom(USERS).where(USERS.EMAIL.eq(loginRequest.email).and(USERS.PASSWORDHASH.eq(hashedPasswd))).fetchAny();
+
+        try{
+            User user = new User(usersRecord);
+            LoginResponse response = new LoginResponse();
+            response.userPhoneNumber = user.Telephone;
+            response.userID = user.Id;
+            response.userFullName = user.Name;
+            response.result = true;
+            response.isFirstLogin = false;
+            return response;
+        } catch (NullPointerException e){
+            throw new APIRequestException(APIErrorCodes.BadCredentials);
+        }
     }
 
     /**
      * Inscrit un nouvel utilisateur au service
-     *
      * @param userInfos Données d'utlisateurs pour l'inscription
      * @return LoginResponse
      */
-    
-    public LoginResponse signup(SignupRequest userInfos) {
 
-        //context.insertInto(USERS, USERS. )
-        return null;
+    @POST
+    @Path("signup")
+    public LoginResponse signup(SignupRequest userInfos) throws APIRequestException {
+
+        ValidationUtil.validateEmail(userInfos.email);
+        ValidationUtil.emailIsUnique(userInfos.email, context);
+        ValidationUtil.validateNewPassword(userInfos.password, userInfos.passwdConfirmation);
+        ValidationUtil.nameisRequired(userInfos.fullName);
+        ValidationUtil.validatePhone(userInfos.cellNumber);
+
+        String hashedPasswd = Hashing.sha256().hashString(userInfos.password, StandardCharsets.UTF_8).toString();
+
+        context.insertInto(USERS, USERS.NAME, USERS.EMAIL, USERS.TELEPHONE, USERS.PASSWORDHASH)
+                .values(userInfos.fullName, userInfos.email, userInfos.cellNumber, hashedPasswd)
+                .execute();
+
+        UsersRecord usersRecord = context.selectFrom(USERS).where(USERS.EMAIL.eq(userInfos.email).and(USERS.PASSWORDHASH.eq(hashedPasswd))).fetchAny();
+        User user = new User(usersRecord);
+
+        LoginResponse response = new LoginResponse();
+        response.isFirstLogin = true;
+        response.result = true;
+        response.userFullName = user.Name;
+        response.userID = user.Id ;
+        response.userPhoneNumber = user.Telephone;
+
+        return response;
     }
 
     /**
@@ -89,9 +125,18 @@ public class InquirioWebService implements InquirioService {
      * @param userID Id de l'utilisateur à déconnecter
      * @return LogoutResponse
      */
-    
-    public LogoutResponse logout(long userID) {
-        return null;
+    @GET
+    @Path("logout/{id}")
+    public LogoutResponse logout(@PathParam("id") int userID) throws APIRequestException {
+
+        ValidationUtil.userIdShouldExist(userID, context);
+
+        //TODO : Détruire le cookie (le token)
+
+        LogoutResponse response = new LogoutResponse();
+        response.message = "Success";
+        response.success = true;
+        return response;
     }
 
     /**

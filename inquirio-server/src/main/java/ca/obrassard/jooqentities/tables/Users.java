@@ -41,7 +41,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Users extends TableImpl<UsersRecord> {
 
-    private static final long serialVersionUID = -50394628;
+    private static final long serialVersionUID = -328976487;
 
     /**
      * The reference instance of <code>inquirio.users</code>
@@ -85,6 +85,11 @@ public class Users extends TableImpl<UsersRecord> {
      * The column <code>inquirio.users.Rating</code>.
      */
     public final TableField<UsersRecord, Double> RATING = createField("Rating", org.jooq.impl.SQLDataType.DOUBLE.nullable(false).defaultValue(org.jooq.impl.DSL.inline("5", org.jooq.impl.SQLDataType.DOUBLE)), this, "");
+
+    /**
+     * The column <code>inquirio.users.PasswordHash</code>.
+     */
+    public final TableField<UsersRecord, String> PASSWORDHASH = createField("PasswordHash", org.jooq.impl.SQLDataType.VARCHAR(64).nullable(false), this, "");
 
     /**
      * Create a <code>inquirio.users</code> table reference
