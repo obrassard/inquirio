@@ -41,10 +41,10 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Users extends TableImpl<UsersRecord> {
 
-    private static final long serialVersionUID = -328976487;
+    private static final long serialVersionUID = 401058649;
 
     /**
-     * The reference instance of <code>inquirio.users</code>
+     * The reference instance of <code>inquirio.Users</code>
      */
     public static final Users USERS = new Users();
 
@@ -57,56 +57,56 @@ public class Users extends TableImpl<UsersRecord> {
     }
 
     /**
-     * The column <code>inquirio.users.Id</code>.
+     * The column <code>inquirio.Users.Id</code>.
      */
     public final TableField<UsersRecord, Integer> ID = createField("Id", org.jooq.impl.SQLDataType.INTEGER.nullable(false).identity(true), this, "");
 
     /**
-     * The column <code>inquirio.users.Name</code>.
+     * The column <code>inquirio.Users.Name</code>.
      */
     public final TableField<UsersRecord, String> NAME = createField("Name", org.jooq.impl.SQLDataType.VARCHAR(80).nullable(false), this, "");
 
     /**
-     * The column <code>inquirio.users.Email</code>.
+     * The column <code>inquirio.Users.Email</code>.
      */
     public final TableField<UsersRecord, String> EMAIL = createField("Email", org.jooq.impl.SQLDataType.VARCHAR(100).nullable(false), this, "");
 
     /**
-     * The column <code>inquirio.users.Telephone</code>.
+     * The column <code>inquirio.Users.Telephone</code>.
      */
     public final TableField<UsersRecord, String> TELEPHONE = createField("Telephone", org.jooq.impl.SQLDataType.VARCHAR(20).nullable(false), this, "");
 
     /**
-     * The column <code>inquirio.users.ItemsFoundCount</code>.
+     * The column <code>inquirio.Users.ItemsFoundCount</code>.
      */
     public final TableField<UsersRecord, Integer> ITEMSFOUNDCOUNT = createField("ItemsFoundCount", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
 
     /**
-     * The column <code>inquirio.users.Rating</code>.
+     * The column <code>inquirio.Users.Rating</code>.
      */
     public final TableField<UsersRecord, Double> RATING = createField("Rating", org.jooq.impl.SQLDataType.DOUBLE.nullable(false).defaultValue(org.jooq.impl.DSL.inline("5", org.jooq.impl.SQLDataType.DOUBLE)), this, "");
 
     /**
-     * The column <code>inquirio.users.PasswordHash</code>.
+     * The column <code>inquirio.Users.PasswordHash</code>.
      */
     public final TableField<UsersRecord, String> PASSWORDHASH = createField("PasswordHash", org.jooq.impl.SQLDataType.VARCHAR(64).nullable(false), this, "");
 
     /**
-     * Create a <code>inquirio.users</code> table reference
+     * Create a <code>inquirio.Users</code> table reference
      */
     public Users() {
-        this(DSL.name("users"), null);
+        this(DSL.name("Users"), null);
     }
 
     /**
-     * Create an aliased <code>inquirio.users</code> table reference
+     * Create an aliased <code>inquirio.Users</code> table reference
      */
     public Users(String alias) {
         this(DSL.name(alias), USERS);
     }
 
     /**
-     * Create an aliased <code>inquirio.users</code> table reference
+     * Create an aliased <code>inquirio.Users</code> table reference
      */
     public Users(Name alias) {
         this(alias, USERS);

@@ -1,6 +1,6 @@
 package ca.obrassard.inquirioCommons;
 
 public class LocationRequest {
-    double latittude;
-    double longitude;
+    public double latitude;
+    public double longitude;
 }

@@ -8,6 +8,8 @@ public enum APIErrorCodes {
     NameIsRequired,
     PasswordIsRequired,
     EmailAlreadyExists,
-    UnknownUserId
+    UnknownUserId,
+    InvalidLocation,
+
 
 }

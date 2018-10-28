@@ -8,13 +8,17 @@ import ca.obrassard.model.LostItem;
 import ca.obrassard.model.User;
 import com.google.common.hash.Hashing;
 import org.jooq.DSLContext;
+import org.jooq.Record;
+import org.jooq.Result;
 
+import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static ca.obrassard.jooqentities.tables.Users.*;
@@ -146,9 +150,27 @@ public class InquirioWebService {
      * @param currentLocation Emplacement de l'appareil
      * @return Une liste sommaire des items perdus à proximité
      */
-    
-    public List<LostItemSummary> getNearLostItems(LocationRequest currentLocation) {
-        return null;
+
+    @POST
+    @Path("items/near")
+    public List<LostItemSummary> getNearLostItems(LocationRequest currentLocation) throws APIRequestException {
+
+        ValidationUtil.isAValidLocation(currentLocation);
+
+        String query = String.format("CALL getNearItems(%s, %s);",currentLocation.latitude,currentLocation.longitude);
+        Result<Record> results = context.fetch(query);
+
+        List<LostItemSummary> lostItemSummaries = new ArrayList<>();
+        for (Record record : results){
+            LostItemSummary lis = new LostItemSummary();
+            lis.itemID = (Integer)record.get("Id");
+            lis.itemName = (String)record.get("Title");
+            lis.locationName = (String)record.get("LocationName");
+            lis.found = (Boolean) record.get("ItemHasBeenFound");
+            lis.distance = (Double) record.get("distance");
+            lostItemSummaries.add(lis);
+        }
+        return lostItemSummaries;
     }
 
     /**

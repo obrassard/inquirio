@@ -10,7 +10,7 @@
     <init-param>
       <param-name>jersey.config.server.provider.packages</param-name>
       <param-value>
-        ca.obrassard, ca.obrassard.GsonJerseyProvider
+        ca.obrassard, ca.obrassard.GsonJerseyProvider, ca.obrassard.exception
       </param-value>
     </init-param>
   </servlet>

@@ -2,6 +2,7 @@ package ca.obrassard;
 
 import ca.obrassard.exception.APIErrorCodes;
 import ca.obrassard.exception.APIRequestException;
+import ca.obrassard.inquirioCommons.LocationRequest;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.jooq.DSLContext;
 
@@ -48,6 +49,14 @@ public class ValidationUtil {
 
         if (!Pattern.compile("[0-9]{10,11}").matcher(phoneNum).matches()){
             throw new APIRequestException(APIErrorCodes.InvalidPhoneNumber);
+        }
+    }
+
+    public static void isAValidLocation(LocationRequest location) throws APIRequestException {
+
+        if (location.longitude > 180 || location.longitude < -180 ||
+                location.latitude > 90 || location.latitude < -90){
+            throw new APIRequestException(APIErrorCodes.InvalidLocation);
         }
     }
 }

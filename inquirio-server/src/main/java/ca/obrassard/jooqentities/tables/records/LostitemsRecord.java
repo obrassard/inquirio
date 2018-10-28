@@ -30,157 +30,157 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class LostitemsRecord extends UpdatableRecordImpl<LostitemsRecord> implements Record11<Integer, String, String, Double, Timestamp, Integer, Byte, Double, Double, String, Integer> {
 
-    private static final long serialVersionUID = -1017133356;
+    private static final long serialVersionUID = -559356122;
 
     /**
-     * Setter for <code>inquirio.lostitems.Id</code>.
+     * Setter for <code>inquirio.LostItems.Id</code>.
      */
     public void setId(Integer value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>inquirio.lostitems.Id</code>.
+     * Getter for <code>inquirio.LostItems.Id</code>.
      */
     public Integer getId() {
         return (Integer) get(0);
     }
 
     /**
-     * Setter for <code>inquirio.lostitems.Title</code>.
+     * Setter for <code>inquirio.LostItems.Title</code>.
      */
     public void setTitle(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>inquirio.lostitems.Title</code>.
+     * Getter for <code>inquirio.LostItems.Title</code>.
      */
     public String getTitle() {
         return (String) get(1);
     }
 
     /**
-     * Setter for <code>inquirio.lostitems.Description</code>.
+     * Setter for <code>inquirio.LostItems.Description</code>.
      */
     public void setDescription(String value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>inquirio.lostitems.Description</code>.
+     * Getter for <code>inquirio.LostItems.Description</code>.
      */
     public String getDescription() {
         return (String) get(2);
     }
 
     /**
-     * Setter for <code>inquirio.lostitems.Reward</code>.
+     * Setter for <code>inquirio.LostItems.Reward</code>.
      */
     public void setReward(Double value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>inquirio.lostitems.Reward</code>.
+     * Getter for <code>inquirio.LostItems.Reward</code>.
      */
     public Double getReward() {
         return (Double) get(3);
     }
 
     /**
-     * Setter for <code>inquirio.lostitems.Date</code>.
+     * Setter for <code>inquirio.LostItems.Date</code>.
      */
     public void setDate(Timestamp value) {
         set(4, value);
     }
 
     /**
-     * Getter for <code>inquirio.lostitems.Date</code>.
+     * Getter for <code>inquirio.LostItems.Date</code>.
      */
     public Timestamp getDate() {
         return (Timestamp) get(4);
     }
 
     /**
-     * Setter for <code>inquirio.lostitems.OwnerId</code>.
+     * Setter for <code>inquirio.LostItems.OwnerId</code>.
      */
     public void setOwnerid(Integer value) {
         set(5, value);
     }
 
     /**
-     * Getter for <code>inquirio.lostitems.OwnerId</code>.
+     * Getter for <code>inquirio.LostItems.OwnerId</code>.
      */
     public Integer getOwnerid() {
         return (Integer) get(5);
     }
 
     /**
-     * Setter for <code>inquirio.lostitems.ItemHasBeenFound</code>.
+     * Setter for <code>inquirio.LostItems.ItemHasBeenFound</code>.
      */
     public void setItemhasbeenfound(Byte value) {
         set(6, value);
     }
 
     /**
-     * Getter for <code>inquirio.lostitems.ItemHasBeenFound</code>.
+     * Getter for <code>inquirio.LostItems.ItemHasBeenFound</code>.
      */
     public Byte getItemhasbeenfound() {
         return (Byte) get(6);
     }
 
     /**
-     * Setter for <code>inquirio.lostitems.Longitude</code>.
+     * Setter for <code>inquirio.LostItems.Lattitude</code>.
      */
-    public void setLongitude(Double value) {
+    public void setLattitude(Double value) {
         set(7, value);
     }
 
     /**
-     * Getter for <code>inquirio.lostitems.Longitude</code>.
+     * Getter for <code>inquirio.LostItems.Lattitude</code>.
      */
-    public Double getLongitude() {
+    public Double getLattitude() {
         return (Double) get(7);
     }
 
     /**
-     * Setter for <code>inquirio.lostitems.Lattitude</code>.
+     * Setter for <code>inquirio.LostItems.Longitude</code>.
      */
-    public void setLattitude(Double value) {
+    public void setLongitude(Double value) {
         set(8, value);
     }
 
     /**
-     * Getter for <code>inquirio.lostitems.Lattitude</code>.
+     * Getter for <code>inquirio.LostItems.Longitude</code>.
      */
-    public Double getLattitude() {
+    public Double getLongitude() {
         return (Double) get(8);
     }
 
     /**
-     * Setter for <code>inquirio.lostitems.LocationName</code>.
+     * Setter for <code>inquirio.LostItems.LocationName</code>.
      */
     public void setLocationname(String value) {
         set(9, value);
     }
 
     /**
-     * Getter for <code>inquirio.lostitems.LocationName</code>.
+     * Getter for <code>inquirio.LostItems.LocationName</code>.
      */
     public String getLocationname() {
         return (String) get(9);
     }
 
     /**
-     * Setter for <code>inquirio.lostitems.FinderID</code>.
+     * Setter for <code>inquirio.LostItems.FinderID</code>.
      */
     public void setFinderid(Integer value) {
         set(10, value);
     }
 
     /**
-     * Getter for <code>inquirio.lostitems.FinderID</code>.
+     * Getter for <code>inquirio.LostItems.FinderID</code>.
      */
     public Integer getFinderid() {
         return (Integer) get(10);
@@ -279,7 +279,7 @@ public class LostitemsRecord extends UpdatableRecordImpl<LostitemsRecord> implem
      */
     @Override
     public Field<Double> field8() {
-        return Lostitems.LOSTITEMS.LONGITUDE;
+        return Lostitems.LOSTITEMS.LATTITUDE;
     }
 
     /**
@@ -287,7 +287,7 @@ public class LostitemsRecord extends UpdatableRecordImpl<LostitemsRecord> implem
      */
     @Override
     public Field<Double> field9() {
-        return Lostitems.LOSTITEMS.LATTITUDE;
+        return Lostitems.LOSTITEMS.LONGITUDE;
     }
 
     /**
@@ -367,7 +367,7 @@ public class LostitemsRecord extends UpdatableRecordImpl<LostitemsRecord> implem
      */
     @Override
     public Double component8() {
-        return getLongitude();
+        return getLattitude();
     }
 
     /**
@@ -375,7 +375,7 @@ public class LostitemsRecord extends UpdatableRecordImpl<LostitemsRecord> implem
      */
     @Override
     public Double component9() {
-        return getLattitude();
+        return getLongitude();
     }
 
     /**
@@ -455,7 +455,7 @@ public class LostitemsRecord extends UpdatableRecordImpl<LostitemsRecord> implem
      */
     @Override
     public Double value8() {
-        return getLongitude();
+        return getLattitude();
     }
 
     /**
@@ -463,7 +463,7 @@ public class LostitemsRecord extends UpdatableRecordImpl<LostitemsRecord> implem
      */
     @Override
     public Double value9() {
-        return getLattitude();
+        return getLongitude();
     }
 
     /**
@@ -550,7 +550,7 @@ public class LostitemsRecord extends UpdatableRecordImpl<LostitemsRecord> implem
      */
     @Override
     public LostitemsRecord value8(Double value) {
-        setLongitude(value);
+        setLattitude(value);
         return this;
     }
 
@@ -559,7 +559,7 @@ public class LostitemsRecord extends UpdatableRecordImpl<LostitemsRecord> implem
      */
     @Override
     public LostitemsRecord value9(Double value) {
-        setLattitude(value);
+        setLongitude(value);
         return this;
     }
 
@@ -614,7 +614,7 @@ public class LostitemsRecord extends UpdatableRecordImpl<LostitemsRecord> implem
     /**
      * Create a detached, initialised LostitemsRecord
      */
-    public LostitemsRecord(Integer id, String title, String description, Double reward, Timestamp date, Integer ownerid, Byte itemhasbeenfound, Double longitude, Double lattitude, String locationname, Integer finderid) {
+    public LostitemsRecord(Integer id, String title, String description, Double reward, Timestamp date, Integer ownerid, Byte itemhasbeenfound, Double lattitude, Double longitude, String locationname, Integer finderid) {
         super(Lostitems.LOSTITEMS);
 
         set(0, id);
@@ -624,8 +624,8 @@ public class LostitemsRecord extends UpdatableRecordImpl<LostitemsRecord> implem
         set(4, date);
         set(5, ownerid);
         set(6, itemhasbeenfound);
-        set(7, longitude);
-        set(8, lattitude);
+        set(7, lattitude);
+        set(8, longitude);
         set(9, locationname);
         set(10, finderid);
     }

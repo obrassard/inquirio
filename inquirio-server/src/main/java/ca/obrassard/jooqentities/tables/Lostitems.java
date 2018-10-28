@@ -42,10 +42,10 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Lostitems extends TableImpl<LostitemsRecord> {
 
-    private static final long serialVersionUID = 848850753;
+    private static final long serialVersionUID = -1501171693;
 
     /**
-     * The reference instance of <code>inquirio.lostitems</code>
+     * The reference instance of <code>inquirio.LostItems</code>
      */
     public static final Lostitems LOSTITEMS = new Lostitems();
 
@@ -58,76 +58,76 @@ public class Lostitems extends TableImpl<LostitemsRecord> {
     }
 
     /**
-     * The column <code>inquirio.lostitems.Id</code>.
+     * The column <code>inquirio.LostItems.Id</code>.
      */
     public final TableField<LostitemsRecord, Integer> ID = createField("Id", org.jooq.impl.SQLDataType.INTEGER.nullable(false).identity(true), this, "");
 
     /**
-     * The column <code>inquirio.lostitems.Title</code>.
+     * The column <code>inquirio.LostItems.Title</code>.
      */
     public final TableField<LostitemsRecord, String> TITLE = createField("Title", org.jooq.impl.SQLDataType.VARCHAR(150).nullable(false), this, "");
 
     /**
-     * The column <code>inquirio.lostitems.Description</code>.
+     * The column <code>inquirio.LostItems.Description</code>.
      */
     public final TableField<LostitemsRecord, String> DESCRIPTION = createField("Description", org.jooq.impl.SQLDataType.VARCHAR(250).nullable(false), this, "");
 
     /**
-     * The column <code>inquirio.lostitems.Reward</code>.
+     * The column <code>inquirio.LostItems.Reward</code>.
      */
     public final TableField<LostitemsRecord, Double> REWARD = createField("Reward", org.jooq.impl.SQLDataType.DOUBLE.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.DOUBLE)), this, "");
 
     /**
-     * The column <code>inquirio.lostitems.Date</code>.
+     * The column <code>inquirio.LostItems.Date</code>.
      */
     public final TableField<LostitemsRecord, Timestamp> DATE = createField("Date", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaultValue(org.jooq.impl.DSL.field("CURRENT_TIMESTAMP", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "");
 
     /**
-     * The column <code>inquirio.lostitems.OwnerId</code>.
+     * The column <code>inquirio.LostItems.OwnerId</code>.
      */
     public final TableField<LostitemsRecord, Integer> OWNERID = createField("OwnerId", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>inquirio.lostitems.ItemHasBeenFound</code>.
+     * The column <code>inquirio.LostItems.ItemHasBeenFound</code>.
      */
     public final TableField<LostitemsRecord, Byte> ITEMHASBEENFOUND = createField("ItemHasBeenFound", org.jooq.impl.SQLDataType.TINYINT.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.TINYINT)), this, "");
 
     /**
-     * The column <code>inquirio.lostitems.Longitude</code>.
-     */
-    public final TableField<LostitemsRecord, Double> LONGITUDE = createField("Longitude", org.jooq.impl.SQLDataType.DOUBLE.nullable(false), this, "");
-
-    /**
-     * The column <code>inquirio.lostitems.Lattitude</code>.
+     * The column <code>inquirio.LostItems.Lattitude</code>.
      */
     public final TableField<LostitemsRecord, Double> LATTITUDE = createField("Lattitude", org.jooq.impl.SQLDataType.DOUBLE.nullable(false), this, "");
 
     /**
-     * The column <code>inquirio.lostitems.LocationName</code>.
+     * The column <code>inquirio.LostItems.Longitude</code>.
+     */
+    public final TableField<LostitemsRecord, Double> LONGITUDE = createField("Longitude", org.jooq.impl.SQLDataType.DOUBLE.nullable(false), this, "");
+
+    /**
+     * The column <code>inquirio.LostItems.LocationName</code>.
      */
     public final TableField<LostitemsRecord, String> LOCATIONNAME = createField("LocationName", org.jooq.impl.SQLDataType.VARCHAR(100).nullable(false), this, "");
 
     /**
-     * The column <code>inquirio.lostitems.FinderID</code>.
+     * The column <code>inquirio.LostItems.FinderID</code>.
      */
     public final TableField<LostitemsRecord, Integer> FINDERID = createField("FinderID", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
-     * Create a <code>inquirio.lostitems</code> table reference
+     * Create a <code>inquirio.LostItems</code> table reference
      */
     public Lostitems() {
-        this(DSL.name("lostitems"), null);
+        this(DSL.name("LostItems"), null);
     }
 
     /**
-     * Create an aliased <code>inquirio.lostitems</code> table reference
+     * Create an aliased <code>inquirio.LostItems</code> table reference
      */
     public Lostitems(String alias) {
         this(DSL.name(alias), LOSTITEMS);
     }
 
     /**
-     * Create an aliased <code>inquirio.lostitems</code> table reference
+     * Create an aliased <code>inquirio.LostItems</code> table reference
      */
     public Lostitems(Name alias) {
         this(alias, LOSTITEMS);

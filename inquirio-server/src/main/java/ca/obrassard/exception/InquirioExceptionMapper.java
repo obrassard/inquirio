@@ -1,4 +1,4 @@
-package ca.obrassard;
+package ca.obrassard.exception;
 
 import ca.obrassard.exception.APIRequestException;
 import com.google.gson.Gson;
