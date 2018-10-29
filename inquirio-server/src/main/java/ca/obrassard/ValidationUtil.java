@@ -3,12 +3,14 @@ package ca.obrassard;
 import ca.obrassard.exception.APIErrorCodes;
 import ca.obrassard.exception.APIRequestException;
 import ca.obrassard.inquirioCommons.LocationRequest;
+import ca.obrassard.jooqentities.tables.Lostitems;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.jooq.DSLContext;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static ca.obrassard.jooqentities.tables.Lostitems.*;
 import static ca.obrassard.jooqentities.tables.Users.USERS;
 
 public class ValidationUtil {
@@ -24,8 +26,14 @@ public class ValidationUtil {
         }
     }
 
-    public static void userIdShouldExist(int userId, DSLContext context) throws APIRequestException{
+    public static void isAnExistantUserID(int userId, DSLContext context) throws APIRequestException{
         if (!context.fetchExists(context.selectOne().from(USERS).where(USERS.ID.eq(userId)))){
+            throw new APIRequestException(APIErrorCodes.UnknownUserId);
+        }
+    }
+
+    public static void isAnExistantItemID(int itemID, DSLContext context) throws APIRequestException{
+        if (!context.fetchExists(context.selectOne().from(LOSTITEMS).where(LOSTITEMS.ID.eq(itemID)))){
             throw new APIRequestException(APIErrorCodes.UnknownUserId);
         }
     }
@@ -39,9 +47,9 @@ public class ValidationUtil {
         }
     }
 
-    public static void nameisRequired(String string) throws APIRequestException {
-        if (string.trim().length()==0){
-            throw new APIRequestException(APIErrorCodes.NameIsRequired);
+    public static void isRequired(String attribute, String value) throws APIRequestException {
+        if (value == null || value.trim().length()==0){
+            throw new APIRequestException(APIErrorCodes.RequiredAttribute, attribute);
         }
     }
 
@@ -52,11 +60,29 @@ public class ValidationUtil {
         }
     }
 
-    public static void isAValidLocation(LocationRequest location) throws APIRequestException {
+    public static void isAValidLocation(double latitude, double longitude) throws APIRequestException {
 
-        if (location.longitude > 180 || location.longitude < -180 ||
-                location.latitude > 90 || location.latitude < -90){
+        if (longitude > 180 || longitude < -180 ||
+                latitude > 90 || latitude < -90){
             throw new APIRequestException(APIErrorCodes.InvalidLocation);
         }
     }
+
+    public static void isAValidLocation(LocationRequest location) throws APIRequestException {
+        isAValidLocation(location.latitude,location.longitude);
+    }
+
+    public static void isAPositiveNumber(String attribute, double number) throws  APIRequestException{
+        if (number < 0){
+            throw new APIRequestException(APIErrorCodes.InvalidValue,attribute);
+        }
+    }
+
+    public static void respectMaxLength(String attribute, String text, int maxlength)throws  APIRequestException{
+        if (text.length() > maxlength){
+            throw new APIRequestException(APIErrorCodes.TextLengthViolation,attribute);
+        }
+    }
+
+
 }

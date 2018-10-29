@@ -1,23 +1,32 @@
 package ca.obrassard.exception;
 
 public class APIRequestException extends Exception {
-    public APIErrorCodes[] errors;
-    public APIRequestException(APIErrorCodes... args) {
+    public APIErrorCodes error;
+    public String targetAttribute;
+    public APIRequestException(APIErrorCodes error, String attribute) {
         super("Un ou plusieurs arguments de la requête sont invalides");
-        this.errors = args;
+        this.error = error;
+        this.targetAttribute = attribute;
     }
+    public APIRequestException(APIErrorCodes error) {
+        super("Un ou plusieurs arguments de la requête sont invalides");
+        this.error = error;
+        this.targetAttribute = null;
+    }
+
 
     public ApiRequestExceptionResponse toResponse(){
         return new ApiRequestExceptionResponse(this);
     }
 
     static class ApiRequestExceptionResponse{
-        public APIErrorCodes[] errors;
+        public APIErrorCodes error;
         public String message;
-
+        public String targetAttribute;
         public ApiRequestExceptionResponse(APIRequestException ex) {
-            errors = ex.errors;
+            error = ex.error;
             message = ex.getMessage();
+            targetAttribute = ex.targetAttribute;
         }
     }
 }

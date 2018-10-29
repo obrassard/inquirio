@@ -1,5 +1,6 @@
 package ca.obrassard.model;
 
+import ca.obrassard.inquirioCommons.Location;
 import ca.obrassard.jooqentities.tables.records.LostitemsRecord;
 
 import java.util.Date;
@@ -7,7 +8,7 @@ import java.util.Date;
 /**
  * Created by Olivier Brassard.
  * Project : inquirioServer
- * Filename : LostItem.java
+ * Filename : LostItemCreationRequest.java
  * Date: 20-10-18
  */
 public class LostItem {
@@ -38,4 +39,12 @@ public class LostItem {
     }
 
     public LostItem() { }
+
+    public Location getLocation(){
+        Location location = new Location();
+        location.Lattitude = latitude;
+        location.Longittude = longitude;
+        location.Name = locationName;
+        return location;
+    }
 }

@@ -3,24 +3,24 @@ package ca.obrassard;
 import ca.obrassard.exception.APIErrorCodes;
 import ca.obrassard.exception.APIRequestException;
 import ca.obrassard.inquirioCommons.*;
+import ca.obrassard.jooqentities.tables.Lostitems;
+import ca.obrassard.jooqentities.tables.records.LostitemsRecord;
 import ca.obrassard.jooqentities.tables.records.UsersRecord;
 import ca.obrassard.model.LostItem;
 import ca.obrassard.model.User;
 import com.google.common.hash.Hashing;
 import org.jooq.DSLContext;
 import org.jooq.Record;
+import org.jooq.Record1;
 import org.jooq.Result;
 
-import javax.validation.Valid;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ca.obrassard.jooqentities.tables.Lostitems.LOSTITEMS;
 import static ca.obrassard.jooqentities.tables.Users.*;
 
 /**
@@ -101,7 +101,7 @@ public class InquirioWebService {
         ValidationUtil.validateEmail(userInfos.email);
         ValidationUtil.emailIsUnique(userInfos.email, context);
         ValidationUtil.validateNewPassword(userInfos.password, userInfos.passwdConfirmation);
-        ValidationUtil.nameisRequired(userInfos.fullName);
+        ValidationUtil.isRequired("email",userInfos.fullName);
         ValidationUtil.validatePhone(userInfos.cellNumber);
 
         String hashedPasswd = Hashing.sha256().hashString(userInfos.password, StandardCharsets.UTF_8).toString();
@@ -110,7 +110,7 @@ public class InquirioWebService {
                 .values(userInfos.fullName, userInfos.email, userInfos.cellNumber, hashedPasswd)
                 .execute();
 
-        UsersRecord usersRecord = context.selectFrom(USERS).where(USERS.EMAIL.eq(userInfos.email).and(USERS.PASSWORDHASH.eq(hashedPasswd))).fetchAny();
+        UsersRecord usersRecord = context.selectFrom(USERS).where(USERS.EMAIL.eq(userInfos.email).and(USERS.PASSWORDHASH.eq(hashedPasswd))).fetchOne();
         User user = new User(usersRecord);
 
         LoginResponse response = new LoginResponse();
@@ -133,7 +133,7 @@ public class InquirioWebService {
     @Path("logout/{id}")
     public LogoutResponse logout(@PathParam("id") int userID) throws APIRequestException {
 
-        ValidationUtil.userIdShouldExist(userID, context);
+        ValidationUtil.isAnExistantUserID(userID, context);
 
         //TODO : Détruire le cookie (le token)
 
@@ -179,20 +179,44 @@ public class InquirioWebService {
      * @param userID identifiant de l'utilsateur
      * @return un objet User
      */
-    
-    public User getUserDetail(long userID) {
-        return null;
+    @GET
+    @Path("users/{id}")
+    public User getUserDetail(@PathParam("id") int userID) throws APIRequestException {
+       UsersRecord record = context.selectFrom(USERS).where(USERS.ID.eq(userID)).fetchOne();
+       if (record == null){
+           throw new APIRequestException(APIErrorCodes.UnknownUserId);
+       }
+       return new User(record);
     }
 
     /**
      * Ajoute un nouvel item perdu
      *
      * @param item Detail de l'item à ajouter
-     * @return L'ID de l'item ajouté ou -1
+     * @return L'ID de l'item ajouté
      */
-    
-    public Long addNewItem(LostItem item) {
-        return null;
+    @POST
+    @Path("items")
+    public Long addNewItem(LostItemCreationRequest item) throws APIRequestException {
+        ValidationUtil.isRequired("locationName", item.locationName);
+        ValidationUtil.isRequired("title",item.title);
+        ValidationUtil.isRequired("description",item.description);
+        ValidationUtil.respectMaxLength("title",item.title,150);
+        ValidationUtil.respectMaxLength("description",item.description,250);
+        ValidationUtil.isAPositiveNumber("reward",item.reward);
+        ValidationUtil.isAnExistantUserID(item.ownerId,context);
+        ValidationUtil.isAValidLocation(item.latitude, item.longitude);
+
+        context.insertInto(LOSTITEMS, LOSTITEMS.TITLE, LOSTITEMS.DESCRIPTION, LOSTITEMS.REWARD,
+                LOSTITEMS.OWNERID, LOSTITEMS.LONGITUDE,LOSTITEMS.LATTITUDE, LOSTITEMS.LOCATIONNAME)
+                .values(item.title, item.description, item.reward, item.ownerId, item.longitude,
+                        item.latitude, item.locationName).execute();
+
+        Record result =  context.select(LOSTITEMS.ID).from(LOSTITEMS)
+                .where(LOSTITEMS.OWNERID.eq(item.ownerId))
+                .orderBy(LOSTITEMS.ID.desc()).fetchAny();
+        int id = (int) result.get("Id");
+        return new Long(id);
     }
 
     /**
@@ -201,9 +225,15 @@ public class InquirioWebService {
      * @param itemID Identifiant de l'item
      * @return Les details de l'item
      */
-    
-    public LostItem getItemDetail(long itemID) {
-        return null;
+    @GET
+    @Path("items/{id}")
+    public LostItem getItemDetail(@PathParam("id") int itemID) throws APIRequestException {
+        LostitemsRecord record = context.selectFrom(LOSTITEMS).where(LOSTITEMS.ID.eq(itemID)).fetchOne();
+
+        if (record == null) {
+            throw new APIRequestException(APIErrorCodes.UnknownItemId);
+        }
+        return new LostItem(record);
     }
 
     /**
@@ -211,9 +241,17 @@ public class InquirioWebService {
      * @param itemID Identifiant de l'item
      * @return L'emplacement de l'item
      */
-    
-    public Location getItemLocation(long itemID) {
-        return null;
+    @GET
+    @Path("items/{id}/location")
+    public Location getItemLocation(@PathParam("id") int itemID) throws APIRequestException {
+        LostitemsRecord record = context.selectFrom(LOSTITEMS).where(LOSTITEMS.ID.eq(itemID)).fetchOne();
+
+        if (record == null) {
+            throw new APIRequestException(APIErrorCodes.UnknownItemId);
+        }
+
+        LostItem li = new LostItem(record);
+        return li.getLocation();
     }
 
     /**
@@ -221,9 +259,15 @@ public class InquirioWebService {
      * @param itemID identifiant de l'id
      * @return True si la suppression s'est bien déroulée
      */
-    
-    public RequestResult deleteItem(long itemID) {
-        return null;
+    @DELETE
+    @Path("items/{id}")
+    public RequestResult deleteItem(@PathParam("id") int itemID) throws APIRequestException {
+        //TODO : Vérifier que l'item est bien celui de la personne !
+        int result = context.deleteFrom(LOSTITEMS).where(LOSTITEMS.ID.eq(itemID)).execute();
+        if (result != 1){
+            throw new APIRequestException(APIErrorCodes.UnknownItemId);
+        }
+        return new RequestResult(true);
     }
 
     /**
@@ -232,20 +276,27 @@ public class InquirioWebService {
      * @param itemID id
      * @return nom de l'item
      */
-    
-    public String getItemName(long itemID) {
-        return null;
+    @GET
+    @Path("items/{id}/title")
+    public String getItemName(@PathParam("id") int itemID) throws APIRequestException {
+
+        Record record = context.select(LOSTITEMS.TITLE).from(LOSTITEMS).where(LOSTITEMS.ID.eq(itemID)).fetchOne();
+
+        if (record == null) {
+            throw new APIRequestException(APIErrorCodes.UnknownItemId);
+        }
+        return record.get("Title").toString();
     }
 
     /**
      * Permet d'envoyer une requete pour signifier
      * qu'un objet à potentiellement été trouvé
      *
-     * @param resquest
+     * @param request
      * @return True si tout s'est déroulé correctement
      */
     
-    public RequestResult sendFoundRequest(FoundRequest resquest) {
+    public RequestResult sendFoundRequest(FoundRequest request) {
         return null;
     }
 

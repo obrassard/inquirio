@@ -5,11 +5,13 @@ public enum APIErrorCodes {
     PasswordDoesntMatch,
     BadCredentials,
     InvalidPhoneNumber,
-    NameIsRequired,
     PasswordIsRequired,
     EmailAlreadyExists,
     UnknownUserId,
+    UnknownItemId,
     InvalidLocation,
-
+    RequiredAttribute,
+    InvalidValue,
+    TextLengthViolation,
 
 }
