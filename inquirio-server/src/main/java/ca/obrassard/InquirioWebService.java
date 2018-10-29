@@ -13,7 +13,9 @@ import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Result;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
@@ -21,7 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ca.obrassard.jooqentities.tables.Lostitems.LOSTITEMS;
-import static ca.obrassard.jooqentities.tables.Users.*;
+import static ca.obrassard.jooqentities.tables.Notification.NOTIFICATION;
+import static ca.obrassard.jooqentities.tables.Users.USERS;
 
 /**
  * Created by Olivier Brassard.
@@ -182,6 +185,7 @@ public class InquirioWebService {
     @GET
     @Path("users/{id}")
     public User getUserDetail(@PathParam("id") int userID) throws APIRequestException {
+        //TODO : Validate token
        UsersRecord record = context.selectFrom(USERS).where(USERS.ID.eq(userID)).fetchOne();
        if (record == null){
            throw new APIRequestException(APIErrorCodes.UnknownUserId);
@@ -198,6 +202,7 @@ public class InquirioWebService {
     @POST
     @Path("items")
     public Long addNewItem(LostItemCreationRequest item) throws APIRequestException {
+        //TODO : Validate token
         ValidationUtil.isRequired("locationName", item.locationName);
         ValidationUtil.isRequired("title",item.title);
         ValidationUtil.isRequired("description",item.description);
@@ -295,9 +300,19 @@ public class InquirioWebService {
      * @param request
      * @return True si tout s'est déroulé correctement
      */
-    
-    public RequestResult sendFoundRequest(FoundRequest request) {
-        return null;
+
+    @POST
+    @Path("notification")
+    public RequestResult sendFoundRequest(FoundRequest request) throws APIRequestException {
+        //TODO : Validate token
+
+        ValidationUtil.isRequired("message",request.message);
+        ValidationUtil.isAnExistantItemID(request.itemID, context);
+        ValidationUtil.isAnExistantUserID(request.senderID, context);
+
+        context.insertInto(NOTIFICATION, NOTIFICATION.ITEMID, NOTIFICATION.SENDERID, NOTIFICATION.MESSAGE,NOTIFICATION.PHOTO)
+                .values(request.itemID,request.senderID,request.message,request.image).execute();
+        return new RequestResult(true);
     }
 
     /**
@@ -307,9 +322,29 @@ public class InquirioWebService {
      * @param userID Identifiant de l'utilisateur
      * @return Une liste de LostItemSummary
      */
-    
-    public List<LostItemSummary> getLostItemsByOwner(long userID) {
-        return null;
+
+    @GET
+    @Path("users/{id}/lostitems")
+    public List<LostItemSummary> getLostItemsByOwner(@PathParam("id") int userID) throws APIRequestException {
+
+        ValidationUtil.isAnExistantUserID(userID, context);
+
+        Result<LostitemsRecord> result = context.selectFrom(LOSTITEMS)
+                    .where(LOSTITEMS.OWNERID.eq(userID).and(LOSTITEMS.ITEMHASBEENFOUND.eq((byte)0)))
+                    .fetch();
+
+        List<LostItemSummary> lostItemSummaries = new ArrayList<>();
+        for (LostitemsRecord item : result){
+            LostItemSummary lis = new LostItemSummary();
+            lis.distance = -1;
+            lis.found = true;
+            lis.locationName = item.getLocationname();
+            lis.itemName = item.getTitle();
+            lis.itemID = item.getId();
+            lostItemSummaries.add(lis);
+        }
+
+        return lostItemSummaries;
     }
 
     /**
@@ -319,9 +354,27 @@ public class InquirioWebService {
      * @param userID Identifiant de l'utilisateur
      * @return Une liste de LostItemSummary
      */
-    
-    public List<FoundItemSummary> getFoundItemsByOwner(long userID) {
-        return null;
+    @GET
+    @Path("users/{id}/founditems")
+    public List<FoundItemSummary> getFoundItemsByOwner(@PathParam("id") int userID) throws APIRequestException {
+        ValidationUtil.isAnExistantUserID(userID, context);
+
+//        Result<LostitemsRecord> result = context.selectFrom(LOSTITEMS)
+//                .where(LOSTITEMS.OWNERID.eq(userID).and(LOSTITEMS.ITEMHASBEENFOUND.eq((byte)1)))
+//                .fetch();
+//
+//        List<FoundItemSummary> foundItemSummaries = new ArrayList<>();
+//        for (LostitemsRecord item : result){
+//            FoundItemSummary fis = new FoundItemSummary();
+//            fis.found = true;
+//            //fis.finderName = ;
+//            fis.itemName = item.getTitle();
+//            fis.itemID = item.getId();
+//            foundItemSummaries.add(fis);
+//        }
+//
+//        return foundItemSummaries;
+        throw new NotImplementedException();
     }
 
     /**
