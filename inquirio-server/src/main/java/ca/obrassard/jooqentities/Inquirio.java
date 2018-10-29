@@ -32,7 +32,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Inquirio extends SchemaImpl {
 
-    private static final long serialVersionUID = 1399301714;
+    private static final long serialVersionUID = -478762478;
 
     /**
      * The reference instance of <code>inquirio</code>
@@ -40,17 +40,17 @@ public class Inquirio extends SchemaImpl {
     public static final Inquirio INQUIRIO = new Inquirio();
 
     /**
-     * The table <code>inquirio.LostItems</code>.
+     * The table <code>inquirio.lostitems</code>.
      */
     public final Lostitems LOSTITEMS = ca.obrassard.jooqentities.tables.Lostitems.LOSTITEMS;
 
     /**
-     * The table <code>inquirio.Notification</code>.
+     * The table <code>inquirio.notification</code>.
      */
     public final Notification NOTIFICATION = ca.obrassard.jooqentities.tables.Notification.NOTIFICATION;
 
     /**
-     * The table <code>inquirio.Users</code>.
+     * The table <code>inquirio.users</code>.
      */
     public final Users USERS = ca.obrassard.jooqentities.tables.Users.USERS;
 

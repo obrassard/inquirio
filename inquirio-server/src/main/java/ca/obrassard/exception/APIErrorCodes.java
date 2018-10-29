@@ -9,6 +9,7 @@ public enum APIErrorCodes {
     EmailAlreadyExists,
     UnknownUserId,
     UnknownItemId,
+    UnknownNotificationID,
     InvalidLocation,
     RequiredAttribute,
     InvalidValue,

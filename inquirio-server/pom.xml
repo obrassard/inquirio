@@ -156,13 +156,13 @@
                   <!-- JDBC connection parameters -->
                   <jdbc>
                       <driver>com.mysql.cj.jdbc.Driver</driver>
-                      <url>jdbc:mysql://debian.obrassard.ca:3306/inquirio</url>
-                      <user>inquirioauth</user>
-                      <password>5kvvpz4HiktywVcq</password>
+                      <!--<url>jdbc:mysql://debian.obrassard.ca:3306/inquirio</url>-->
+                      <!--<user>inquirioauth</user>-->
+                      <!--<password>5kvvpz4HiktywVcq</password>-->
 
-                      <!--<url>jdbc:mysql://localhost:3306/inquirio</url>-->
-                      <!--<user>root</user>-->
-                      <!--<password></password>-->
+                      <url>jdbc:mysql://localhost:3306/inquirio</url>
+                      <user>root</user>
+                      <password></password>
                   </jdbc>
 
                   <!-- Generator parameters -->

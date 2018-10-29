@@ -35,6 +35,7 @@ public class Indexes {
     public static final Index LOSTITEMS_FK_USERS_FINDERID = Indexes0.LOSTITEMS_FK_USERS_FINDERID;
     public static final Index LOSTITEMS_FK_USERS_OWNERID = Indexes0.LOSTITEMS_FK_USERS_OWNERID;
     public static final Index LOSTITEMS_PRIMARY = Indexes0.LOSTITEMS_PRIMARY;
+    public static final Index NOTIFICATION_FK_LOSTITEM_ITEMID = Indexes0.NOTIFICATION_FK_LOSTITEM_ITEMID;
     public static final Index NOTIFICATION_FK_USERS_SENDERID = Indexes0.NOTIFICATION_FK_USERS_SENDERID;
     public static final Index NOTIFICATION_PRIMARY = Indexes0.NOTIFICATION_PRIMARY;
     public static final Index USERS_PRIMARY = Indexes0.USERS_PRIMARY;
@@ -47,7 +48,8 @@ public class Indexes {
         public static Index LOSTITEMS_FK_USERS_FINDERID = Internal.createIndex("FK_Users_FinderID", Lostitems.LOSTITEMS, new OrderField[] { Lostitems.LOSTITEMS.FINDERID }, false);
         public static Index LOSTITEMS_FK_USERS_OWNERID = Internal.createIndex("FK_Users_OwnerID", Lostitems.LOSTITEMS, new OrderField[] { Lostitems.LOSTITEMS.OWNERID }, false);
         public static Index LOSTITEMS_PRIMARY = Internal.createIndex("PRIMARY", Lostitems.LOSTITEMS, new OrderField[] { Lostitems.LOSTITEMS.ID }, true);
-        public static Index NOTIFICATION_FK_USERS_SENDERID = Internal.createIndex("FK_Users_SenderID", Notification.NOTIFICATION, new OrderField[] { Notification.NOTIFICATION.ITEMID }, false);
+        public static Index NOTIFICATION_FK_LOSTITEM_ITEMID = Internal.createIndex("FK_LostItem_ItemID", Notification.NOTIFICATION, new OrderField[] { Notification.NOTIFICATION.ITEMID }, false);
+        public static Index NOTIFICATION_FK_USERS_SENDERID = Internal.createIndex("FK_Users_SenderId", Notification.NOTIFICATION, new OrderField[] { Notification.NOTIFICATION.SENDERID }, false);
         public static Index NOTIFICATION_PRIMARY = Internal.createIndex("PRIMARY", Notification.NOTIFICATION, new OrderField[] { Notification.NOTIFICATION.ID }, true);
         public static Index USERS_PRIMARY = Internal.createIndex("PRIMARY", Users.USERS, new OrderField[] { Users.USERS.ID }, true);
     }

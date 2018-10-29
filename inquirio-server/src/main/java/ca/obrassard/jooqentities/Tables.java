@@ -25,17 +25,17 @@ import javax.annotation.Generated;
 public class Tables {
 
     /**
-     * The table <code>inquirio.LostItems</code>.
+     * The table <code>inquirio.lostitems</code>.
      */
     public static final Lostitems LOSTITEMS = ca.obrassard.jooqentities.tables.Lostitems.LOSTITEMS;
 
     /**
-     * The table <code>inquirio.Notification</code>.
+     * The table <code>inquirio.notification</code>.
      */
     public static final Notification NOTIFICATION = ca.obrassard.jooqentities.tables.Notification.NOTIFICATION;
 
     /**
-     * The table <code>inquirio.Users</code>.
+     * The table <code>inquirio.users</code>.
      */
     public static final Users USERS = ca.obrassard.jooqentities.tables.Users.USERS;
 }

@@ -3,8 +3,8 @@ package ca.obrassard;
 import ca.obrassard.exception.APIErrorCodes;
 import ca.obrassard.exception.APIRequestException;
 import ca.obrassard.inquirioCommons.*;
-import ca.obrassard.jooqentities.tables.Lostitems;
 import ca.obrassard.jooqentities.tables.records.LostitemsRecord;
+import ca.obrassard.jooqentities.tables.records.NotificationRecord;
 import ca.obrassard.jooqentities.tables.records.UsersRecord;
 import ca.obrassard.model.LostItem;
 import ca.obrassard.model.User;
@@ -13,9 +13,7 @@ import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Result;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import javax.validation.Valid;
 import javax.ws.rs.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
@@ -56,7 +54,7 @@ public class InquirioWebService {
     @POST
     @Path("checksubscription")
     public RequestResult isSubscribed(SubscriptionCheckRequest request) throws APIRequestException {
-        ValidationUtil.validateEmail(request.email);
+        Validator.validateEmail(request.email);
         boolean exists = context.fetchExists(context.selectOne().from(USERS).where(USERS.EMAIL.eq(request.email)));
         return new RequestResult(exists);
     }
@@ -71,7 +69,7 @@ public class InquirioWebService {
     @Path("login")
     public LoginResponse login(LoginRequest loginRequest) throws APIRequestException {
 
-        ValidationUtil.validateEmail(loginRequest.email);
+        Validator.validateEmail(loginRequest.email);
 
         String hashedPasswd = Hashing.sha256().hashString(loginRequest.password, StandardCharsets.UTF_8).toString();
 
@@ -101,11 +99,11 @@ public class InquirioWebService {
     @Path("signup")
     public LoginResponse signup(SignupRequest userInfos) throws APIRequestException {
 
-        ValidationUtil.validateEmail(userInfos.email);
-        ValidationUtil.emailIsUnique(userInfos.email, context);
-        ValidationUtil.validateNewPassword(userInfos.password, userInfos.passwdConfirmation);
-        ValidationUtil.isRequired("email",userInfos.fullName);
-        ValidationUtil.validatePhone(userInfos.cellNumber);
+        Validator.validateEmail(userInfos.email);
+        Validator.emailIsUnique(userInfos.email, context);
+        Validator.validateNewPassword(userInfos.password, userInfos.passwdConfirmation);
+        Validator.isRequired("email",userInfos.fullName);
+        Validator.validatePhone(userInfos.cellNumber);
 
         String hashedPasswd = Hashing.sha256().hashString(userInfos.password, StandardCharsets.UTF_8).toString();
 
@@ -136,7 +134,7 @@ public class InquirioWebService {
     @Path("logout/{id}")
     public LogoutResponse logout(@PathParam("id") int userID) throws APIRequestException {
 
-        ValidationUtil.isAnExistantUserID(userID, context);
+        Validator.isAnExistantUserID(userID, context);
 
         //TODO : Détruire le cookie (le token)
 
@@ -158,7 +156,7 @@ public class InquirioWebService {
     @Path("items/near")
     public List<LostItemSummary> getNearLostItems(LocationRequest currentLocation) throws APIRequestException {
 
-        ValidationUtil.isAValidLocation(currentLocation);
+        Validator.isAValidLocation(currentLocation);
 
         String query = String.format("CALL getNearItems(%s, %s);",currentLocation.latitude,currentLocation.longitude);
         Result<Record> results = context.fetch(query);
@@ -203,14 +201,14 @@ public class InquirioWebService {
     @Path("items")
     public Long addNewItem(LostItemCreationRequest item) throws APIRequestException {
         //TODO : Validate token
-        ValidationUtil.isRequired("locationName", item.locationName);
-        ValidationUtil.isRequired("title",item.title);
-        ValidationUtil.isRequired("description",item.description);
-        ValidationUtil.respectMaxLength("title",item.title,150);
-        ValidationUtil.respectMaxLength("description",item.description,250);
-        ValidationUtil.isAPositiveNumber("reward",item.reward);
-        ValidationUtil.isAnExistantUserID(item.ownerId,context);
-        ValidationUtil.isAValidLocation(item.latitude, item.longitude);
+        Validator.isRequired("locationName", item.locationName);
+        Validator.isRequired("title",item.title);
+        Validator.isRequired("description",item.description);
+        Validator.respectMaxLength("title",item.title,150);
+        Validator.respectMaxLength("description",item.description,250);
+        Validator.isAPositiveNumber("reward",item.reward);
+        Validator.isAnExistantUserID(item.ownerId,context);
+        Validator.isAValidLocation(item.latitude, item.longitude);
 
         context.insertInto(LOSTITEMS, LOSTITEMS.TITLE, LOSTITEMS.DESCRIPTION, LOSTITEMS.REWARD,
                 LOSTITEMS.OWNERID, LOSTITEMS.LONGITUDE,LOSTITEMS.LATTITUDE, LOSTITEMS.LOCATIONNAME)
@@ -302,13 +300,13 @@ public class InquirioWebService {
      */
 
     @POST
-    @Path("notification")
+    @Path("notifications")
     public RequestResult sendFoundRequest(FoundRequest request) throws APIRequestException {
         //TODO : Validate token
 
-        ValidationUtil.isRequired("message",request.message);
-        ValidationUtil.isAnExistantItemID(request.itemID, context);
-        ValidationUtil.isAnExistantUserID(request.senderID, context);
+        Validator.isRequired("message",request.message);
+        Validator.isAnExistantItemID(request.itemID, context);
+        Validator.isAnExistantUserID(request.senderID, context);
 
         context.insertInto(NOTIFICATION, NOTIFICATION.ITEMID, NOTIFICATION.SENDERID, NOTIFICATION.MESSAGE,NOTIFICATION.PHOTO)
                 .values(request.itemID,request.senderID,request.message,request.image).execute();
@@ -327,7 +325,7 @@ public class InquirioWebService {
     @Path("users/{id}/lostitems")
     public List<LostItemSummary> getLostItemsByOwner(@PathParam("id") int userID) throws APIRequestException {
 
-        ValidationUtil.isAnExistantUserID(userID, context);
+        Validator.isAnExistantUserID(userID, context);
 
         Result<LostitemsRecord> result = context.selectFrom(LOSTITEMS)
                     .where(LOSTITEMS.OWNERID.eq(userID).and(LOSTITEMS.ITEMHASBEENFOUND.eq((byte)0)))
@@ -357,24 +355,22 @@ public class InquirioWebService {
     @GET
     @Path("users/{id}/founditems")
     public List<FoundItemSummary> getFoundItemsByOwner(@PathParam("id") int userID) throws APIRequestException {
-        ValidationUtil.isAnExistantUserID(userID, context);
+        Validator.isAnExistantUserID(userID, context);
 
-//        Result<LostitemsRecord> result = context.selectFrom(LOSTITEMS)
-//                .where(LOSTITEMS.OWNERID.eq(userID).and(LOSTITEMS.ITEMHASBEENFOUND.eq((byte)1)))
-//                .fetch();
-//
-//        List<FoundItemSummary> foundItemSummaries = new ArrayList<>();
-//        for (LostitemsRecord item : result){
-//            FoundItemSummary fis = new FoundItemSummary();
-//            fis.found = true;
-//            //fis.finderName = ;
-//            fis.itemName = item.getTitle();
-//            fis.itemID = item.getId();
-//            foundItemSummaries.add(fis);
-//        }
-//
-//        return foundItemSummaries;
-        throw new NotImplementedException();
+        Result<Record> result = context.select().from(LOSTITEMS.innerJoin(USERS).on(LOSTITEMS.FINDERID.eq(USERS.ID)))
+                .where(LOSTITEMS.OWNERID.eq(userID).and(LOSTITEMS.ITEMHASBEENFOUND.eq((byte)1)))
+                .fetch();
+
+        List<FoundItemSummary> foundItemSummaries = new ArrayList<>();
+        for (Record item : result){
+            FoundItemSummary fis = new FoundItemSummary();
+            fis.found = true;
+            fis.finderName = item.get("Name").toString();
+            fis.itemName = item.get("Title").toString();
+            fis.itemID = (int)item.get("Id");
+            foundItemSummaries.add(fis);
+        }
+        return foundItemSummaries;
     }
 
     /**
@@ -384,9 +380,29 @@ public class InquirioWebService {
      * @param userID Utilisateur a qui les notifs sont adressées
      * @return Une liste de NotificationSummary
      */
-    
-    public List<NotificationSummary> getPotentiallyFoundItems(long userID) {
-        return null;
+    @GET
+    @Path("users/{id}/notifications")
+    public List<NotificationSummary> getPotentiallyFoundItems(@PathParam("id") int userID) throws APIRequestException {
+
+        Validator.isAnExistantUserID(userID, context);
+        Result<Record> result = context.select().from(NOTIFICATION.innerJoin(LOSTITEMS)
+                .on(LOSTITEMS.ID.eq(NOTIFICATION.ITEMID))
+                .innerJoin(USERS).on(USERS.ID.eq(NOTIFICATION.SENDERID)))
+                .where(LOSTITEMS.OWNERID.eq(userID)
+                .and(NOTIFICATION.VISIBLE.eq((byte)1)))
+                .fetch();
+
+        List<NotificationSummary> notifs = new ArrayList<>();
+
+        for (Record item : result){
+            NotificationSummary ns = new NotificationSummary();
+            ns.itemName = item.get("Title").toString();
+            ns.notificationID = (int)item.get(0);
+            ns.senderName = item.get("Name").toString();
+            notifs.add(ns);
+        }
+
+        return notifs;
     }
 
     /**
@@ -396,9 +412,18 @@ public class InquirioWebService {
      * @param notificationID identifiant de la notif de candidat
      * @return Details de la Notification
      */
-    
-    public Notification getNotificationDetail(long notificationID) {
-        return null;
+    @GET
+    @Path("notifications/{id}")
+    public ca.obrassard.model.Notification getNotificationDetail(@PathParam("id") int notificationID) throws APIRequestException {
+
+        //TODO check si la notif est destinée au requester
+
+        NotificationRecord record = context.selectFrom(NOTIFICATION).where(NOTIFICATION.ID.eq(notificationID)).fetchOne();
+        if (record == null){
+            throw new APIRequestException(APIErrorCodes.UnknownNotificationID);
+        }
+
+        return new ca.obrassard.model.Notification(record);
     }
 
     /**
@@ -409,7 +434,8 @@ public class InquirioWebService {
      * @return True si la requête s'est bien déroulée
      */
     
-    public Boolean denyCandidateNotification(long notificationID) {
+    public Boolean denyCandidateNotification(int notificationID) {
+
         return null;
     }
 
@@ -435,8 +461,15 @@ public class InquirioWebService {
      * @return FinderContactDetail
      */
     
-    public FinderContactDetail getFinderContactDetail(long notificationID) {
-        return null;
+    public FinderContactDetail getFinderContactDetail(int notificationID) throws APIRequestException {
+        Record result = context.select().from(NOTIFICATION.innerJoin(USERS)
+                .on(USERS.ID.eq(NOTIFICATION.SENDERID))).fetchOne();
+        if (result == null){
+            throw new APIRequestException(APIErrorCodes.UnknownNotificationID);
+        }
+        FinderContactDetail fcd = new FinderContactDetail();
+        fcd.phoneNumber = result.get("Telephone").toString();
+        return fcd;
     }
 
     /**
@@ -446,7 +479,8 @@ public class InquirioWebService {
      * @param rating note de 0 à 5 reporésentant la fiabilité
      * @return True si la requête s'est bien déroulée;
      */
-    
+
+    //TODO : Est-ce vraiment utils ?
     public RequestResult rateUser(long userId, int rating) {
         return null;
     }

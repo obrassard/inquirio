@@ -4,6 +4,7 @@ import ca.obrassard.exception.APIErrorCodes;
 import ca.obrassard.exception.APIRequestException;
 import ca.obrassard.inquirioCommons.LocationRequest;
 import ca.obrassard.jooqentities.tables.Lostitems;
+import ca.obrassard.jooqentities.tables.Notification;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.jooq.DSLContext;
 
@@ -11,9 +12,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static ca.obrassard.jooqentities.tables.Lostitems.*;
+import static ca.obrassard.jooqentities.tables.Notification.NOTIFICATION;
 import static ca.obrassard.jooqentities.tables.Users.USERS;
 
-public class ValidationUtil {
+public class Validator {
     public static void validateEmail(String email) throws APIRequestException {
         if (!EmailValidator.getInstance().isValid(email)){
             throw new APIRequestException(APIErrorCodes.InvalidEmail);
@@ -35,6 +37,12 @@ public class ValidationUtil {
     public static void isAnExistantItemID(int itemID, DSLContext context) throws APIRequestException{
         if (!context.fetchExists(context.selectOne().from(LOSTITEMS).where(LOSTITEMS.ID.eq(itemID)))){
             throw new APIRequestException(APIErrorCodes.UnknownUserId);
+        }
+    }
+
+    public static void isAnExistantNotificationID(int notifId, DSLContext context) throws APIRequestException{
+        if (!context.fetchExists(context.selectOne().from(NOTIFICATION).where(NOTIFICATION.ID.eq(notifId)))){
+            throw new APIRequestException(APIErrorCodes.UnknownNotificationID);
         }
     }
 
