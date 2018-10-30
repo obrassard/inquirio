@@ -28,101 +28,101 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UsersRecord extends UpdatableRecordImpl<UsersRecord> implements Record7<Integer, String, String, String, Integer, Double, String> {
 
-    private static final long serialVersionUID = -746276993;
+    private static final long serialVersionUID = -883210433;
 
     /**
-     * Setter for <code>inquirio.users.Id</code>.
+     * Setter for <code>inquirio.Users.Id</code>.
      */
     public void setId(Integer value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>inquirio.users.Id</code>.
+     * Getter for <code>inquirio.Users.Id</code>.
      */
     public Integer getId() {
         return (Integer) get(0);
     }
 
     /**
-     * Setter for <code>inquirio.users.Name</code>.
+     * Setter for <code>inquirio.Users.Name</code>.
      */
     public void setName(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>inquirio.users.Name</code>.
+     * Getter for <code>inquirio.Users.Name</code>.
      */
     public String getName() {
         return (String) get(1);
     }
 
     /**
-     * Setter for <code>inquirio.users.Email</code>.
+     * Setter for <code>inquirio.Users.Email</code>.
      */
     public void setEmail(String value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>inquirio.users.Email</code>.
+     * Getter for <code>inquirio.Users.Email</code>.
      */
     public String getEmail() {
         return (String) get(2);
     }
 
     /**
-     * Setter for <code>inquirio.users.Telephone</code>.
+     * Setter for <code>inquirio.Users.Telephone</code>.
      */
     public void setTelephone(String value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>inquirio.users.Telephone</code>.
+     * Getter for <code>inquirio.Users.Telephone</code>.
      */
     public String getTelephone() {
         return (String) get(3);
     }
 
     /**
-     * Setter for <code>inquirio.users.ItemsFoundCount</code>.
+     * Setter for <code>inquirio.Users.ItemsFoundCount</code>.
      */
     public void setItemsfoundcount(Integer value) {
         set(4, value);
     }
 
     /**
-     * Getter for <code>inquirio.users.ItemsFoundCount</code>.
+     * Getter for <code>inquirio.Users.ItemsFoundCount</code>.
      */
     public Integer getItemsfoundcount() {
         return (Integer) get(4);
     }
 
     /**
-     * Setter for <code>inquirio.users.Rating</code>.
+     * Setter for <code>inquirio.Users.Rating</code>.
      */
     public void setRating(Double value) {
         set(5, value);
     }
 
     /**
-     * Getter for <code>inquirio.users.Rating</code>.
+     * Getter for <code>inquirio.Users.Rating</code>.
      */
     public Double getRating() {
         return (Double) get(5);
     }
 
     /**
-     * Setter for <code>inquirio.users.PasswordHash</code>.
+     * Setter for <code>inquirio.Users.PasswordHash</code>.
      */
     public void setPasswordhash(String value) {
         set(6, value);
     }
 
     /**
-     * Getter for <code>inquirio.users.PasswordHash</code>.
+     * Getter for <code>inquirio.Users.PasswordHash</code>.
      */
     public String getPasswordhash() {
         return (String) get(6);

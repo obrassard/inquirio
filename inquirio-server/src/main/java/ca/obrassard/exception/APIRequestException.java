@@ -4,12 +4,16 @@ public class APIRequestException extends Exception {
     public APIErrorCodes error;
     public String targetAttribute;
     public APIRequestException(APIErrorCodes error, String attribute) {
-        super("Un ou plusieurs arguments de la requête sont invalides");
+        super((error == APIErrorCodes.Forbidden || error == APIErrorCodes.AccesDenied) ?
+                "Vous n'êtes pas autorisé à effectuer cette action ou vous n'êtes pas authentifié" :
+                "Un ou plusieurs arguments de la requête sont invalides");
         this.error = error;
         this.targetAttribute = attribute;
     }
     public APIRequestException(APIErrorCodes error) {
-        super("Un ou plusieurs arguments de la requête sont invalides");
+        super((error == APIErrorCodes.Forbidden || error == APIErrorCodes.AccesDenied) ?
+                "Vous n'êtes pas autorisé à effectuer cette action ou vous n'êtes pas authentifié" :
+                "Un ou plusieurs arguments de la requête sont invalides");
         this.error = error;
         this.targetAttribute = null;
     }

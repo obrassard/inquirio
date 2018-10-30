@@ -69,9 +69,9 @@ public class Keys {
     }
 
     private static class UniqueKeys0 {
-        public static final UniqueKey<LostitemsRecord> KEY_LOSTITEMS_PRIMARY = Internal.createUniqueKey(Lostitems.LOSTITEMS, "KEY_lostitems_PRIMARY", Lostitems.LOSTITEMS.ID);
-        public static final UniqueKey<NotificationRecord> KEY_NOTIFICATION_PRIMARY = Internal.createUniqueKey(Notification.NOTIFICATION, "KEY_notification_PRIMARY", Notification.NOTIFICATION.ID);
-        public static final UniqueKey<UsersRecord> KEY_USERS_PRIMARY = Internal.createUniqueKey(Users.USERS, "KEY_users_PRIMARY", Users.USERS.ID);
+        public static final UniqueKey<LostitemsRecord> KEY_LOSTITEMS_PRIMARY = Internal.createUniqueKey(Lostitems.LOSTITEMS, "KEY_LostItems_PRIMARY", Lostitems.LOSTITEMS.ID);
+        public static final UniqueKey<NotificationRecord> KEY_NOTIFICATION_PRIMARY = Internal.createUniqueKey(Notification.NOTIFICATION, "KEY_Notification_PRIMARY", Notification.NOTIFICATION.ID);
+        public static final UniqueKey<UsersRecord> KEY_USERS_PRIMARY = Internal.createUniqueKey(Users.USERS, "KEY_Users_PRIMARY", Users.USERS.ID);
     }
 
     private static class ForeignKeys0 {

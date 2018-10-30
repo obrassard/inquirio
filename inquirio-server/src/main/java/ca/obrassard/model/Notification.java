@@ -11,9 +11,9 @@ import java.util.Date;
  * Date: 20-10-18
  */
 public class Notification {
-    public long id;
-    public long senderId;
-    public long itemId;
+    public int id;
+    public int senderId;
+    public int itemId;
     public byte[] photo;
     public String message;
     public Date date;

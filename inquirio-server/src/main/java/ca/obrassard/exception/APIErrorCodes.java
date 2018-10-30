@@ -14,5 +14,7 @@ public enum APIErrorCodes {
     RequiredAttribute,
     InvalidValue,
     TextLengthViolation,
+    AccesDenied,
+    Forbidden
 
 }

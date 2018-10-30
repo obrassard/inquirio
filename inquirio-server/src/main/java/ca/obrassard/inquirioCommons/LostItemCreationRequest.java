@@ -14,9 +14,7 @@ public class LostItemCreationRequest {
     public String title;
     public String description;
     public double reward;
-    public int ownerId;
     public double longitude;
     public double latitude;
     public String locationName;
-
 }

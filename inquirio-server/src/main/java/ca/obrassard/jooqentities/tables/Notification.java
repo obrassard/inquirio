@@ -42,10 +42,10 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Notification extends TableImpl<NotificationRecord> {
 
-    private static final long serialVersionUID = 498990574;
+    private static final long serialVersionUID = 1383671406;
 
     /**
-     * The reference instance of <code>inquirio.notification</code>
+     * The reference instance of <code>inquirio.Notification</code>
      */
     public static final Notification NOTIFICATION = new Notification();
 
@@ -58,56 +58,56 @@ public class Notification extends TableImpl<NotificationRecord> {
     }
 
     /**
-     * The column <code>inquirio.notification.Id</code>.
+     * The column <code>inquirio.Notification.Id</code>.
      */
     public final TableField<NotificationRecord, Integer> ID = createField("Id", org.jooq.impl.SQLDataType.INTEGER.nullable(false).identity(true), this, "");
 
     /**
-     * The column <code>inquirio.notification.SenderId</code>.
+     * The column <code>inquirio.Notification.SenderId</code>.
      */
     public final TableField<NotificationRecord, Integer> SENDERID = createField("SenderId", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>inquirio.notification.ItemId</code>.
+     * The column <code>inquirio.Notification.ItemId</code>.
      */
     public final TableField<NotificationRecord, Integer> ITEMID = createField("ItemId", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>inquirio.notification.Photo</code>.
+     * The column <code>inquirio.Notification.Photo</code>.
      */
     public final TableField<NotificationRecord, byte[]> PHOTO = createField("Photo", org.jooq.impl.SQLDataType.BLOB, this, "");
 
     /**
-     * The column <code>inquirio.notification.Message</code>.
+     * The column <code>inquirio.Notification.Message</code>.
      */
     public final TableField<NotificationRecord, String> MESSAGE = createField("Message", org.jooq.impl.SQLDataType.VARCHAR(200).nullable(false), this, "");
 
     /**
-     * The column <code>inquirio.notification.Date</code>.
+     * The column <code>inquirio.Notification.Date</code>.
      */
     public final TableField<NotificationRecord, Timestamp> DATE = createField("Date", org.jooq.impl.SQLDataType.TIMESTAMP.defaultValue(org.jooq.impl.DSL.field("CURRENT_TIMESTAMP", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "");
 
     /**
-     * The column <code>inquirio.notification.Visible</code>.
+     * The column <code>inquirio.Notification.Visible</code>.
      */
     public final TableField<NotificationRecord, Byte> VISIBLE = createField("Visible", org.jooq.impl.SQLDataType.TINYINT.nullable(false).defaultValue(org.jooq.impl.DSL.inline("1", org.jooq.impl.SQLDataType.TINYINT)), this, "");
 
     /**
-     * Create a <code>inquirio.notification</code> table reference
+     * Create a <code>inquirio.Notification</code> table reference
      */
     public Notification() {
-        this(DSL.name("notification"), null);
+        this(DSL.name("Notification"), null);
     }
 
     /**
-     * Create an aliased <code>inquirio.notification</code> table reference
+     * Create an aliased <code>inquirio.Notification</code> table reference
      */
     public Notification(String alias) {
         this(DSL.name(alias), NOTIFICATION);
     }
 
     /**
-     * Create an aliased <code>inquirio.notification</code> table reference
+     * Create an aliased <code>inquirio.Notification</code> table reference
      */
     public Notification(Name alias) {
         this(alias, NOTIFICATION);
