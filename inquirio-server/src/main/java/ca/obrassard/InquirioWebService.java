@@ -137,17 +137,18 @@ public class InquirioWebService {
      * @return LogoutResponse
      */
     @GET
-    @Path("logout/{id}")
-    public LogoutResponse logout(@PathParam("id") int userID) throws APIRequestException {
+    @Path("logout")
+    public LogoutResponse logout(@HeaderParam("token") int token) throws APIRequestException {
 
-        Validator.isAnExistantUserID(userID, context);
+         //TODO : Validate token
+         int authUserId = AuthValidator.validateToken(token,context);
 
         //TODO : Détruire le cookie (le token)
 
         LogoutResponse response = new LogoutResponse();
         response.message = "Success";
         response.success = true;
-        System.out.println("User ("+userID+") logged out on " + DateTime.now().toString());
+        System.out.println("User ("+authUserId+") logged out on " + DateTime.now().toString());
         return response;
     }
 
