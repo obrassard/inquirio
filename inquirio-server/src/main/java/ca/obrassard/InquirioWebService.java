@@ -42,6 +42,7 @@ public class InquirioWebService {
         this.context = DatasourceConfig.getContext();
     }
 
+    
     @GET
     public String getVersion(){
         return "Inquirio Web API v1.0 - All systems are operational";
@@ -53,6 +54,7 @@ public class InquirioWebService {
      * @param request adresse à vérifier
      * @return True si un compte correspond à l'adresse
      */
+    
     @POST
     @Path("checksubscription")
     public RequestResult isSubscribed(SubscriptionCheckRequest request) throws APIRequestException {
@@ -68,6 +70,7 @@ public class InquirioWebService {
      * @return LoginResponse
      */
 
+    
     @POST
     @Path("login")
     public LoginResponse login(LoginRequest loginRequest) throws APIRequestException {
@@ -101,6 +104,7 @@ public class InquirioWebService {
      * @return LoginResponse
      */
 
+    
     @POST
     @Path("signup")
     public LoginResponse signup(SignupRequest userInfos) throws APIRequestException {
@@ -136,6 +140,7 @@ public class InquirioWebService {
      * @param userID Id de l'utilisateur à déconnecter
      * @return LogoutResponse
      */
+    
     @GET
     @Path("logout")
     public LogoutResponse logout(@HeaderParam("token") int token) throws APIRequestException {
@@ -160,6 +165,7 @@ public class InquirioWebService {
      * @return Une liste sommaire des items perdus à proximité
      */
 
+    
     @POST
     @Path("items/near")
     public List<LostItemSummary> getNearLostItems(LocationRequest currentLocation, @HeaderParam("token") int token) throws APIRequestException {
@@ -193,6 +199,7 @@ public class InquirioWebService {
      * @param userID identifiant de l'utilsateur
      * @return un objet User
      */
+    
     @GET
     @Path("users/{id}")
     public User getUserDetail(@PathParam("id") int userID, @HeaderParam("token") int token) throws APIRequestException {
@@ -219,6 +226,7 @@ public class InquirioWebService {
      * @param item Detail de l'item à ajouter
      * @return L'ID de l'item ajouté
      */
+    
     @POST
     @Path("items")
     public int addNewItem(LostItemCreationRequest item, @HeaderParam("token") int token) throws APIRequestException {
@@ -253,6 +261,7 @@ public class InquirioWebService {
      * @param itemID Identifiant de l'item
      * @return Les details de l'item
      */
+    
     @GET
     @Path("items/{id}")
     public LostItem getItemDetail(@PathParam("id") int itemID, @HeaderParam("token") int token) throws APIRequestException {
@@ -273,6 +282,7 @@ public class InquirioWebService {
      * @param itemID Identifiant de l'item
      * @return L'emplacement de l'item
      */
+    
     @GET
     @Path("items/{id}/location")
     public Location getItemLocation(@PathParam("id") int itemID, @HeaderParam("token") int token) throws APIRequestException {
@@ -296,6 +306,7 @@ public class InquirioWebService {
      * @param itemID identifiant de l'id
      * @return True si la suppression s'est bien déroulée
      */
+    
     @DELETE
     @Path("items/{id}")
     public RequestResult deleteItem(@PathParam("id") int itemID, @HeaderParam("token") int token) throws APIRequestException {
@@ -322,6 +333,7 @@ public class InquirioWebService {
      * @param itemID id
      * @return nom de l'item
      */
+    
     @GET
     @Path("items/{id}/title")
     public String getItemName(@PathParam("id") int itemID, @HeaderParam("token") int token) throws APIRequestException {
@@ -346,6 +358,7 @@ public class InquirioWebService {
      * @return True si tout s'est déroulé correctement
      */
 
+    
     @POST
     @Path("notifications")
     public RequestResult sendFoundRequest(FoundRequest request, @HeaderParam("token") int token) throws APIRequestException {
@@ -374,6 +387,7 @@ public class InquirioWebService {
      * @return Une liste de LostItemSummary
      */
 
+    
     @GET
     @Path("users/{id}/lostitems")
     public List<LostItemSummary> getLostItemsByOwner(@PathParam("id") int userID, @HeaderParam("token") int token) throws APIRequestException {
@@ -409,6 +423,7 @@ public class InquirioWebService {
      * @param userID Identifiant de l'utilisateur
      * @return Une liste de LostItemSummary
      */
+    
     @GET
     @Path("users/{id}/founditems")
     public List<FoundItemSummary> getFoundItemsByOwner(@PathParam("id") int userID, @HeaderParam("token") int token) throws APIRequestException {
@@ -443,6 +458,7 @@ public class InquirioWebService {
      * @param userID Utilisateur a qui les notifs sont adressées
      * @return Une liste de NotificationSummary
      */
+    
     @GET
     @Path("users/{id}/notifications")
     public List<NotificationSummary> getPotentiallyFoundItems(@PathParam("id") int userID, @HeaderParam("token") int token) throws APIRequestException {
@@ -481,9 +497,10 @@ public class InquirioWebService {
      * @param notificationID identifiant de la notif de candidat
      * @return Details de la Notification
      */
+    
     @GET
     @Path("notifications/{id}")
-    public ca.obrassard.model.Notification getNotificationDetail(@PathParam("id") int notificationID, @HeaderParam("token") int token) throws APIRequestException {
+    public ca.obrassard.inquirioCommons.Notification getNotificationDetail(@PathParam("id") int notificationID, @HeaderParam("token") int token) throws APIRequestException {
 
 
         //TODO : Validate Real Token
@@ -499,8 +516,19 @@ public class InquirioWebService {
             throw new APIRequestException(APIErrorCodes.Forbidden);
         }
 
+        UsersRecord senderrecord = context.selectFrom(USERS).where(USERS.ID.eq(record.getSenderid())).fetchOne();
+
+        ca.obrassard.inquirioCommons.Notification notification = new ca.obrassard.inquirioCommons.Notification();
+        notification.date = record.getDate();
+        notification.id = record.getId();
+        notification.itemName = itrecord.getTitle();
+        notification.message = record.getMessage();
+        notification.senderName = senderrecord.getName();
+        notification.senderRating = senderrecord.getRating();
+        notification.photo = record.getPhoto();
+
         System.out.println("User ("+authUserId+") requested notification #"+notificationID+"'s details on " + DateTime.now().toString());
-        return new ca.obrassard.model.Notification(record);
+        return notification;
     }
 
     /**
@@ -512,9 +540,10 @@ public class InquirioWebService {
      */
 
     //TODO : Le type de retour a été changé ici!
+    
     @GET
     @Path("notifications/{id}/deny")
-    public RequestResult denyCandidateNotification( @PathParam("id") int notificationID, @HeaderParam("token") int token) throws APIRequestException {
+    public RequestResult denyCandidateNotification(@PathParam("id") int notificationID, @HeaderParam("token") int token) throws APIRequestException {
         //TODO : Validate Real Token
         int authUserId = AuthValidator.validateToken(token,context);
 
@@ -544,9 +573,10 @@ public class InquirioWebService {
      * @return Les informations de contact du 'sender'
      */
 
+    
     @GET
     @Path("notifications/{id}/accept")
-    public FinderContactDetail acceptCandidateNotification( @PathParam("id") int notificationID, @HeaderParam("token") int token) throws APIRequestException {
+    public FinderContactDetail acceptCandidateNotification(@PathParam("id") int notificationID, @HeaderParam("token") int token) throws APIRequestException {
         //TODO : Validate Real Token
         int authUserId = AuthValidator.validateToken(token,context);
 
@@ -596,6 +626,7 @@ public class InquirioWebService {
      * @return FinderContactDetail
      */
 
+    
     @GET
     @Path("notifications/{id}/contact")
     public FinderContactDetail getFinderContactDetail(@PathParam("id") int notificationID, @HeaderParam("token") int token) throws APIRequestException {
@@ -628,6 +659,7 @@ public class InquirioWebService {
      */
 
     //TODO : Est-ce vraiment utile ?
+    
     public RequestResult rateUser(long userId, int rating) {
         throw new NotImplementedException();
     }
