@@ -108,7 +108,7 @@ public class InquirioWebService {
         Validator.validateEmail(userInfos.email);
         Validator.emailIsUnique(userInfos.email, context);
         Validator.validateNewPassword(userInfos.password, userInfos.passwdConfirmation);
-        Validator.isRequired("email",userInfos.fullName);
+        Validator.isRequired("fullname",userInfos.fullName);
         Validator.validatePhone(userInfos.cellNumber);
 
         String hashedPasswd = Hashing.sha256().hashString(userInfos.password, StandardCharsets.UTF_8).toString();
