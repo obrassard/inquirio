@@ -1,4 +1,4 @@
-package ca.obrassard.inquirio;
+package ca.obrassard.inquirio.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +17,11 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import ca.obrassard.inquirio.DrawerUtils;
+import ca.obrassard.inquirio.LoggedUser;
+import ca.obrassard.inquirio.activities.adapters.MyFoundItemAdapter;
+import ca.obrassard.inquirio.activities.adapters.MyLostItemAdapter;
+import ca.obrassard.inquirio.R;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
 import ca.obrassard.inquirio.transfer.FoundItemSummary;

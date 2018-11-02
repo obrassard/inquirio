@@ -27,101 +27,101 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBRL-StZql-y3WrTrrEX-6vFUDaU-2E5bg" />
 
-        <activity android:name=".LoginHomeActivity" >
+        <activity android:name=".activities.LoginHomeActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
-            android:parentActivityName=".LoginHomeActivity">
+            android:name=".activities.LoginActivity"
+            android:parentActivityName=".activities.LoginHomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LoginHomeActivity" />
+                android:value=".activities.LoginHomeActivity" />
         </activity>
         <activity
-            android:name=".SignupActivity"
-            android:parentActivityName=".LoginHomeActivity">
+            android:name=".activities.SignupActivity"
+            android:parentActivityName=".activities.LoginHomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LoginHomeActivity" />
+                android:value=".activities.LoginHomeActivity" />
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".MyItemsActivity"
+            android:name=".activities.MyItemsActivity"
             android:label="@string/title_activity_my_items"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ca.obrassard.inquirio.MainActivity" />
+                android:value="ca.obrassard.inquirio.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".ItemsDetailActivity"
+            android:name=".activities.ItemsDetailActivity"
             android:label="@string/title_activity_items_detail"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ca.obrassard.inquirio.MainActivity" />
+                android:value="ca.obrassard.inquirio.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".AddItemActivity"
+            android:name=".activities.AddItemActivity"
             android:label="@string/title_activity_add_item"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ca.obrassard.inquirio.MainActivity" />
+                android:value="ca.obrassard.inquirio.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".NotificationsActivity"
+            android:name=".activities.NotificationsActivity"
             android:label="@string/title_activity_notifications"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ca.obrassard.inquirio.MainActivity" />
+                android:value="ca.obrassard.inquirio.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".AccountActivity"
+            android:name=".activities.AccountActivity"
             android:label="@string/title_activity_account"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ca.obrassard.inquirio.MainActivity" />
+                android:value="ca.obrassard.inquirio.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".MapDetail"
+            android:name=".activities.MapDetail"
             android:label="@string/title_activity_map_detail"
-            android:parentActivityName=".ItemsDetailActivity">
+            android:parentActivityName=".activities.ItemsDetailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ca.obrassard.inquirio.ItemsDetailActivity" />
+                android:value="ca.obrassard.inquirio.activities.ItemsDetailActivity" />
         </activity>
         <activity
-            android:name=".ItemFoundActivity"
+            android:name=".activities.ItemFoundActivity"
             android:label="@string/title_activity_item_found"
-            android:parentActivityName=".ItemsDetailActivity"
+            android:parentActivityName=".activities.ItemsDetailActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ca.obrassard.inquirio.ItemsDetailActivity" />
+                android:value="ca.obrassard.inquirio.activities.ItemsDetailActivity" />
         </activity>
         <activity
-            android:name=".NotificationDetailsActivity"
+            android:name=".activities.NotificationDetailsActivity"
             android:label="@string/title_activity_notification_details"
-            android:parentActivityName=".NotificationsActivity"
+            android:parentActivityName=".activities.NotificationsActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ca.obrassard.inquirio.NotificationsActivity" />
+                android:value="ca.obrassard.inquirio.activities.NotificationsActivity" />
         </activity>
     </application>
 

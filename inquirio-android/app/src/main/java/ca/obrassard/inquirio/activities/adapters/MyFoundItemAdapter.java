@@ -1,4 +1,4 @@
-package ca.obrassard.inquirio;
+package ca.obrassard.inquirio.activities.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import ca.obrassard.inquirio.R;
 import ca.obrassard.inquirio.model.LostItem;
 import ca.obrassard.inquirio.transfer.FoundItemSummary;
 import ca.obrassard.inquirio.transfer.LostItemSummary;

@@ -1,7 +1,6 @@
 package ca.obrassard.inquirio;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -9,6 +8,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.TextView;
+
+import ca.obrassard.inquirio.activities.AccountActivity;
+import ca.obrassard.inquirio.activities.AddItemActivity;
+import ca.obrassard.inquirio.activities.LoginHomeActivity;
+import ca.obrassard.inquirio.activities.MyItemsActivity;
+import ca.obrassard.inquirio.activities.NotificationsActivity;
 
 public class DrawerUtils {
 

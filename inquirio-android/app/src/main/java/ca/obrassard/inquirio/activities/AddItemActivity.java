@@ -1,4 +1,4 @@
-package ca.obrassard.inquirio;
+package ca.obrassard.inquirio.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,8 +21,10 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
-import java.util.Date;
-
+import ca.obrassard.inquirio.DrawerUtils;
+import ca.obrassard.inquirio.activities.dialogs.ItemAddedDialog;
+import ca.obrassard.inquirio.LoggedUser;
+import ca.obrassard.inquirio.R;
 import ca.obrassard.inquirio.model.LostItem;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;

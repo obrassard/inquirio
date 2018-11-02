@@ -1,4 +1,4 @@
-package ca.obrassard.inquirio;
+package ca.obrassard.inquirio.activities;
 
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -20,6 +20,10 @@ import android.graphics.Bitmap;
 
 import java.nio.ByteBuffer;
 
+import ca.obrassard.inquirio.DrawerUtils;
+import ca.obrassard.inquirio.LoggedUser;
+import ca.obrassard.inquirio.R;
+import ca.obrassard.inquirio.activities.dialogs.ThanksDialog;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
 import ca.obrassard.inquirio.transfer.FoundRequest;

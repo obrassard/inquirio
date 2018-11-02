@@ -1,4 +1,4 @@
-package ca.obrassard.inquirio;
+package ca.obrassard.inquirio.activities.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
+
+import ca.obrassard.inquirio.R;
+import ca.obrassard.inquirio.activities.ItemsDetailActivity;
 
 public class ItemAddedDialog extends DialogFragment {
     @Override

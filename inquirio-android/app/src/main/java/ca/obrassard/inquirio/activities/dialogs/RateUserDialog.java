@@ -1,4 +1,4 @@
-package ca.obrassard.inquirio;
+package ca.obrassard.inquirio.activities.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import ca.obrassard.inquirio.R;
 import ca.obrassard.inquirio.transfer.NotificationSummary;
 
 public class RateUserDialog extends DialogFragment {
