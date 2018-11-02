@@ -29,7 +29,6 @@ public class InquirioServiceMock implements InquirioService {
         this.delegate = delegate;
     }
 
-
     /**
      * Permet de savoir si une adresse courriel
      * est associé à un compte d'utlisateur
@@ -136,12 +135,12 @@ public class InquirioServiceMock implements InquirioService {
     @Override
     public Call<User> getUserDetail(long userID) {
         User u = new User();
-        u.email = "tester.roger@obrassard.ca";
-        u.fullname = "Roger Tester";
-        u.id = 1;
-        u.itemsFound = 5;
-        u.rating = 3;
-        u.telephone = "5145782504";
+        u.Email = "tester.roger@obrassard.ca";
+        u.Name = "Roger Tester";
+        u.Id = 1;
+        u.ItemsFoundCount = 5;
+        u.Rating = 3;
+        u.Telephone = "5145782504";
 
         return delegate.returningResponse(u).getUserDetail(userID);
     }
@@ -323,8 +322,7 @@ public class InquirioServiceMock implements InquirioService {
      */
     @Override
     public Call<FinderContactDetail> acceptCandidateNotification(long notificationID) {
-        FinderContactDetail fcd = new FinderContactDetail();
-        fcd.phoneNumber = "5146514567";
+        FinderContactDetail fcd = new FinderContactDetail("5146514567");
         return delegate.returningResponse(fcd).acceptCandidateNotification(notificationID);
     }
 
@@ -337,8 +335,7 @@ public class InquirioServiceMock implements InquirioService {
      */
     @Override
     public Call<FinderContactDetail> getFinderContactDetail(long notificationID) {
-        FinderContactDetail fcd = new FinderContactDetail();
-        fcd.phoneNumber = "5146514567";
+        FinderContactDetail fcd = new FinderContactDetail("5146514567");
         return delegate.returningResponse(fcd).acceptCandidateNotification(notificationID);
     }
 

@@ -70,10 +70,10 @@ public class AccountActivity extends AppCompatActivity
             public void onResponse(Call<User> call, Response<User> response) {
                 User u = response.body();
                 if (u != null) {
-                    txtEmail.setText(u.email);
-                    txtName.setText(u.fullname);
-                    ratingBar.setRating((float)u.rating);
-                    nbItemTFound.setText(getString(R.string.nbitems, String.valueOf(u.itemsFound)));
+                    txtEmail.setText(u.Email);
+                    txtName.setText(u.Name);
+                    ratingBar.setRating((float)u.Rating);
+                    nbItemTFound.setText(getString(R.string.nbitems, String.valueOf(u.ItemsFoundCount)));
                 }  else {
                     Toast.makeText(AccountActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
                 }

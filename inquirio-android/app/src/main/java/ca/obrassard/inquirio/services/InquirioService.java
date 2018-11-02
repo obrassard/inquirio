@@ -3,7 +3,6 @@ package ca.obrassard.inquirio.services;
 import java.util.List;
 
 import ca.obrassard.inquirio.model.LostItem;
-import ca.obrassard.inquirio.transfer.Notification;
 import ca.obrassard.inquirio.model.User;
 import ca.obrassard.inquirio.transfer.*;
 import retrofit2.Call;

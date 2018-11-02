@@ -97,8 +97,8 @@ public class ItemFoundActivity extends AppCompatActivity
 
                 FoundRequest request = new FoundRequest();
                 request.message = txtmessage.getText().toString();
-                request.itemID = itemID;
-                request.senderID = LoggedUser.data.userID;
+                request.itemID = (int) itemID;
+                request.senderID = (int) LoggedUser.data.userID;
 
                 final int length = itemImage.getByteCount();
                 ByteBuffer buffer = ByteBuffer.allocate(length);

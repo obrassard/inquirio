@@ -1,8 +1,8 @@
 package ca.obrassard.inquirio.transfer;
 
 public class FoundRequest {
-    public long itemID;
-    public long senderID;
+    public int itemID;
+    public int senderID;
     public String message;
     public byte[] image;
 }
