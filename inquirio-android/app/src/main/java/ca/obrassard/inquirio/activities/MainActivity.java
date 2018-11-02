@@ -1,10 +1,16 @@
 package ca.obrassard.inquirio.activities;
 
+import android.Manifest;
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +23,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import java.util.List;
 
 import ca.obrassard.inquirio.DrawerUtils;
@@ -24,6 +34,7 @@ import ca.obrassard.inquirio.LoggedUser;
 import ca.obrassard.inquirio.activities.adapters.LostItemAdapter;
 import ca.obrassard.inquirio.R;
 import ca.obrassard.inquirio.activities.dialogs.WelcomeDialog;
+import ca.obrassard.inquirio.errorHandling.ErrorUtils;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
 import ca.obrassard.inquirio.transfer.LocationRequest;
@@ -34,10 +45,11 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    InquirioService service = RetrofitUtil.getMock();
+    InquirioService service = RetrofitUtil.get();
     LostItemAdapter m_adapter;
     BottomNavigationView bottomNavigationView;
     Boolean m_isFirstConnection = LoggedUser.data.isFirstLogin;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerUtils.prepareHeader(navigationView);
 
         bottomNavigationView = findViewById(R.id.navigation);
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -98,15 +112,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 LostItemSummary selecteditem = m_adapter.getItem(position);
-                Intent i = new Intent(MainActivity.this.getApplicationContext(),ItemsDetailActivity.class);
-                i.putExtra("item.id",selecteditem.itemID);
+                Intent i = new Intent(MainActivity.this.getApplicationContext(), ItemsDetailActivity.class);
+                i.putExtra("item.id", selecteditem.itemID);
                 startActivity(i);
             }
         });
 
-
         //Affichage du popup d'accueil si première connexion
-        if (m_isFirstConnection){
+        if (m_isFirstConnection) {
             DialogFragment welcomeDialog = new WelcomeDialog();
             welcomeDialog.show(getFragmentManager(), "welcomeDialog");
         }
@@ -115,28 +128,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-        LocationRequest request = new LocationRequest();
-        //TODO : Obtenir les coordonnées GPS de l'Appareil
-        service.getNearLostItems(request).enqueue(new Callback<List<LostItemSummary>>() {
-            @Override
-            public void onResponse(Call<List<LostItemSummary>> call, Response<List<LostItemSummary>> response) {
-                List<LostItemSummary> items = response.body();
 
-                if (items == null){
-                    Toast.makeText(MainActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ErrorUtils.showLocationPermitionError(MainActivity.this);
+            return;
+        }
+        mFusedLocationClient.getLastLocation()
+        .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+
+                if (location == null) {
+                    ErrorUtils.showLocationError(MainActivity.this);
                     return;
                 }
-                m_adapter.clear();
-                m_adapter.addAll(items);
-                m_adapter.notifyDataSetChanged();
-            }
 
-            @Override
-            public void onFailure(Call<List<LostItemSummary>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Une erreur est survenue lors du chargement des données", Toast.LENGTH_SHORT).show();
+                LocationRequest request = new LocationRequest();
+                request.latitude = location.getLatitude();
+                request.longitude = location.getLongitude();
+                service.getNearLostItems(request, LoggedUser.token).enqueue(new Callback<List<LostItemSummary>>() {
+                    @Override
+                    public void onResponse(Call<List<LostItemSummary>> call, Response<List<LostItemSummary>> response) {
+                        if (!response.isSuccessful()) {
+                            ErrorUtils.showExceptionError(MainActivity.this, response.errorBody());
+                            return;
+                        }
+
+                        List<LostItemSummary> items = response.body();
+                        m_adapter.clear();
+                        m_adapter.addAll(items);
+                        m_adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<LostItemSummary>> call, Throwable t) {
+                        ErrorUtils.showGenServError(MainActivity.this);
+                    }
+                });
             }
         });
-
     }
 
     //region [Evennement de navigation]
@@ -161,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
     }
     //endregion
-
     //region [Evennement du tirroir]
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

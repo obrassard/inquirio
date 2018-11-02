@@ -1,5 +1,6 @@
 package ca.obrassard.inquirio.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +12,10 @@ import android.widget.Toast;
 
 import ca.obrassard.inquirio.LoggedUser;
 import ca.obrassard.inquirio.R;
+import ca.obrassard.inquirio.errorHandling.ErrorUtils;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
+import ca.obrassard.inquirio.transfer.LoginRequest;
 import ca.obrassard.inquirio.transfer.LoginResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,7 +23,7 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    InquirioService service = RetrofitUtil.getMock();
+    InquirioService service = RetrofitUtil.get();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,25 +52,35 @@ public class LoginActivity extends AppCompatActivity {
 
     public void login(String email, String passwd){
 
+        LoginRequest lr = new LoginRequest();
+        lr.email = email;
+        lr.password = passwd;
         //Authenticate and retrieve userID
-        service.login(email,passwd).enqueue(new Callback<LoginResponse>() {
+        service.login(lr).enqueue(new Callback<LoginResponse>() {
+            @SuppressLint("NewApi")
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                LoginResponse loginResponse = response.body();
-                if (loginResponse == null){
-                    Toast.makeText(LoginActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+
+                if (!response.isSuccessful()) {
+                    ErrorUtils.showExceptionError(LoginActivity.this, response.errorBody());
                     return;
                 }
 
+                LoginResponse loginResponse = response.body();
+
                 if (loginResponse.result){
                     LoggedUser.data = loginResponse;
+                    //TODO : RÉcupérer le token dans le loginresponse ici
+                    LoggedUser.token = loginResponse.userID;
+                    ///////////
+
                     Intent intent = new Intent(LoginActivity.this.getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     LoginActivity.this.finishAffinity();
                     ActivityCompat.finishAffinity(LoginActivity.this);
                 } else {
                     //Erreur d'authentification
-                    Toast.makeText(LoginActivity.this, "Le nom d'utilisateur ou mot de passe est incorrect", Toast.LENGTH_LONG).show();
+                    ErrorUtils.showGenServError(LoginActivity.this);
                 }
             }
 

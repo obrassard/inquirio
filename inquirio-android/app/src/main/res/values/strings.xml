@@ -87,4 +87,32 @@
     <string name="foundby">Trouvé par %1$s</string>
     <string name="itemadded">Votre item a été enregistré!</string>
     <string name="itemaddeddesc">Les utilisateur situés près de l\'emplacement %1$s seront averti que vous avez perdu un item!</string>
+    <string name="genericconnexionerror">Impossible de contacter le serveur, veuillez réésayer</string>
+    <string name="genericerror">Une erreur est survenue, veuillez réésayer</string>
+    <string name="InvalidEmail">L\'adresse email spécifiée est invalide</string>
+    <string name="PasswordDoesntMatch">Les mots des passes ne correspondent pas</string>
+    <string name="BadCredentials">Votre nom d\'utilisateur ou mot de passe est incorrect</string>
+    <string name="InvalidPhoneNumber">Le numéro de téléphone spécifié est invalide</string>
+    <string name="PasswordIsRequired">Un mot de passes est requis !</string>
+    <string name="EmailAlreadyExists">Cette adresse courrielle est déjà utilisée</string>
+    <string name="UnknownUserId">Erreur ! L\'utilisateur demandé n\'existe pas</string>
+    <string name="UnknownItemId">Erreur ! L\'item demandé n\'existe pas</string>
+    <string name="UnknownNotificationID">Erreur ! L\'information demandé n\'est plus disponible</string>
+    <string name="InvalidLocation">L\'emplacement fourni est invalide</string>
+    <string name="RequiredAttribute_fullname">Le nom est requis !</string>
+    <string name="RequiredAttribute_locationname">Un emplacement est requis !</string>
+    <string name="RequiredAttribute_title">Le titre de l\'item est requis</string>
+    <string name="RequiredAttribute_message">Veuillez spécifier un message au propriétaire de l\'objet</string>
+    <string name="RequiredAttribute_description">La description est requise</string>
+    <string name="RequiredAttribute_email">L\'adresse courielle est requise</string>
+    <string name="InvalidValue_reward">La valeur de la récompense ne peut pas être négative</string>
+    <string name="TextLengthViolation_tilte">Le titre de l\'item est trop long !</string>
+    <string name="TextLengthViolation_description">La description de l\'item est trop longue !</string>
+    <string name="AccesDenied_reward">Veuillez vous identifier à inquirio</string>
+    <string name="Forbidden">Vous n\'avez pas les autorisations requises pour accéder à cette ressource</string>
+
+
+
+
+
 </resources>

@@ -44,7 +44,7 @@ public class ItemsDetailActivity extends AppCompatActivity
     private static final String MAP_VIEW_BUNDLE_KEY = "MAPKEY";
 
     private InquirioService service = RetrofitUtil.getMock();
-    private long itemId;
+    private int itemId;
     TextView itemName;
     TextView locationName;
     ImageView statusIcon;
@@ -96,8 +96,8 @@ public class ItemsDetailActivity extends AppCompatActivity
         //endregion
 
         //Affichage des details de l'item
-        itemId = getIntent().getLongExtra("item.id",0);
-        service.getItemDetail(itemId).enqueue(new Callback<LostItem>() {
+        itemId = (int)getIntent().getLongExtra("item.id",0);
+        service.getItemDetail(itemId, LoggedUser.token).enqueue(new Callback<LostItem>() {
             @Override
             public void onResponse(Call<LostItem> call, Response<LostItem> response) {
                 LostItem lostItem = response.body();
@@ -147,7 +147,7 @@ public class ItemsDetailActivity extends AppCompatActivity
         btnDeleteItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                service.deleteItem(itemId).enqueue(new Callback<RequestResult>() {
+                service.deleteItem(itemId, LoggedUser.token).enqueue(new Callback<RequestResult>() {
                     @Override
                     public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
                         if (response.body() == null){
@@ -187,7 +187,7 @@ public class ItemsDetailActivity extends AppCompatActivity
     public void onMapReady(final GoogleMap googleMap) {
 
 
-        service.getItemLocation(itemId).enqueue(new Callback<Location>() {
+        service.getItemLocation(itemId, LoggedUser.token).enqueue(new Callback<Location>() {
             @Override
             public void onResponse(Call<Location> call, Response<Location> response) {
                 Location location = response.body();

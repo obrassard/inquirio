@@ -19,11 +19,13 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 
 import ca.obrassard.inquirio.DrawerUtils;
+import ca.obrassard.inquirio.LoggedUser;
 import ca.obrassard.inquirio.R;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
 import ca.obrassard.inquirio.transfer.FinderContactDetail;
 import ca.obrassard.inquirio.transfer.Notification;
+import ca.obrassard.inquirio.transfer.RequestResult;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -63,9 +65,9 @@ public class NotificationDetailsActivity extends AppCompatActivity
         Button btnNon = findViewById(R.id.btn_no);
         Button btnContact = findViewById(R.id.btn_contactFinder);
 
-        final long notifID = getIntent().getLongExtra("notification.id",1);
+        final int notifID = (int)getIntent().getLongExtra("notification.id",1);
 
-        service.getNotificationDetail(notifID).enqueue(new Callback<Notification>() {
+        service.getNotificationDetail(notifID, LoggedUser.token).enqueue(new Callback<Notification>() {
             @Override
             public void onResponse(Call<Notification> call, Response<Notification> response) {
                 Notification notification = response.body();
@@ -90,16 +92,16 @@ public class NotificationDetailsActivity extends AppCompatActivity
         btnNon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                service.denyCandidateNotification(notifID).enqueue(new Callback<Boolean>() {
+                service.denyCandidateNotification(notifID, LoggedUser.token).enqueue(new Callback<RequestResult>() {
                     @Override
-                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                        if (response.body() !=null && response.body()){
+                    public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
+                        if (response.body() != null && response.body().result){
                             NotificationDetailsActivity.this.finish();
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Boolean> call, Throwable t) {
+                    public void onFailure(Call<RequestResult> call, Throwable t) {
                         Toast.makeText(NotificationDetailsActivity.this, "Une erreur s'est produite", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -109,7 +111,7 @@ public class NotificationDetailsActivity extends AppCompatActivity
         btnOui.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                service.acceptCandidateNotification(notifID).enqueue(new Callback<FinderContactDetail>() {
+                service.acceptCandidateNotification((int) notifID, LoggedUser.token).enqueue(new Callback<FinderContactDetail>() {
                     @Override
                     public void onResponse(Call<FinderContactDetail> call, Response<FinderContactDetail> response) {
                         FinderContactDetail finderContactDetail = response.body();

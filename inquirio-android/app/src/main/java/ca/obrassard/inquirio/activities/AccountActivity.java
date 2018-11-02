@@ -68,7 +68,7 @@ public class AccountActivity extends AppCompatActivity
             }
         });
 
-        service.getUserDetail(LoggedUser.data.userID).enqueue(new Callback<User>() {
+        service.getUserDetail(LoggedUser.data.userID, LoggedUser.token).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 User u = response.body();

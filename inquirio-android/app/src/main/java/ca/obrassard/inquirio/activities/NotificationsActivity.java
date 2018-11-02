@@ -75,7 +75,7 @@ public class NotificationsActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        service.getPotentiallyFoundItems(LoggedUser.data.userID).enqueue(new Callback<List<NotificationSummary>>() {
+        service.getPotentiallyFoundItems(LoggedUser.data.userID, LoggedUser.token).enqueue(new Callback<List<NotificationSummary>>() {
             @Override
             public void onResponse(Call<List<NotificationSummary>> call, Response<List<NotificationSummary>> response) {
                 List<NotificationSummary> list = response.body();

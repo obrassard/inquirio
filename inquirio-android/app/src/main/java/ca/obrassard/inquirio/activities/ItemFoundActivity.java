@@ -56,8 +56,8 @@ public class ItemFoundActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         DrawerUtils.prepareHeader(navigationView);
 
-        final long itemID = getIntent().getLongExtra("item.id",0);
-        service.getItemName(itemID).enqueue(new Callback<String>() {
+        final int itemID = (int)getIntent().getLongExtra("item.id",0);
+        service.getItemName(itemID, LoggedUser.token).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 TextView txtItemName = findViewById(R.id.txt_item_name);
@@ -110,7 +110,7 @@ public class ItemFoundActivity extends AppCompatActivity
                 byte[] image = buffer.array();
                 request.image = image;
 
-                service.sendFoundRequest(request).enqueue(new Callback<RequestResult>() {
+                service.sendFoundRequest(request, LoggedUser.token).enqueue(new Callback<RequestResult>() {
                     @Override
                     public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
                         if (response.body() != null && response.body().result) {

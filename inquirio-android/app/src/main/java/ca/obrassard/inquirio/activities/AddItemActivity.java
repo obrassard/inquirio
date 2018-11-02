@@ -28,6 +28,7 @@ import ca.obrassard.inquirio.R;
 import ca.obrassard.inquirio.model.LostItem;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
+import ca.obrassard.inquirio.transfer.LostItemCreationRequest;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -96,21 +97,19 @@ public class AddItemActivity extends AppCompatActivity
                 else if (selectedplace == null){
                     Toast.makeText(AddItemActivity.this, "Veuillez séléctionner l'emplacement approximatif de la perte", Toast.LENGTH_SHORT).show();
                 } else {
-                    final LostItem item = new LostItem();
+                    final LostItemCreationRequest item = new LostItemCreationRequest();
 
                     item.description = txtDescription.getText().toString();
-                    item.itemHasBeenFound = false;
-                    item.ownerId = LoggedUser.data.userID;
                     item.title = txtTitle.getText().toString();
                     item.reward = Double.parseDouble(txtReward.getText().toString());
                     item.latitude = selectedplace.getLatLng().latitude;
                     item.longitude = selectedplace.getLatLng().longitude;
                     item.locationName = selectedplace.getName().toString();
 
-                    service.addNewItem(item).enqueue(new Callback<Long>() {
+                    service.addNewItem(item, LoggedUser.token).enqueue(new Callback<Integer>() {
                         @Override
-                        public void onResponse(Call<Long> call, Response<Long> response) {
-                            Long itemId = response.body();
+                        public void onResponse(Call<Integer> call, Response<Integer> response) {
+                            Integer itemId = response.body();
                             if (itemId == null){
                                 Toast.makeText(AddItemActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
                                 return;
@@ -125,7 +124,7 @@ public class AddItemActivity extends AppCompatActivity
                         }
 
                         @Override
-                        public void onFailure(Call<Long> call, Throwable t) {
+                        public void onFailure(Call<Integer> call, Throwable t) {
                             Toast.makeText(AddItemActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
                         }
                     });

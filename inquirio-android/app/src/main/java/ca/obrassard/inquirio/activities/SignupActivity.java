@@ -1,5 +1,6 @@
 package ca.obrassard.inquirio.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import ca.obrassard.inquirio.LoggedUser;
 import ca.obrassard.inquirio.R;
+import ca.obrassard.inquirio.errorHandling.ErrorUtils;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
 import ca.obrassard.inquirio.transfer.LoginResponse;
@@ -22,7 +24,7 @@ import retrofit2.Response;
 public class SignupActivity extends AppCompatActivity {
 
 
-    InquirioService service = RetrofitUtil.getMock();
+    InquirioService service = RetrofitUtil.get();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +63,16 @@ public class SignupActivity extends AppCompatActivity {
 
     private void signup(SignupRequest request){
         service.signup(request).enqueue(new Callback<LoginResponse>() {
+            @SuppressLint("NewApi")
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                LoginResponse loginResponse = response.body();
-                if (loginResponse == null){
-                    Toast.makeText(SignupActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+
+                if (!response.isSuccessful()) {
+                    ErrorUtils.showExceptionError(SignupActivity.this, response.errorBody());
                     return;
                 }
+
+                LoginResponse loginResponse = response.body();
 
                 if (loginResponse.result){
                     LoggedUser.data = loginResponse;
@@ -76,15 +81,12 @@ public class SignupActivity extends AppCompatActivity {
                     SignupActivity.this.finishAffinity();
                     ActivityCompat.finishAffinity(SignupActivity.this);
 
-                } else {
-                    //Ereur d'authentification
-                    Toast.makeText(SignupActivity.this, "Impossible de vous connecter, veuillez réésayer.", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                Toast.makeText(SignupActivity.this, "Une erreur est survenue", Toast.LENGTH_SHORT).show();
+                ErrorUtils.showGenServError(SignupActivity.this);
             }
         });
     }

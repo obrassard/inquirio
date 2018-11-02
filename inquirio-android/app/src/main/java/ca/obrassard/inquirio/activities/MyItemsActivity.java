@@ -22,6 +22,7 @@ import ca.obrassard.inquirio.LoggedUser;
 import ca.obrassard.inquirio.activities.adapters.MyFoundItemAdapter;
 import ca.obrassard.inquirio.activities.adapters.MyLostItemAdapter;
 import ca.obrassard.inquirio.R;
+import ca.obrassard.inquirio.errorHandling.ErrorUtils;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
 import ca.obrassard.inquirio.transfer.FoundItemSummary;
@@ -34,7 +35,7 @@ public class MyItemsActivity extends AppCompatActivity
 implements NavigationView.OnNavigationItemSelectedListener {
     MyLostItemAdapter m_adapterLostItems;
     MyFoundItemAdapter m_adapterFoundItems;
-    InquirioService service = RetrofitUtil.getMock();
+    InquirioService service = RetrofitUtil.get();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,14 +100,16 @@ implements NavigationView.OnNavigationItemSelectedListener {
     @Override
     protected void onResume() {
         super.onResume();
-        service.getLostItemsByOwner(LoggedUser.data.userID).enqueue(new Callback<List<LostItemSummary>>() {
+        service.getLostItemsByOwner(LoggedUser.data.userID, LoggedUser.token).enqueue(new Callback<List<LostItemSummary>>() {
             @Override
             public void onResponse(Call<List<LostItemSummary>> call, Response<List<LostItemSummary>> response) {
-                List<LostItemSummary> li = response.body();
-                if (li == null){
-                    Toast.makeText(MyItemsActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+
+                if (!response.isSuccessful()) {
+                    ErrorUtils.showExceptionError(MyItemsActivity.this, response.errorBody());
                     return;
                 }
+                List<LostItemSummary> li = response.body();
+
                 m_adapterLostItems.clear();
                 m_adapterLostItems.addAll(li);
                 m_adapterLostItems.notifyDataSetChanged();
@@ -114,18 +117,20 @@ implements NavigationView.OnNavigationItemSelectedListener {
 
             @Override
             public void onFailure(Call<List<LostItemSummary>> call, Throwable t) {
-                Toast.makeText(MyItemsActivity.this, "Une erreur est survenue", Toast.LENGTH_SHORT).show();
+                ErrorUtils.showGenServError(MyItemsActivity.this);
             }
         });
 
-        service.getFoundItemsByOwner(LoggedUser.data.userID).enqueue(new Callback<List<FoundItemSummary>>() {
+        service.getFoundItemsByOwner(LoggedUser.data.userID, LoggedUser.token).enqueue(new Callback<List<FoundItemSummary>>() {
             @Override
             public void onResponse(Call<List<FoundItemSummary>> call, Response<List<FoundItemSummary>> response) {
-                List<FoundItemSummary> li = response.body();
-                if (li == null){
-                    Toast.makeText(MyItemsActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                if (!response.isSuccessful()) {
+                    ErrorUtils.showExceptionError(MyItemsActivity.this, response.errorBody());
                     return;
                 }
+
+                List<FoundItemSummary> li = response.body();
+
                 m_adapterFoundItems.clear();
                 m_adapterFoundItems.addAll(li);
                 m_adapterFoundItems.notifyDataSetChanged();
@@ -133,7 +138,7 @@ implements NavigationView.OnNavigationItemSelectedListener {
 
             @Override
             public void onFailure(Call<List<FoundItemSummary>> call, Throwable t) {
-                Toast.makeText(MyItemsActivity.this, "Une erreur est survenue", Toast.LENGTH_SHORT).show();
+                ErrorUtils.showGenServError(MyItemsActivity.this);
             }
         });
     }
