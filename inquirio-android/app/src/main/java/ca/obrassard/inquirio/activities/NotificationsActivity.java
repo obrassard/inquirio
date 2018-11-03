@@ -20,6 +20,7 @@ import ca.obrassard.inquirio.DrawerUtils;
 import ca.obrassard.inquirio.LoggedUser;
 import ca.obrassard.inquirio.activities.adapters.NotificationAdapter;
 import ca.obrassard.inquirio.R;
+import ca.obrassard.inquirio.errorHandling.ErrorUtils;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
 import ca.obrassard.inquirio.transfer.NotificationSummary;
@@ -30,7 +31,7 @@ import retrofit2.Response;
 public class NotificationsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    InquirioService service = RetrofitUtil.getMock();
+    InquirioService service = RetrofitUtil.get();
     NotificationAdapter m_adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +79,11 @@ public class NotificationsActivity extends AppCompatActivity
         service.getPotentiallyFoundItems(LoggedUser.data.userID, LoggedUser.token).enqueue(new Callback<List<NotificationSummary>>() {
             @Override
             public void onResponse(Call<List<NotificationSummary>> call, Response<List<NotificationSummary>> response) {
-                List<NotificationSummary> list = response.body();
-                if (list == null){
-                    Toast.makeText(NotificationsActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                if (!response.isSuccessful()) {
+                    ErrorUtils.showExceptionError(NotificationsActivity.this, response.errorBody());
                     return;
                 }
+                List<NotificationSummary> list = response.body();
                 m_adapter.clear();
                 m_adapter.addAll(list);
                 m_adapter.notifyDataSetChanged();
@@ -90,7 +91,7 @@ public class NotificationsActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<List<NotificationSummary>> call, Throwable t) {
-                Toast.makeText(NotificationsActivity.this, "Une erreur s'est produite", Toast.LENGTH_SHORT).show();
+                ErrorUtils.showGenServError(NotificationsActivity.this);
             }
         });
     }

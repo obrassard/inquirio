@@ -18,6 +18,7 @@ import android.widget.Toast;
 import ca.obrassard.inquirio.DrawerUtils;
 import ca.obrassard.inquirio.LoggedUser;
 import ca.obrassard.inquirio.R;
+import ca.obrassard.inquirio.errorHandling.ErrorUtils;
 import ca.obrassard.inquirio.model.User;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
@@ -29,7 +30,7 @@ import retrofit2.Response;
 public class AccountActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    InquirioService service = RetrofitUtil.getMock();
+    InquirioService service = RetrofitUtil.get();
     TextView txtName;
     TextView txtEmail;
     RatingBar ratingBar;
@@ -71,20 +72,20 @@ public class AccountActivity extends AppCompatActivity
         service.getUserDetail(LoggedUser.data.userID, LoggedUser.token).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                User u = response.body();
-                if (u != null) {
-                    txtEmail.setText(u.Email);
-                    txtName.setText(u.Name);
-                    ratingBar.setRating((float)u.Rating);
-                    nbItemTFound.setText(getString(R.string.nbitems, String.valueOf(u.ItemsFoundCount)));
-                }  else {
-                    Toast.makeText(AccountActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                if (!response.isSuccessful()) {
+                    ErrorUtils.showExceptionError(AccountActivity.this, response.errorBody());
+                    return;
                 }
+                User u = response.body();
+                txtEmail.setText(u.Email);
+                txtName.setText(u.Name);
+                ratingBar.setRating((float)u.Rating);
+                nbItemTFound.setText(getString(R.string.nbitems, String.valueOf(u.ItemsFoundCount)));
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(AccountActivity.this, "Une erreur est survenue", Toast.LENGTH_SHORT).show();
+                ErrorUtils.showGenServError(AccountActivity.this);
             }
         });
     }
@@ -93,19 +94,21 @@ public class AccountActivity extends AppCompatActivity
         service.logout(LoggedUser.data.userID).enqueue(new Callback<LogoutResponse>() {
             @Override
             public void onResponse(Call<LogoutResponse> call, Response<LogoutResponse> response) {
+                if (!response.isSuccessful()) {
+                    ErrorUtils.showExceptionError(AccountActivity.this, response.errorBody());
+                    return;
+                }
                 LogoutResponse lr = response.body();
-                if (lr != null) {
-                    if (lr.success){
-                        DrawerUtils.logout(AccountActivity.this);
-                    } else {
-                        Toast.makeText(AccountActivity.this, lr.message, Toast.LENGTH_SHORT).show();
-                    }
+                if (lr.success){
+                    DrawerUtils.logout(AccountActivity.this);
+                } else {
+                    Toast.makeText(AccountActivity.this, lr.message, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LogoutResponse> call, Throwable t) {
-                Toast.makeText(AccountActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_LONG).show();
+                ErrorUtils.showGenServError(AccountActivity.this);
             }
         });
 

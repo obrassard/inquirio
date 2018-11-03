@@ -111,9 +111,9 @@ public class InquirioWebService {
 
         Validator.validateEmail(userInfos.email);
         Validator.emailIsUnique(userInfos.email, context);
-        Validator.validateNewPassword(userInfos.password, userInfos.passwdConfirmation);
-        Validator.isRequired("fullname",userInfos.fullName);
         Validator.validatePhone(userInfos.cellNumber);
+        Validator.isRequired("fullname",userInfos.fullName);
+        Validator.validateNewPassword(userInfos.password, userInfos.passwdConfirmation);
 
         String hashedPasswd = Hashing.sha256().hashString(userInfos.password, StandardCharsets.UTF_8).toString();
 
@@ -232,14 +232,13 @@ public class InquirioWebService {
     public int addNewItem(LostItemCreationRequest item, @HeaderParam("token") int token) throws APIRequestException {
         //TODO : Validate token
         int authUserId = AuthValidator.validateToken(token,context);
-        
-        Validator.isRequired("locationName", item.locationName);
+        //Validator.isAnExistantUserID(authUserId,context);
         Validator.isRequired("title",item.title);
-        Validator.isRequired("description",item.description);
         Validator.respectMaxLength("title",item.title,150);
+        Validator.isRequired("description",item.description);
         Validator.respectMaxLength("description",item.description,250);
         Validator.isAPositiveNumber("reward",item.reward);
-        Validator.isAnExistantUserID(authUserId,context);
+        Validator.isRequired("locationName", item.locationName);
         Validator.isAValidLocation(item.latitude, item.longitude);
 
         context.insertInto(LOSTITEMS, LOSTITEMS.TITLE, LOSTITEMS.DESCRIPTION, LOSTITEMS.REWARD,

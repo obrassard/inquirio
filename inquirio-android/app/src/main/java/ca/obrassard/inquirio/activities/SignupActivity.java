@@ -76,6 +76,8 @@ public class SignupActivity extends AppCompatActivity {
 
                 if (loginResponse.result){
                     LoggedUser.data = loginResponse;
+                    LoggedUser.token = loginResponse.userID; //TODO TOKEN
+
                     Intent intent = new Intent(SignupActivity.this.getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     SignupActivity.this.finishAffinity();

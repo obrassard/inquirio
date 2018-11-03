@@ -24,6 +24,7 @@ import ca.obrassard.inquirio.DrawerUtils;
 import ca.obrassard.inquirio.LoggedUser;
 import ca.obrassard.inquirio.R;
 import ca.obrassard.inquirio.activities.dialogs.ThanksDialog;
+import ca.obrassard.inquirio.errorHandling.ErrorUtils;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
 import ca.obrassard.inquirio.transfer.FoundRequest;
@@ -35,7 +36,7 @@ import retrofit2.Response;
 public class ItemFoundActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    InquirioService service = RetrofitUtil.getMock();
+    InquirioService service = RetrofitUtil.get();
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap itemImage = null;
 
@@ -56,17 +57,21 @@ public class ItemFoundActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         DrawerUtils.prepareHeader(navigationView);
 
-        final int itemID = (int)getIntent().getLongExtra("item.id",0);
+        final int itemID = getIntent().getIntExtra("item.id",0);
         service.getItemName(itemID, LoggedUser.token).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
+                if (!response.isSuccessful()) {
+                    ErrorUtils.showExceptionError(ItemFoundActivity.this, response.errorBody());
+                    return;
+                }
                 TextView txtItemName = findViewById(R.id.txt_item_name);
                         txtItemName.setText(response.body());
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(ItemFoundActivity.this, "Une erreur s'est produite", Toast.LENGTH_SHORT).show();
+                ErrorUtils.showGenServError(ItemFoundActivity.this);
                 finish();
             }
         });
@@ -113,19 +118,19 @@ public class ItemFoundActivity extends AppCompatActivity
                 service.sendFoundRequest(request, LoggedUser.token).enqueue(new Callback<RequestResult>() {
                     @Override
                     public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
-                        if (response.body() != null && response.body().result) {
+                        if (!response.isSuccessful()) {
+                            ErrorUtils.showExceptionError(ItemFoundActivity.this, response.errorBody());
+                            return;
+                        }
+                        if (response.body().result) {
                             DialogFragment dialog = new ThanksDialog();
                             dialog.show(getFragmentManager(), "ThanksDialog");
-                        }
-                        else {
-                            Toast.makeText(ItemFoundActivity.this, "Une erreur s'est produite veuillez réésayer", Toast.LENGTH_LONG).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<RequestResult> call, Throwable t) {
-                        Toast.makeText(ItemFoundActivity.this, "Une erreur s'est produite veuillez réésayer", Toast.LENGTH_LONG).show();
-                    }
+                        ErrorUtils.showGenServError(ItemFoundActivity.this);}
                 });
             }
         });

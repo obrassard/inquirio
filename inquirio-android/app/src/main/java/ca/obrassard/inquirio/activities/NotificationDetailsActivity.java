@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import ca.obrassard.inquirio.DrawerUtils;
 import ca.obrassard.inquirio.LoggedUser;
 import ca.obrassard.inquirio.R;
+import ca.obrassard.inquirio.errorHandling.ErrorUtils;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
 import ca.obrassard.inquirio.transfer.FinderContactDetail;
@@ -33,7 +34,7 @@ import retrofit2.Response;
 public class NotificationDetailsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    InquirioService service = RetrofitUtil.getMock();
+    InquirioService service = RetrofitUtil.get();
     String telephone = "";
 
     @Override
@@ -70,6 +71,12 @@ public class NotificationDetailsActivity extends AppCompatActivity
         service.getNotificationDetail(notifID, LoggedUser.token).enqueue(new Callback<Notification>() {
             @Override
             public void onResponse(Call<Notification> call, Response<Notification> response) {
+
+                if (!response.isSuccessful()) {
+                    ErrorUtils.showExceptionError(NotificationDetailsActivity.this, response.errorBody());
+                    return;
+                }
+
                 Notification notification = response.body();
                 SimpleDateFormat simpleDateFormat =
                         new SimpleDateFormat("yyyy-MM-dd' 'HH:mm");
@@ -84,7 +91,7 @@ public class NotificationDetailsActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<Notification> call, Throwable t) {
-                Toast.makeText(NotificationDetailsActivity.this, "Une erreur est survenue", Toast.LENGTH_SHORT).show();
+                ErrorUtils.showGenServError(NotificationDetailsActivity.this);
                 NotificationDetailsActivity.this.finish();
             }
         });
@@ -95,14 +102,18 @@ public class NotificationDetailsActivity extends AppCompatActivity
                 service.denyCandidateNotification(notifID, LoggedUser.token).enqueue(new Callback<RequestResult>() {
                     @Override
                     public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
-                        if (response.body() != null && response.body().result){
+                        if (!response.isSuccessful()) {
+                            ErrorUtils.showExceptionError(NotificationDetailsActivity.this, response.errorBody());
+                            return;
+                        }
+                        if (response.body().result){
                             NotificationDetailsActivity.this.finish();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<RequestResult> call, Throwable t) {
-                        Toast.makeText(NotificationDetailsActivity.this, "Une erreur s'est produite", Toast.LENGTH_SHORT).show();
+                        ErrorUtils.showGenServError(NotificationDetailsActivity.this);
                     }
                 });
             }
@@ -114,12 +125,11 @@ public class NotificationDetailsActivity extends AppCompatActivity
                 service.acceptCandidateNotification((int) notifID, LoggedUser.token).enqueue(new Callback<FinderContactDetail>() {
                     @Override
                     public void onResponse(Call<FinderContactDetail> call, Response<FinderContactDetail> response) {
-                        FinderContactDetail finderContactDetail = response.body();
-                        if (finderContactDetail == null){
-                            Toast.makeText(NotificationDetailsActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                        if (!response.isSuccessful()) {
+                            ErrorUtils.showExceptionError(NotificationDetailsActivity.this, response.errorBody());
                             return;
                         }
-
+                        FinderContactDetail finderContactDetail = response.body();
                         findViewById(R.id.ll_btn_yn).setVisibility(View.GONE);
                         findViewById(R.id.ll_btn_contact).setVisibility(View.VISIBLE);
                         telephone = finderContactDetail.phoneNumber;
@@ -127,7 +137,7 @@ public class NotificationDetailsActivity extends AppCompatActivity
 
                     @Override
                     public void onFailure(Call<FinderContactDetail> call, Throwable t) {
-                        Toast.makeText(NotificationDetailsActivity.this, "Une erreur s'est produite", Toast.LENGTH_SHORT).show();
+                        ErrorUtils.showGenServError(NotificationDetailsActivity.this);
                     }
                 });
             }

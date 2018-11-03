@@ -2,6 +2,7 @@ package ca.obrassard.inquirio.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -25,6 +26,7 @@ import ca.obrassard.inquirio.DrawerUtils;
 import ca.obrassard.inquirio.activities.dialogs.ItemAddedDialog;
 import ca.obrassard.inquirio.LoggedUser;
 import ca.obrassard.inquirio.R;
+import ca.obrassard.inquirio.errorHandling.ErrorUtils;
 import ca.obrassard.inquirio.model.LostItem;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
@@ -46,21 +48,21 @@ public class AddItemActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        service = RetrofitUtil.getMock();
+        service = RetrofitUtil.get();
 
         //region [Initialisation des éléments de navigation]
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         DrawerUtils.prepareHeader(navigationView);
         //endregion
@@ -85,17 +87,8 @@ public class AddItemActivity extends AppCompatActivity
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (txtTitle.getText().toString().trim().equals("")){
-                    Toast.makeText(AddItemActivity.this, "Veuillez fournir le titre de votre item", Toast.LENGTH_SHORT).show();
-                }
-                else if (txtDescription.getText().toString().trim().equals("")){
-                    Toast.makeText(AddItemActivity.this, "Veuillez entrer une description", Toast.LENGTH_SHORT).show();
-                }
-                else if (txtReward.getText().toString().trim().equals("")){
-                    Toast.makeText(AddItemActivity.this, "Veuillez spécifier une récompense (ou 0$)", Toast.LENGTH_SHORT).show();
-                }
-                else if (selectedplace == null){
-                    Toast.makeText(AddItemActivity.this, "Veuillez séléctionner l'emplacement approximatif de la perte", Toast.LENGTH_SHORT).show();
+                if (selectedplace == null){
+                    Snackbar.make(findViewById(android.R.id.content), "Veuillez séléctionner l'emplacement approximatif de la perte", Snackbar.LENGTH_LONG).show();
                 } else {
                     final LostItemCreationRequest item = new LostItemCreationRequest();
 
@@ -109,12 +102,12 @@ public class AddItemActivity extends AppCompatActivity
                     service.addNewItem(item, LoggedUser.token).enqueue(new Callback<Integer>() {
                         @Override
                         public void onResponse(Call<Integer> call, Response<Integer> response) {
-                            Integer itemId = response.body();
-                            if (itemId == null){
-                                Toast.makeText(AddItemActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+
+                            if (!response.isSuccessful()) {
+                                ErrorUtils.showExceptionError(AddItemActivity.this, response.errorBody());
                                 return;
                             }
-
+                            Integer itemId = response.body();
                             ItemAddedDialog dialog = new ItemAddedDialog();
                             Bundle args = new Bundle();
                             args.putString("itemplace",item.locationName);
@@ -125,7 +118,7 @@ public class AddItemActivity extends AppCompatActivity
 
                         @Override
                         public void onFailure(Call<Integer> call, Throwable t) {
-                            Toast.makeText(AddItemActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                            ErrorUtils.showGenServError(AddItemActivity.this);
                         }
                     });
                 }

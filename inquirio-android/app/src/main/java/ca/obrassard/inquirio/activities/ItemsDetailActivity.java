@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import ca.obrassard.inquirio.DrawerUtils;
 import ca.obrassard.inquirio.LoggedUser;
 import ca.obrassard.inquirio.R;
+import ca.obrassard.inquirio.errorHandling.ErrorUtils;
 import ca.obrassard.inquirio.model.LostItem;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
@@ -43,7 +44,7 @@ public class ItemsDetailActivity extends AppCompatActivity
     private MapView mapView;
     private static final String MAP_VIEW_BUNDLE_KEY = "MAPKEY";
 
-    private InquirioService service = RetrofitUtil.getMock();
+    private InquirioService service = RetrofitUtil.get();
     private int itemId;
     TextView itemName;
     TextView locationName;
@@ -59,7 +60,7 @@ public class ItemsDetailActivity extends AppCompatActivity
         //region [Initialisation des éléments de navigation]
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -100,13 +101,12 @@ public class ItemsDetailActivity extends AppCompatActivity
         service.getItemDetail(itemId, LoggedUser.token).enqueue(new Callback<LostItem>() {
             @Override
             public void onResponse(Call<LostItem> call, Response<LostItem> response) {
-                LostItem lostItem = response.body();
-
-                if (lostItem == null){
-                    Toast.makeText(ItemsDetailActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                if (!response.isSuccessful()) {
+                    ErrorUtils.showExceptionError(ItemsDetailActivity.this, response.errorBody());
                     return;
                 }
 
+                LostItem lostItem = response.body();
                 setTitle(lostItem.title);
                 itemName.setText(lostItem.title);
                 if (lostItem.itemHasBeenFound){
@@ -139,7 +139,7 @@ public class ItemsDetailActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<LostItem> call, Throwable t) {
-                Toast.makeText(ItemsDetailActivity.this, "Une erreur est survenue lors du chargement des données", Toast.LENGTH_SHORT).show();
+                ErrorUtils.showGenServError(ItemsDetailActivity.this);
             }
         });
 
@@ -150,8 +150,8 @@ public class ItemsDetailActivity extends AppCompatActivity
                 service.deleteItem(itemId, LoggedUser.token).enqueue(new Callback<RequestResult>() {
                     @Override
                     public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
-                        if (response.body() == null){
-                            Toast.makeText(ItemsDetailActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                        if (!response.isSuccessful()) {
+                            ErrorUtils.showExceptionError(ItemsDetailActivity.this, response.errorBody());
                             return;
                         }
                         boolean deleteIsSuccessful = response.body().result;
@@ -166,8 +166,8 @@ public class ItemsDetailActivity extends AppCompatActivity
 
                     @Override
                     public void onFailure(Call<RequestResult> call, Throwable t) {
-                        Toast.makeText(ItemsDetailActivity.this, "Impossible de supprimer l'item. Veuillex réésayer", Toast.LENGTH_LONG).show();
-                       }
+                        ErrorUtils.showGenServError(ItemsDetailActivity.this);
+                    }
                 });
             }
         });
@@ -190,12 +190,11 @@ public class ItemsDetailActivity extends AppCompatActivity
         service.getItemLocation(itemId, LoggedUser.token).enqueue(new Callback<Location>() {
             @Override
             public void onResponse(Call<Location> call, Response<Location> response) {
-                Location location = response.body();
-                if (location == null){
-                    Toast.makeText(ItemsDetailActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
+                if (!response.isSuccessful()) {
+                    ErrorUtils.showExceptionError(ItemsDetailActivity.this, response.errorBody());
                     return;
                 }
-
+                Location location = response.body();
                 locationName.setText(location.Name);
 
                 googleMap.setMinZoomPreference(16);
@@ -216,7 +215,7 @@ public class ItemsDetailActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<Location> call, Throwable t) {
-                Toast.makeText(ItemsDetailActivity.this, "Impossible d'obtenir l'emplacement de l'objet", Toast.LENGTH_SHORT).show();
+                ErrorUtils.showGenServError(ItemsDetailActivity.this);
             }
         });
 

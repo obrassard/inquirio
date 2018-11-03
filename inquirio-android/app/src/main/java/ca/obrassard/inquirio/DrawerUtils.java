@@ -19,6 +19,7 @@ public class DrawerUtils {
 
     public static void logout(Activity a){
         LoggedUser.data = null;
+        LoggedUser.token = null;
         Intent i = new Intent(a.getApplicationContext(),LoginHomeActivity.class);
         a.startActivity(i);
         a.finishAffinity();
