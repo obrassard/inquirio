@@ -29,6 +29,7 @@ import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
 import ca.obrassard.inquirio.transfer.FoundRequest;
 import ca.obrassard.inquirio.transfer.RequestResult;
+import ca.obrassard.inquirio.transfer.StringWrapper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,33 +45,33 @@ public class ItemFoundActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_found);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         DrawerUtils.prepareHeader(navigationView);
 
         final int itemID = getIntent().getIntExtra("item.id",0);
-        service.getItemName(itemID, LoggedUser.token).enqueue(new Callback<String>() {
+        service.getItemName(itemID, LoggedUser.token).enqueue(new Callback<StringWrapper>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<StringWrapper> call, Response<StringWrapper> response) {
                 if (!response.isSuccessful()) {
                     ErrorUtils.showExceptionError(ItemFoundActivity.this, response.errorBody());
                     return;
                 }
                 TextView txtItemName = findViewById(R.id.txt_item_name);
-                        txtItemName.setText(response.body());
+                txtItemName.setText(response.body().value);
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<StringWrapper> call, Throwable t) {
                 ErrorUtils.showGenServError(ItemFoundActivity.this);
                 finish();
             }

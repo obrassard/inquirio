@@ -78,6 +78,7 @@
     <string name="messagetodest">Ajouter un message pour le propriétaire</string>
     <string name="addpic">Ajouter une photo</string>
     <string name="contact">Contacter l\'utilisateur</string>
+    <string name="contact2">Contacter l\'utilisateur\nqui a trouvé cet item</string>
     <string name="title_activity_notification_details">Détail de la notification</string>
     <string name="thanks">Merci !</string>
     <string name="thanks_dialog_txt">Une notification a bien été envoyée au propriétaire de l\'objet perdu! Celui-ci vous contactera sous peu s\'il s\'agit bien de son objet.</string>

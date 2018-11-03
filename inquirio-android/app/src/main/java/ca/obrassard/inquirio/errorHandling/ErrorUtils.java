@@ -22,7 +22,7 @@ public class ErrorUtils {
     }
 
     public static void showLocationError(Activity a){
-        Snackbar.make(a.findViewById(android.R.id.content), "Impossible d'accéder à votre localisation !",Snackbar.LENGTH_LONG).show();
+        //Snackbar.make(a.findViewById(android.R.id.content), "Impossible d'accéder à votre localisation !",Snackbar.LENGTH_LONG).show();
         Snackbar.make(a.findViewById(android.R.id.content), "Vérifiez que votre service de localisation est activé!",Snackbar.LENGTH_LONG).show();
     }
     public static void showLocationPermitionError(Activity a){

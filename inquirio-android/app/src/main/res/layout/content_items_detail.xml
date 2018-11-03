@@ -149,6 +149,16 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="17sp"
                     android:visibility="gone"/>
+
+                <Button
+                    android:layout_marginTop="5sp"
+                    android:id="@+id/btn_contactFinder"
+                    android:backgroundTint="@color/colorAccent"
+                    android:textColor="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contact2"
+                    android:drawableLeft="@android:drawable/stat_notify_chat"/>
                 </LinearLayout>
         </ScrollView>
     </LinearLayout>

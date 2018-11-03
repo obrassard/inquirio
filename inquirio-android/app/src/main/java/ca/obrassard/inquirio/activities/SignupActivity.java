@@ -79,6 +79,7 @@ public class SignupActivity extends AppCompatActivity {
                     LoggedUser.token = loginResponse.userID; //TODO TOKEN
 
                     Intent intent = new Intent(SignupActivity.this.getApplicationContext(), MainActivity.class);
+                    intent.putExtra("firstconnexion",loginResponse.isFirstLogin);
                     startActivity(intent);
                     SignupActivity.this.finishAffinity();
                     ActivityCompat.finishAffinity(SignupActivity.this);

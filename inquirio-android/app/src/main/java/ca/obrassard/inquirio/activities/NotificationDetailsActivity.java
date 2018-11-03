@@ -146,9 +146,9 @@ public class NotificationDetailsActivity extends AppCompatActivity
         btnContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!telephone.trim().equals("")){
-                    sendSMS(telephone);
-                }
+            if (!telephone.trim().equals("")){
+                sendSMS(telephone);
+            }
             }
         });
     }

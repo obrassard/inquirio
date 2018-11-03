@@ -137,7 +137,7 @@ public class InquirioWebService {
     /**
      * Effectue une déconnexion de l'utlisateur spécifié
      *
-     * @param userID Id de l'utilisateur à déconnecter
+     * @param token token de l'utilisateur à déconnecter
      * @return LogoutResponse
      */
     
@@ -335,7 +335,7 @@ public class InquirioWebService {
     
     @GET
     @Path("items/{id}/title")
-    public String getItemName(@PathParam("id") int itemID, @HeaderParam("token") int token) throws APIRequestException {
+    public StringWrapper getItemName(@PathParam("id") int itemID, @HeaderParam("token") int token) throws APIRequestException {
 
         //TODO : Validate Token
         int authUserId = AuthValidator.validateToken(token,context);
@@ -346,7 +346,7 @@ public class InquirioWebService {
             throw new APIRequestException(APIErrorCodes.UnknownItemId);
         }
         System.out.println("User ("+authUserId+") requested item #"+ itemID + "'s title on " + DateTime.now().toString());
-        return record.get("Title").toString();
+        return new StringWrapper(record.get("Title").toString());
     }
 
     /**
@@ -356,8 +356,6 @@ public class InquirioWebService {
      * @param request
      * @return True si tout s'est déroulé correctement
      */
-
-    
     @POST
     @Path("notifications")
     public RequestResult sendFoundRequest(FoundRequest request, @HeaderParam("token") int token) throws APIRequestException {
@@ -385,8 +383,6 @@ public class InquirioWebService {
      * @param userID Identifiant de l'utilisateur
      * @return Une liste de LostItemSummary
      */
-
-    
     @GET
     @Path("users/{id}/lostitems")
     public List<LostItemSummary> getLostItemsByOwner(@PathParam("id") int userID, @HeaderParam("token") int token) throws APIRequestException {
@@ -621,45 +617,29 @@ public class InquirioWebService {
      * Obtiens les details de contact de l'utlisateur
      * ayant retrouvé un item
      *
-     * @param notificationID identifiant de la notif candidate
+     * @param itemID identifiant de l'item trouvé
      * @return FinderContactDetail
      */
-
-    
     @GET
     @Path("notifications/{id}/contact")
-    public FinderContactDetail getFinderContactDetail(@PathParam("id") int notificationID, @HeaderParam("token") int token) throws APIRequestException {
+    public FinderContactDetail getFinderContactDetail(@PathParam("id") int itemID, @HeaderParam("token") int token) throws APIRequestException {
 
         //TODO : Validate Real Token
         int authUserId = AuthValidator.validateToken(token,context);
 
         Record ownerid = context.select(LOSTITEMS.OWNERID)
-                .from(NOTIFICATION.innerJoin(LOSTITEMS).on(LOSTITEMS.ID.eq(NOTIFICATION.ITEMID)))
-                .where(NOTIFICATION.ID.eq(notificationID)).fetchOne();
+                .from(LOSTITEMS).where(LOSTITEMS.ID.eq(itemID)).fetchOne();
         if (ownerid == null){
-            throw new APIRequestException(APIErrorCodes.UnknownNotificationID);
+            throw new APIRequestException(APIErrorCodes.UnknownItemId);
         } else if ((int)ownerid.get(0) != authUserId){
             throw new APIRequestException(APIErrorCodes.Forbidden);
         }
 
-        Record result = context.select().from(NOTIFICATION.innerJoin(USERS)
-                .on(USERS.ID.eq(NOTIFICATION.SENDERID))).fetchOne();
+        Record result = context.select().from(LOSTITEMS.innerJoin(USERS)
+                .on(USERS.ID.eq(LOSTITEMS.FINDERID))).fetchOne();
 
-        System.out.println("User ("+authUserId+") requested contact details for notification #"+notificationID+" on " + DateTime.now().toString());
+        System.out.println("User ("+authUserId+") requested finder contact details for item #"+itemID+" on " + DateTime.now().toString());
         return new FinderContactDetail(result.get("Telephone").toString());
     }
 
-    /**
-     * Assigne une note de fiabilité(de 0 à 5) à un utilisateur
-     *
-     * @param userId id de l'utilisateur à noter
-     * @param rating note de 0 à 5 reporésentant la fiabilité
-     * @return True si la requête s'est bien déroulée;
-     */
-
-    //TODO : Est-ce vraiment utile ?
-    
-    public RequestResult rateUser(long userId, int rating) {
-        throw new NotImplementedException();
-    }
 }

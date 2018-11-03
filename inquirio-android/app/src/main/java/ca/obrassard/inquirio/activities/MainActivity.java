@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     InquirioService service = RetrofitUtil.get();
     LostItemAdapter m_adapter;
     BottomNavigationView bottomNavigationView;
-    Boolean m_isFirstConnection = LoggedUser.data.isFirstLogin;
     private FusedLocationProviderClient mFusedLocationClient;
 
     @Override
@@ -119,7 +118,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         //Affichage du popup d'accueil si première connexion
-        if (m_isFirstConnection) {
+        boolean isFirstConnection = getIntent().getBooleanExtra("firstconnexion",false);
+        if (isFirstConnection) {
             DialogFragment welcomeDialog = new WelcomeDialog();
             welcomeDialog.show(getFragmentManager(), "welcomeDialog");
         }

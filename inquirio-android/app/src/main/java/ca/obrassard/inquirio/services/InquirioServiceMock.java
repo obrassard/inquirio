@@ -21,6 +21,7 @@ import ca.obrassard.inquirio.transfer.Notification;
 import ca.obrassard.inquirio.transfer.NotificationSummary;
 import ca.obrassard.inquirio.transfer.RequestResult;
 import ca.obrassard.inquirio.transfer.SignupRequest;
+import ca.obrassard.inquirio.transfer.StringWrapper;
 import ca.obrassard.inquirio.transfer.SubscriptionCheckRequest;
 import retrofit2.Call;
 import retrofit2.mock.BehaviorDelegate;
@@ -344,7 +345,7 @@ public class InquirioServiceMock implements InquirioService {
      * @return nom de l'item
      */
     @Override
-    public Call<String> getItemName(int itemID, int token)  {
+    public Call<StringWrapper> getItemName(int itemID, int token)  {
         return delegate.returningResponse("Iphone XS").getItemName(itemID,token);
     }
 

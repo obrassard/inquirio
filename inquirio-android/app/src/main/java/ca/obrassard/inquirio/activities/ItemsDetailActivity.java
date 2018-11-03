@@ -1,6 +1,7 @@
 package ca.obrassard.inquirio.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -31,6 +32,7 @@ import ca.obrassard.inquirio.errorHandling.ErrorUtils;
 import ca.obrassard.inquirio.model.LostItem;
 import ca.obrassard.inquirio.services.InquirioService;
 import ca.obrassard.inquirio.services.RetrofitUtil;
+import ca.obrassard.inquirio.transfer.FinderContactDetail;
 import ca.obrassard.inquirio.transfer.Location;
 import ca.obrassard.inquirio.transfer.RequestResult;
 import retrofit2.Call;
@@ -54,6 +56,7 @@ public class ItemsDetailActivity extends AppCompatActivity
     TextView lostDate;
     Button btnIFoundThis;
     Button btnDeleteItem;
+    Button btnContact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +96,7 @@ public class ItemsDetailActivity extends AppCompatActivity
 
         btnIFoundThis = findViewById(R.id.btn_itemfound);
         btnDeleteItem = findViewById(R.id.btn_deleteItem);
-
+        btnContact = findViewById(R.id.btn_contactFinder);
         //endregion
 
         //Affichage des details de l'item
@@ -128,12 +131,16 @@ public class ItemsDetailActivity extends AppCompatActivity
                 } else {
                     btnIFoundThis.setVisibility(View.VISIBLE);
                     btnDeleteItem.setVisibility(View.GONE);
+                    btnContact.setVisibility(View.GONE);
                 }
 
                 if(lostItem.itemHasBeenFound){
                     btnIFoundThis.setVisibility(View.GONE);
                     btnDeleteItem.setVisibility(View.GONE);
                     findViewById(R.id.txtfound).setVisibility(View.VISIBLE);
+                    btnContact.setVisibility(View.VISIBLE);
+                } else {
+                    btnContact.setVisibility(View.GONE);
                 }
             }
 
@@ -143,41 +150,63 @@ public class ItemsDetailActivity extends AppCompatActivity
             }
         });
 
-        //Actions des deux boutons
+        //Actions des boutons
         btnDeleteItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                service.deleteItem(itemId, LoggedUser.token).enqueue(new Callback<RequestResult>() {
-                    @Override
-                    public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
-                        if (!response.isSuccessful()) {
-                            ErrorUtils.showExceptionError(ItemsDetailActivity.this, response.errorBody());
-                            return;
-                        }
-                        boolean deleteIsSuccessful = response.body().result;
-                        if (deleteIsSuccessful){
-                            Intent i = new Intent(ItemsDetailActivity.this.getApplicationContext(),MainActivity.class);
-                            startActivity(i);
-                            Toast.makeText(ItemsDetailActivity.this, "L'item " + itemName.getText()+ " à été supprimé d'Inquirio", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(ItemsDetailActivity.this, "Impossible de supprimer l'item. Veuillez réésayer", Toast.LENGTH_LONG).show();
-                        }
+            service.deleteItem(itemId, LoggedUser.token).enqueue(new Callback<RequestResult>() {
+                @Override
+                public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
+                    if (!response.isSuccessful()) {
+                        ErrorUtils.showExceptionError(ItemsDetailActivity.this, response.errorBody());
+                        return;
                     }
+                    boolean deleteIsSuccessful = response.body().result;
+                    if (deleteIsSuccessful){
+                        Intent i = new Intent(ItemsDetailActivity.this.getApplicationContext(),MainActivity.class);
+                        startActivity(i);
+                        Toast.makeText(ItemsDetailActivity.this, "L'item " + itemName.getText()+ " à été supprimé d'Inquirio", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(ItemsDetailActivity.this, "Impossible de supprimer l'item. Veuillez réésayer", Toast.LENGTH_LONG).show();
+                    }
+                }
 
-                    @Override
-                    public void onFailure(Call<RequestResult> call, Throwable t) {
-                        ErrorUtils.showGenServError(ItemsDetailActivity.this);
-                    }
-                });
+                @Override
+                public void onFailure(Call<RequestResult> call, Throwable t) {
+                    ErrorUtils.showGenServError(ItemsDetailActivity.this);
+                }
+            });
             }
         });
 
         btnIFoundThis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ItemsDetailActivity.this.getApplicationContext(),ItemFoundActivity.class);
-                i.putExtra("item.id",itemId);
-                startActivity(i);
+            Intent i = new Intent(ItemsDetailActivity.this.getApplicationContext(),ItemFoundActivity.class);
+            i.putExtra("item.id",itemId);
+            startActivity(i);
+            }
+        });
+
+        btnContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                service.getFinderContactDetail(itemId,LoggedUser.token).enqueue(new Callback<FinderContactDetail>() {
+                    @Override
+                    public void onResponse(Call<FinderContactDetail> call, Response<FinderContactDetail> response) {
+                        if (!response.isSuccessful()) {
+                            ErrorUtils.showExceptionError(ItemsDetailActivity.this, response.errorBody());
+                            return;
+                        }
+                        String telephone = response.body().phoneNumber;
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", telephone, null)));
+                    }
+
+                    @Override
+                    public void onFailure(Call<FinderContactDetail> call, Throwable t) {
+                        ErrorUtils.showGenServError(ItemsDetailActivity.this);
+                    }
+                });
             }
         });
     }

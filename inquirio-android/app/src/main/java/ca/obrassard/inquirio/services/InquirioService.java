@@ -125,7 +125,7 @@ public interface InquirioService {
      */
     @GET
     ("api/items/{id}/title")
-    Call<String> getItemName(@Path("id") int itemID, @Header("token") int token);
+    Call<StringWrapper> getItemName(@Path("id") int itemID, @Header("token") int token);
 
     /**
      * Permet d'envoyer une requete pour signifier
