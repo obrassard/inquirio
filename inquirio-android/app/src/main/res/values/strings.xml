@@ -70,7 +70,7 @@
     <string name="isthisyouritem">Est-ce bien votre item ?</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
-    <string name="title_activity_item_found">ItemFoundActivity</string>
+    <string name="title_activity_item_found">Décrivez l\'objet trouvé</string>
     <string name="item_found">Cet item à été retrouvé !</string>
     <string name="send">Envoyer</string>
     <string name="end">Terminer</string>
