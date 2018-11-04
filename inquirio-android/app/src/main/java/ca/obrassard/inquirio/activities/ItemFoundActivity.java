@@ -1,13 +1,17 @@
 package ca.obrassard.inquirio.activities;
 
+import android.Manifest;
 import android.app.DialogFragment;
+import android.content.ClipData;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -90,7 +94,9 @@ public class ItemFoundActivity extends AppCompatActivity
         findViewById(R.id.btn_add_photo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openBackCamera();
+                if (checkPermissions()){
+                    openBackCamera();
+                }
             }
         });
 
@@ -142,6 +148,18 @@ public class ItemFoundActivity extends AppCompatActivity
         });
     }
 
+    private boolean checkPermissions(){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(ItemFoundActivity.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    1);
+            return false;
+        }
+        return true;
+    }
+
 
     String mCurrentPhotoPath;
     static final int REQUEST_TAKE_PHOTO = 1;
@@ -150,13 +168,7 @@ public class ItemFoundActivity extends AppCompatActivity
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
+        File image = File.createTempFile( imageFileName, ".jpg", storageDir);
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
@@ -191,6 +203,22 @@ public class ItemFoundActivity extends AppCompatActivity
             File f = new File(mCurrentPhotoPath);
             itemImage = BitmapFactory.decodeFile(f.getAbsolutePath());
             ((ImageView)findViewById(R.id.imgPreview)).setImageBitmap(itemImage);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openBackCamera();
+                } else {
+                    Snackbar.make(findViewById(android.R.id.content), "Inquirio nécéssite l'acces au stockage local!",Snackbar.LENGTH_LONG).show();
+                }
+            }
         }
     }
 

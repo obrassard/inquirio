@@ -23,6 +23,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -128,47 +130,74 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
+                == ConnectionResult.SUCCESS){
+            loadNearItems();
+        } else {
+            ErrorUtils.showGPServiceError(this);
+        }
 
+    }
+
+    public void loadNearItems(){
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ErrorUtils.showLocationPermitionError(MainActivity.this);
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    1);
             return;
         }
         mFusedLocationClient.getLastLocation()
-        .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-
-                if (location == null) {
-                    ErrorUtils.showLocationError(MainActivity.this);
-                    return;
-                }
-
-                LocationRequest request = new LocationRequest();
-                request.latitude = location.getLatitude();
-                request.longitude = location.getLongitude();
-                service.getNearLostItems(request, LoggedUser.token).enqueue(new Callback<List<LostItemSummary>>() {
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                     @Override
-                    public void onResponse(Call<List<LostItemSummary>> call, Response<List<LostItemSummary>> response) {
-                        if (!response.isSuccessful()) {
-                            ErrorUtils.showExceptionError(MainActivity.this, response.errorBody());
+                    public void onSuccess(Location location) {
+
+                        if (location == null) {
+                            ErrorUtils.showLocationError(MainActivity.this);
                             return;
                         }
 
-                        List<LostItemSummary> items = response.body();
-                        m_adapter.clear();
-                        m_adapter.addAll(items);
-                        m_adapter.notifyDataSetChanged();
-                    }
+                        LocationRequest request = new LocationRequest();
+                        request.latitude = location.getLatitude();
+                        request.longitude = location.getLongitude();
+                        service.getNearLostItems(request, LoggedUser.token).enqueue(new Callback<List<LostItemSummary>>() {
+                            @Override
+                            public void onResponse(Call<List<LostItemSummary>> call, Response<List<LostItemSummary>> response) {
+                                if (!response.isSuccessful()) {
+                                    ErrorUtils.showExceptionError(MainActivity.this, response.errorBody());
+                                    return;
+                                }
 
-                    @Override
-                    public void onFailure(Call<List<LostItemSummary>> call, Throwable t) {
-                        ErrorUtils.showGenServError(MainActivity.this);
+                                List<LostItemSummary> items = response.body();
+                                m_adapter.clear();
+                                m_adapter.addAll(items);
+                                m_adapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<LostItemSummary>> call, Throwable t) {
+                                ErrorUtils.showGenServError(MainActivity.this);
+                            }
+                        });
                     }
                 });
-            }
-        });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    loadNearItems();
+                } else {
+                    ErrorUtils.showLocationPermitionError(MainActivity.this);
+                }
+            }
+        }
+    }
     //region [Evennement de navigation]
 
     private void LaunchILostSomething(){
