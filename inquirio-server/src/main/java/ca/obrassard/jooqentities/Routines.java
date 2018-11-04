@@ -4,6 +4,7 @@
 package ca.obrassard.jooqentities;
 
 
+import ca.obrassard.jooqentities.routines.Cleardb;
 import ca.obrassard.jooqentities.routines.Getnearitems;
 
 import javax.annotation.Generated;
@@ -23,6 +24,16 @@ import org.jooq.Configuration;
 )
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Routines {
+
+    /**
+     * Call <code>inquirio.clearDB</code>
+     */
+    public static void cleardb(Configuration configuration, Integer sure) {
+        Cleardb p = new Cleardb();
+        p.setSure(sure);
+
+        p.execute(configuration);
+    }
 
     /**
      * Call <code>inquirio.getNearItems</code>

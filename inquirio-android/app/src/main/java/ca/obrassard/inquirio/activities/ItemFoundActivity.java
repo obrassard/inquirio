@@ -2,8 +2,13 @@ package ca.obrassard.inquirio.activities;
 
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,7 +23,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.graphics.Bitmap;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import ca.obrassard.inquirio.DrawerUtils;
 import ca.obrassard.inquirio.LoggedUser;
@@ -38,7 +48,6 @@ public class ItemFoundActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     InquirioService service = RetrofitUtil.get();
-    static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap itemImage = null;
 
     @Override
@@ -77,15 +86,11 @@ public class ItemFoundActivity extends AppCompatActivity
             }
         });
 
-
         //Prise de photo
         findViewById(R.id.btn_add_photo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                }
+                openBackCamera();
             }
         });
 
@@ -97,11 +102,11 @@ public class ItemFoundActivity extends AppCompatActivity
             public void onClick(View v) {
                 
                 if (txtmessage.getText().toString().trim().equals("")){
-                    Toast.makeText(ItemFoundActivity.this, "Veuillez ajouter un message", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(android.R.id.content), "Veuillez ajouter un message", Snackbar.LENGTH_LONG).show();
                     return;
                 }
                 else if (itemImage == null){
-                    Toast.makeText(ItemFoundActivity.this, "Veuillez prendre une photo de l'item", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(android.R.id.content), "Veuillez prendre une photo de l'item", Snackbar.LENGTH_LONG).show();
                     return;
                 }
 
@@ -110,15 +115,15 @@ public class ItemFoundActivity extends AppCompatActivity
                 request.itemID = (int) itemID;
                 request.senderID = (int) LoggedUser.data.userID;
 
-                final int length = itemImage.getByteCount();
-                ByteBuffer buffer = ByteBuffer.allocate(length);
-                itemImage.copyPixelsToBuffer( buffer);
-                byte[] image = buffer.array();
+                ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
+                itemImage.compress(Bitmap.CompressFormat.JPEG,40,bytearrayoutputstream);
+                byte[] image = bytearrayoutputstream.toByteArray();
                 request.image = image;
 
                 service.sendFoundRequest(request, LoggedUser.token).enqueue(new Callback<RequestResult>() {
                     @Override
                     public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
+
                         if (!response.isSuccessful()) {
                             ErrorUtils.showExceptionError(ItemFoundActivity.this, response.errorBody());
                             return;
@@ -137,12 +142,54 @@ public class ItemFoundActivity extends AppCompatActivity
         });
     }
 
+
+    String mCurrentPhotoPath;
+    static final int REQUEST_TAKE_PHOTO = 1;
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void openBackCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                ErrorUtils.showGenError(ItemFoundActivity.this);
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "ca.obrassard.inquirio.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
     //Reception de la photo depuis l'intent
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            itemImage = (Bitmap) extras.get("data");
+        if (requestCode == REQUEST_TAKE_PHOTO) {
+            File f = new File(mCurrentPhotoPath);
+            itemImage = BitmapFactory.decodeFile(f.getAbsolutePath());
             ((ImageView)findViewById(R.id.imgPreview)).setImageBitmap(itemImage);
         }
     }

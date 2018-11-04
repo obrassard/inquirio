@@ -124,6 +124,7 @@ public class ItemsDetailActivity extends AppCompatActivity
                         new SimpleDateFormat("yyyy-MM-dd' 'HH:mm");
                 lostDate.setText(getString(R.string.date,simpleDateFormat.format(lostItem.date)));
 
+
                 //Afichage des bons boutons selon l'utilisateur
                 if (lostItem.ownerId == LoggedUser.data.userID){
                     btnIFoundThis.setVisibility(View.GONE);

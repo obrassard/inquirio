@@ -437,11 +437,12 @@ public class InquirioWebService {
         for (Record item : result){
             FoundItemSummary fis = new FoundItemSummary();
             fis.found = true;
-            fis.finderName = item.get("Name").toString();
-            fis.itemName = item.get("Title").toString();
-            fis.itemID = (int)item.get("Id");
+            fis.finderName = item.get(USERS.NAME).toString();
+            fis.itemName = item.get(LOSTITEMS.TITLE).toString();
+            fis.itemID = (int)item.get(LOSTITEMS.ID);
             foundItemSummaries.add(fis);
         }
+
         System.out.println("User ("+authUserId+") requested his found items list on " + DateTime.now().toString());
         return foundItemSummaries;
     }
@@ -636,7 +637,7 @@ public class InquirioWebService {
         }
 
         Record result = context.select().from(LOSTITEMS.innerJoin(USERS)
-                .on(USERS.ID.eq(LOSTITEMS.FINDERID))).fetchOne();
+                .on(USERS.ID.eq(LOSTITEMS.FINDERID))).where(LOSTITEMS.ID.eq(itemID)).fetchOne();
 
         System.out.println("User ("+authUserId+") requested finder contact details for item #"+itemID+" on " + DateTime.now().toString());
         return new FinderContactDetail(result.get("Telephone").toString());

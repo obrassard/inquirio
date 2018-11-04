@@ -1,6 +1,8 @@
 package ca.obrassard.inquirio.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -60,7 +62,7 @@ public class NotificationDetailsActivity extends AppCompatActivity
         final TextView txtDate = findViewById(R.id.txt_date);
         final TextView txtUser = findViewById(R.id.txt_username);
         final TextView txtItem = findViewById(R.id.txt_itemtitle);
-        ImageView img = findViewById(R.id.img_notif);
+        final ImageView img = findViewById(R.id.img_notif);
         final TextView txtDesc = findViewById(R.id.txtMessage);
         final Button btnOui = findViewById(R.id.btn_yes);
         Button btnNon = findViewById(R.id.btn_no);
@@ -85,7 +87,8 @@ public class NotificationDetailsActivity extends AppCompatActivity
                 txtItem.setText(notification.itemName);
                 txtDesc.setText(notification.message);
                 //TODO Obtenir l'image
-
+                Bitmap bitmap = BitmapFactory.decodeByteArray(notification.photo, 0, notification.photo.length);
+                img.setImageBitmap(bitmap);
                 setTitle(notification.senderName);
             }
 

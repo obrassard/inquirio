@@ -192,7 +192,6 @@ public interface InquirioService {
      * @return True si la requête s'est bien déroulée
      */
 
-    //TODO : Le type de retour a été changé ici!
     @GET
     ("api/notifications/{id}/deny")
     Call<RequestResult> denyCandidateNotification(@Path("id") int notificationID, @Header("token") int token);

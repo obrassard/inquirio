@@ -10,8 +10,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Date;
 
-import ca.obrassard.exception.APIErrorCodes;
-import ca.obrassard.exception.APIRequestException;
 import com.google.common.io.BaseEncoding;
 import com.google.gson.*;
 import org.joda.time.DateTime;
