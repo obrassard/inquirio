@@ -3,6 +3,8 @@ package ca.obrassard;
 import ca.obrassard.exception.APIErrorCodes;
 import ca.obrassard.exception.APIRequestException;
 import ca.obrassard.inquirioCommons.*;
+import ca.obrassard.jooqentities.Routines;
+import ca.obrassard.jooqentities.routines.Updatefounditemcount;
 import ca.obrassard.model.LostItem;
 import ca.obrassard.model.Notification;
 import ca.obrassard.model.User;
@@ -622,6 +624,9 @@ public class InquirioWebService {
                     .set(LOSTITEMS.ITEMHASBEENFOUND, (byte) 1)
                     .set(LOSTITEMS.FINDERID, notification.senderId)
                     .where(LOSTITEMS.ID.eq(notification.itemId)).execute();
+
+            //MAJ le nombre d'item trouvé de la personne
+            Routines.updatefounditemcount(context.configuration(),notification.senderId);
 
             String telephone = context.selectFrom(USERS)
                     .where(USERS.ID.eq(notification.senderId))

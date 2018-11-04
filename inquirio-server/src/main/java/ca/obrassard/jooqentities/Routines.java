@@ -6,6 +6,7 @@ package ca.obrassard.jooqentities;
 
 import ca.obrassard.jooqentities.routines.Cleardb;
 import ca.obrassard.jooqentities.routines.Getnearitems;
+import ca.obrassard.jooqentities.routines.Updatefounditemcount;
 
 import javax.annotation.Generated;
 
@@ -42,6 +43,16 @@ public class Routines {
         Getnearitems p = new Getnearitems();
         p.setLat(lat);
         p.setLng(lng);
+
+        p.execute(configuration);
+    }
+
+    /**
+     * Call <code>inquirio.updateFoundItemCount</code>
+     */
+    public static void updatefounditemcount(Configuration configuration, Integer userid) {
+        Updatefounditemcount p = new Updatefounditemcount();
+        p.setUserid(userid);
 
         p.execute(configuration);
     }
