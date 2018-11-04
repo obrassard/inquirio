@@ -61,6 +61,7 @@ public class InquirioWebService {
         Validator.validateEmail(request.email);
         boolean exists = context.fetchExists(context.selectOne().from(USERS).where(USERS.EMAIL.eq(request.email)));
         System.out.println("Subscription checked on " + DateTime.now().toString());
+        context.close();
         return new RequestResult(exists);
     }
 
@@ -95,6 +96,8 @@ public class InquirioWebService {
             return response;
         } catch (NullPointerException e){
             throw new APIRequestException(APIErrorCodes.BadCredentials);
+        } finally {
+            context.close();
         }
     }
 
@@ -131,6 +134,7 @@ public class InquirioWebService {
         response.userID = user.Id ;
         response.userPhoneNumber = user.Telephone;
         System.out.println("User ("+user.Id+") signed up on " + DateTime.now().toString());
+        context.close();
         return response;
     }
 
@@ -154,6 +158,7 @@ public class InquirioWebService {
         response.message = "Success";
         response.success = true;
         System.out.println("User ("+authUserId+") logged out on " + DateTime.now().toString());
+        context.close();
         return response;
     }
 
@@ -190,6 +195,7 @@ public class InquirioWebService {
 
         //TODO : Get user id with token
         System.out.println("User ("+authUserId+") requested near items on " + DateTime.now().toString());
+        context.close();
         return lostItemSummaries;
     }
 
@@ -217,7 +223,9 @@ public class InquirioWebService {
         
         //TODO : Get user id with token
         System.out.println("User ("+authUserId+") requested user #"+userID+"'s detail on " + DateTime.now().toString());
-        return new User(record);
+        User u = new User(record);
+        context.close();
+        return u;
     }
 
     /**
@@ -251,6 +259,7 @@ public class InquirioWebService {
                 .orderBy(LOSTITEMS.ID.desc()).fetchAny();
         int id = (int) result.get("Id");
         System.out.println("User ("+authUserId+") declared a new lost item on " + DateTime.now().toString());
+        context.close();
         return id;
     }
 
@@ -273,7 +282,9 @@ public class InquirioWebService {
             throw new APIRequestException(APIErrorCodes.UnknownItemId);
         }
         System.out.println("User ("+authUserId+") requested item #"+ itemID + "'s details on " + DateTime.now().toString());
-        return new LostItem(record);
+        LostItem li = new LostItem(record);
+        context.close();
+        return li;
     }
 
     /**
@@ -296,6 +307,7 @@ public class InquirioWebService {
 
         LostItem li = new LostItem(record);
         System.out.println("User ("+authUserId+") requested item #"+ itemID + "'s location on " + DateTime.now().toString());
+        context.close();
         return li.getLocation();
         
     }
@@ -323,6 +335,7 @@ public class InquirioWebService {
             throw new APIRequestException(APIErrorCodes.UnknownItemId);
         }
         System.out.println("User ("+authUserId+") deleted item #"+ itemID + " on " + DateTime.now().toString());
+        context.close();
         return new RequestResult(true);
     }
 
@@ -346,7 +359,9 @@ public class InquirioWebService {
             throw new APIRequestException(APIErrorCodes.UnknownItemId);
         }
         System.out.println("User ("+authUserId+") requested item #"+ itemID + "'s title on " + DateTime.now().toString());
-        return new StringWrapper(record.get("Title").toString());
+        StringWrapper sw = new StringWrapper(record.get("Title").toString());
+        context.close();
+        return sw;
     }
 
     /**
@@ -373,6 +388,7 @@ public class InquirioWebService {
                 .values(request.itemID,request.senderID,request.message,request.image).execute();
 
         System.out.println("User ("+authUserId+") send new notification for item #"+ request.itemID + " on " + DateTime.now().toString());
+        context.close();
         return new RequestResult(true);
     }
 
@@ -408,6 +424,7 @@ public class InquirioWebService {
             lostItemSummaries.add(lis);
         }
         System.out.println("User ("+authUserId+") requested his lost items list on " + DateTime.now().toString());
+        context.close();
         return lostItemSummaries;
     }
 
@@ -444,6 +461,7 @@ public class InquirioWebService {
         }
 
         System.out.println("User ("+authUserId+") requested his found items list on " + DateTime.now().toString());
+        context.close();
         return foundItemSummaries;
     }
 
@@ -483,6 +501,7 @@ public class InquirioWebService {
         }
 
         System.out.println("User ("+authUserId+") requested his notification list on " + DateTime.now().toString());
+        context.close();
         return notifs;
     }
 
@@ -524,6 +543,7 @@ public class InquirioWebService {
         notification.photo = record.getPhoto();
 
         System.out.println("User ("+authUserId+") requested notification #"+notificationID+"'s details on " + DateTime.now().toString());
+        context.close();
         return notification;
     }
 
@@ -557,6 +577,7 @@ public class InquirioWebService {
             .where(NOTIFICATION.ID.eq(notificationID)).execute();
 
         System.out.println("User ("+authUserId+") denied notification #"+notificationID+"'s proposal on " + DateTime.now().toString());
+        context.close();
         return new RequestResult(true);
     }
     /**
@@ -611,6 +632,8 @@ public class InquirioWebService {
 
         } catch (NullPointerException e){
             throw new APIRequestException(APIErrorCodes.UnknownNotificationID);
+        } finally {
+            context.close();
         }
     }
 
@@ -640,7 +663,9 @@ public class InquirioWebService {
                 .on(USERS.ID.eq(LOSTITEMS.FINDERID))).where(LOSTITEMS.ID.eq(itemID)).fetchOne();
 
         System.out.println("User ("+authUserId+") requested finder contact details for item #"+itemID+" on " + DateTime.now().toString());
-        return new FinderContactDetail(result.get("Telephone").toString());
+        FinderContactDetail fcd = new FinderContactDetail(result.get("Telephone").toString());
+        context.close();
+        return fcd;
     }
 
 }
