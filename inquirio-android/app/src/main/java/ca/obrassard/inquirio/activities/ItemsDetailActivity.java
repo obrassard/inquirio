@@ -97,6 +97,10 @@ public class ItemsDetailActivity extends AppCompatActivity
         btnIFoundThis = findViewById(R.id.btn_itemfound);
         btnDeleteItem = findViewById(R.id.btn_deleteItem);
         btnContact = findViewById(R.id.btn_contactFinder);
+
+        btnIFoundThis.setVisibility(View.GONE);
+        btnDeleteItem.setVisibility(View.GONE);
+        btnContact.setVisibility(View.GONE);
         //endregion
 
         //Affichage des details de l'item

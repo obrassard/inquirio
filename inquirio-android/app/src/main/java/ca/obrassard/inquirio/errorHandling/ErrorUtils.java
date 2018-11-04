@@ -28,6 +28,9 @@ public class ErrorUtils {
     public static void showLocationPermitionError(Activity a){
         Snackbar.make(a.findViewById(android.R.id.content), "Veuillez autoriser inquirio à accéder à votre emplacement!",Snackbar.LENGTH_LONG).show();
     }
+    public static void showGPServiceError(Activity a){
+        Snackbar.make(a.findViewById(android.R.id.content), "Les services Google Play doivent être installés pour utiliser Inquirio",Snackbar.LENGTH_LONG).show();
+    }
 
     public static void showExceptionError(Activity a, ResponseBody errorBody){
         if (errorBody == null){
@@ -43,8 +46,9 @@ public class ErrorUtils {
             }
             int ressourceid = a.getResources().getIdentifier(key, "string", a.getPackageName());
             Snackbar.make(a.findViewById(android.R.id.content), ressourceid,Snackbar.LENGTH_LONG).show();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            ErrorUtils.showGenError(a);
         }
     }
 
