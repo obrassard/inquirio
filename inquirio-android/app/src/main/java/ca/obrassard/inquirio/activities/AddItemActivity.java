@@ -94,7 +94,12 @@ public class AddItemActivity extends AppCompatActivity
 
                     item.description = txtDescription.getText().toString();
                     item.title = txtTitle.getText().toString();
-                    item.reward = Double.parseDouble(txtReward.getText().toString());
+                    try{
+                        item.reward = Double.parseDouble(txtReward.getText().toString());
+                    } catch (NumberFormatException e){
+                        item.reward = 0;
+                    }
+
                     item.latitude = selectedplace.getLatLng().latitude;
                     item.longitude = selectedplace.getLatLng().longitude;
                     item.locationName = selectedplace.getName().toString();

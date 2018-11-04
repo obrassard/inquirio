@@ -47,7 +47,7 @@ public class ErrorUtils {
             int ressourceid = a.getResources().getIdentifier(key, "string", a.getPackageName());
             Snackbar.make(a.findViewById(android.R.id.content), ressourceid,Snackbar.LENGTH_LONG).show();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("ERROR :" + e.getMessage());
             ErrorUtils.showGenError(a);
         }
     }
