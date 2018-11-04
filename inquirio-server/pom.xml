@@ -73,7 +73,13 @@
           <artifactId>guava</artifactId>
           <version>19.0</version>
       </dependency>
-</dependencies>
+      <!-- https://mvnrepository.com/artifact/commons-validator/commons-validator -->
+      <dependency>
+          <groupId>commons-validator</groupId>
+          <artifactId>commons-validator</artifactId>
+          <version>1.4.0</version>
+      </dependency>
+  </dependencies>
   <build>
     <finalName>inquirioServer</finalName>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
