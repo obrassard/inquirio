@@ -220,8 +220,6 @@ public class ItemsDetailActivity extends AppCompatActivity
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
-
-
         service.getItemLocation(itemId, LoggedUser.token).enqueue(new Callback<Location>() {
             @Override
             public void onResponse(Call<Location> call, Response<Location> response) {
