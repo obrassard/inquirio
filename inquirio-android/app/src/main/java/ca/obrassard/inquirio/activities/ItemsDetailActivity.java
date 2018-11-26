@@ -1,6 +1,7 @@
 package ca.obrassard.inquirio.activities;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -62,6 +63,11 @@ public class ItemsDetailActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //region [Initialisation des éléments de navigation]
+        boolean deviceIsLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+        if (deviceIsLandscape){
+            startActivity(new Intent(ItemsDetailActivity.this, MainActivity.class ));
+            finish();
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items_detail);
         Toolbar toolbar = findViewById(R.id.toolbar);

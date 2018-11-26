@@ -1,6 +1,7 @@
 package ca.obrassard.inquirio.activities;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -41,6 +42,13 @@ public class NotificationDetailsActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        boolean deviceIsLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+        if (deviceIsLandscape){
+            startActivity(new Intent(NotificationDetailsActivity.this, MainActivity.class ));
+            finish();
+        }
+
         //region [Initialisation des éléments graphiques]
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification_details);
