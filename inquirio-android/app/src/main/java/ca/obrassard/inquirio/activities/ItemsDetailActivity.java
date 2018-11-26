@@ -63,8 +63,9 @@ public class ItemsDetailActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //region [Initialisation des éléments de navigation]
+        boolean shouldKillItself = getIntent().getBooleanExtra("killOnLandscape",true);
         boolean deviceIsLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
-        if (deviceIsLandscape){
+        if (deviceIsLandscape && shouldKillItself){
             startActivity(new Intent(ItemsDetailActivity.this, MainActivity.class ));
             finish();
         }

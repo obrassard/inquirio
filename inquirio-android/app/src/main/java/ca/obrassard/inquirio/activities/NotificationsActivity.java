@@ -17,7 +17,9 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +59,8 @@ public class NotificationsActivity extends AppCompatActivity
     ListView lvNearItems;
     long selectedNotifId = -1;
 
+    ScrollView landscapeDetails;
+    LinearLayout landscapeEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +89,9 @@ public class NotificationsActivity extends AppCompatActivity
         lvNearItems.setEmptyView(findViewById(R.id.no_notif_ph));
 
         if (deviceIsLandscape){
+            landscapeDetails = findViewById(R.id.landscape_detail);
+            landscapeEmpty = findViewById(R.id.landscape_detail_empty);
+
             txtDate = findViewById(R.id.txt_date);
             txtUser = findViewById(R.id.txt_username);
             txtItem = findViewById(R.id.txt_itemtitle);
@@ -104,7 +111,8 @@ public class NotificationsActivity extends AppCompatActivity
                                 return;
                             }
                             if (response.body().result){
-                                //todo hide detail panel
+                                landscapeDetails.setVisibility(View.GONE);
+                                landscapeEmpty.setVisibility(View.VISIBLE);
                                 selectedNotifId = -1;
                                 refreshlist();
                             }
@@ -152,11 +160,6 @@ public class NotificationsActivity extends AppCompatActivity
             });
         }
 
-        refreshlist();
-
-    }
-
-    public void refreshlist(){
         lvNearItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -165,11 +168,13 @@ public class NotificationsActivity extends AppCompatActivity
                     Toast.makeText(NotificationsActivity.this, "Une erreur est survenue, veuillez réésayer", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 selectedNotifId = summary.notificationID;
 
                 if (deviceIsLandscape){
 
+
+                    landscapeDetails.setVisibility(View.VISIBLE);
+                    landscapeEmpty.setVisibility(View.GONE);
                     service.getNotificationDetail((int)selectedNotifId, LoggedUser.token).enqueue(new Callback<Notification>() {
                         @Override
                         public void onResponse(Call<Notification> call, Response<Notification> response) {
@@ -204,15 +209,7 @@ public class NotificationsActivity extends AppCompatActivity
         });
     }
 
-
-    public void sendSMS(String number)
-    {
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null)));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
+    public void refreshlist(){
         service.getPotentiallyFoundItems(LoggedUser.data.userID, LoggedUser.token).enqueue(new Callback<List<NotificationSummary>>() {
             @Override
             public void onResponse(Call<List<NotificationSummary>> call, Response<List<NotificationSummary>> response) {
@@ -231,6 +228,22 @@ public class NotificationsActivity extends AppCompatActivity
                 ErrorUtils.showGenServError(NotificationsActivity.this);
             }
         });
+    }
+
+
+    public void sendSMS(String number)
+    {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null)));
+    }
+
+    @Override
+    protected void onResume() {
+        if (deviceIsLandscape){
+            landscapeDetails.setVisibility(View.GONE);
+            landscapeEmpty.setVisibility(View.VISIBLE);
+        }
+        super.onResume();
+        refreshlist();
     }
 
 

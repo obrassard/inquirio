@@ -82,6 +82,7 @@ implements NavigationView.OnNavigationItemSelectedListener {
                 FoundItemSummary selecteditem = m_adapterFoundItems.getItem(position);
                 Intent i = new Intent(MyItemsActivity.this.getApplicationContext(),ItemsDetailActivity.class);
                 i.putExtra("item.id",selecteditem.itemID);
+                i.putExtra("killOnLandscape",false);
                 startActivity(i);
             }
         });
@@ -92,6 +93,7 @@ implements NavigationView.OnNavigationItemSelectedListener {
                 LostItemSummary selecteditem = m_adapterLostItems.getItem(position);
                 Intent i = new Intent(MyItemsActivity.this.getApplicationContext(),ItemsDetailActivity.class);
                 i.putExtra("item.id",selecteditem.itemID);
+                i.putExtra("killOnLandscape",false);
                 startActivity(i);
             }
         });
