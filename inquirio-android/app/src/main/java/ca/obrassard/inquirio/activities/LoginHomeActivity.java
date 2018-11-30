@@ -1,10 +1,12 @@
 package ca.obrassard.inquirio.activities;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -17,11 +19,33 @@ import ca.obrassard.inquirio.transfer.SubscriptionCheckRequest;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Path;
 
 public class LoginHomeActivity extends AppCompatActivity {
 
     InquirioService service = RetrofitUtil.get();
+    ProgressDialog progressDialog ;
+
+    private void beginLoading() {
+        //Hide keyboard
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        if(imm.isAcceptingText()) {
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+
+        if (progressDialog == null)
+        progressDialog = ProgressDialog.show(LoginHomeActivity.this,
+                "Veuillez patienter",null,true);
+    }
+
+
+    private void endLoading() {
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +69,11 @@ public class LoginHomeActivity extends AppCompatActivity {
     public void LoginStepOne(final String email){
         SubscriptionCheckRequest scr = new SubscriptionCheckRequest();
         scr.email = email;
+        beginLoading();
         service.isSubscribed(scr).enqueue(new Callback<RequestResult>() {
             @Override
             public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
+                endLoading();
                 if (!response.isSuccessful()) {
                     ErrorUtils.showExceptionError(LoginHomeActivity.this, response.errorBody());
                     return;
@@ -65,6 +91,7 @@ public class LoginHomeActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<RequestResult> call, Throwable t) {
+                endLoading();
                 ErrorUtils.showGenServError(LoginHomeActivity.this);
             }
         });

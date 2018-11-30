@@ -1,5 +1,6 @@
 package ca.obrassard.inquirio.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -62,6 +64,23 @@ public class NotificationsActivity extends AppCompatActivity
     ScrollView landscapeDetails;
     LinearLayout landscapeEmpty;
 
+    ProgressDialog progressDialog ;
+
+    private void beginLoading() {
+        if (progressDialog == null)
+        progressDialog = ProgressDialog.show(NotificationsActivity.this,
+                "Veuillez patienter",null,true);
+    }
+
+
+    private void endLoading() {
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         deviceIsLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
@@ -103,9 +122,11 @@ public class NotificationsActivity extends AppCompatActivity
             btnNon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    beginLoading();
                     service.denyCandidateNotification((int)selectedNotifId, LoggedUser.token).enqueue(new Callback<RequestResult>() {
                         @Override
                         public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
+                            endLoading();
                             if (!response.isSuccessful()) {
                                 ErrorUtils.showExceptionError(NotificationsActivity.this, response.errorBody());
                                 return;
@@ -120,6 +141,7 @@ public class NotificationsActivity extends AppCompatActivity
 
                         @Override
                         public void onFailure(Call<RequestResult> call, Throwable t) {
+                            endLoading();
                             ErrorUtils.showGenServError(NotificationsActivity.this);
                         }
                     });
@@ -129,9 +151,11 @@ public class NotificationsActivity extends AppCompatActivity
             btnOui.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    beginLoading();
                     service.acceptCandidateNotification((int) selectedNotifId, LoggedUser.token).enqueue(new Callback<FinderContactDetail>() {
                         @Override
                         public void onResponse(Call<FinderContactDetail> call, Response<FinderContactDetail> response) {
+                            endLoading();
                             if (!response.isSuccessful()) {
                                 ErrorUtils.showExceptionError(NotificationsActivity.this, response.errorBody());
                                 return;
@@ -144,6 +168,7 @@ public class NotificationsActivity extends AppCompatActivity
 
                         @Override
                         public void onFailure(Call<FinderContactDetail> call, Throwable t) {
+                            endLoading();
                             ErrorUtils.showGenServError(NotificationsActivity.this);
                         }
                     });
@@ -175,10 +200,11 @@ public class NotificationsActivity extends AppCompatActivity
 
                     landscapeDetails.setVisibility(View.VISIBLE);
                     landscapeEmpty.setVisibility(View.GONE);
+                    beginLoading();
                     service.getNotificationDetail((int)selectedNotifId, LoggedUser.token).enqueue(new Callback<Notification>() {
                         @Override
                         public void onResponse(Call<Notification> call, Response<Notification> response) {
-
+                            endLoading();
                             if (!response.isSuccessful()) {
                                 ErrorUtils.showExceptionError(NotificationsActivity.this, response.errorBody());
                                 return;
@@ -197,6 +223,7 @@ public class NotificationsActivity extends AppCompatActivity
 
                         @Override
                         public void onFailure(Call<Notification> call, Throwable t) {
+                            endLoading();
                             ErrorUtils.showGenServError(NotificationsActivity.this);
                         }
                     });
@@ -210,9 +237,11 @@ public class NotificationsActivity extends AppCompatActivity
     }
 
     public void refreshlist(){
+        beginLoading();
         service.getPotentiallyFoundItems(LoggedUser.data.userID, LoggedUser.token).enqueue(new Callback<List<NotificationSummary>>() {
             @Override
             public void onResponse(Call<List<NotificationSummary>> call, Response<List<NotificationSummary>> response) {
+                endLoading();
                 if (!response.isSuccessful()) {
                     ErrorUtils.showExceptionError(NotificationsActivity.this, response.errorBody());
                     return;
@@ -225,6 +254,7 @@ public class NotificationsActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<List<NotificationSummary>> call, Throwable t) {
+                endLoading();
                 ErrorUtils.showGenServError(NotificationsActivity.this);
             }
         });
@@ -233,7 +263,9 @@ public class NotificationsActivity extends AppCompatActivity
 
     public void sendSMS(String number)
     {
+        beginLoading();
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null)));
+        endLoading();
     }
 
     @Override

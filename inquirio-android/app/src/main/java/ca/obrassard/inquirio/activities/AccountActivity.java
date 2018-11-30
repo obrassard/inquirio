@@ -1,5 +1,6 @@
 package ca.obrassard.inquirio.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -36,6 +38,25 @@ public class AccountActivity extends AppCompatActivity
     RatingBar ratingBar;
     TextView nbItemTFound;
 
+    ProgressDialog progressDialog ;
+
+    private void beginLoading() {
+        //Hide keyboard
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        if(imm.isAcceptingText()) {
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        if (progressDialog == null)
+        progressDialog = ProgressDialog.show(AccountActivity.this,
+                "Veuillez patienter",null,true);
+    }
+
+    private void endLoading() {
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +90,11 @@ public class AccountActivity extends AppCompatActivity
             }
         });
 
+        beginLoading();
         service.getUserDetail(LoggedUser.data.userID, LoggedUser.token).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
+                endLoading();
                 if (!response.isSuccessful()) {
                     ErrorUtils.showExceptionError(AccountActivity.this, response.errorBody());
                     return;
@@ -85,15 +108,19 @@ public class AccountActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
+                endLoading();
                 ErrorUtils.showGenServError(AccountActivity.this);
             }
         });
     }
 
     private void logout (){
+        beginLoading();
         service.logout(LoggedUser.data.userID).enqueue(new Callback<LogoutResponse>() {
+
             @Override
             public void onResponse(Call<LogoutResponse> call, Response<LogoutResponse> response) {
+                endLoading();
                 if (!response.isSuccessful()) {
                     ErrorUtils.showExceptionError(AccountActivity.this, response.errorBody());
                     return;
@@ -108,6 +135,7 @@ public class AccountActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<LogoutResponse> call, Throwable t) {
+                endLoading();
                 ErrorUtils.showGenServError(AccountActivity.this);
             }
         });

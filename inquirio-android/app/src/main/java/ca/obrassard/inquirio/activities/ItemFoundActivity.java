@@ -2,6 +2,7 @@ package ca.obrassard.inquirio.activities;
 
 import android.Manifest;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,6 +22,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,6 +53,28 @@ import retrofit2.Response;
 public class ItemFoundActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    ProgressDialog progressDialog ;
+
+    private void beginLoading() {
+        //Hide keyboard
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        if(imm.isAcceptingText()) {
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+
+        if (progressDialog == null)
+        progressDialog = ProgressDialog.show(ItemFoundActivity.this,
+                "Veuillez patienter",null,true);
+    }
+
+    private void endLoading() {
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+    }
+
+
     InquirioService service = RetrofitUtil.get();
     private Bitmap itemImage = null;
 
@@ -72,9 +96,11 @@ public class ItemFoundActivity extends AppCompatActivity
         DrawerUtils.prepareHeader(navigationView);
 
         final int itemID = getIntent().getIntExtra("item.id",0);
+        beginLoading();
         service.getItemName(itemID, LoggedUser.token).enqueue(new Callback<StringWrapper>() {
             @Override
             public void onResponse(Call<StringWrapper> call, Response<StringWrapper> response) {
+                endLoading();
                 if (!response.isSuccessful()) {
                     ErrorUtils.showExceptionError(ItemFoundActivity.this, response.errorBody());
                     return;
@@ -85,6 +111,7 @@ public class ItemFoundActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<StringWrapper> call, Throwable t) {
+                endLoading();
                 ErrorUtils.showGenServError(ItemFoundActivity.this);
                 finish();
             }
@@ -126,10 +153,11 @@ public class ItemFoundActivity extends AppCompatActivity
                 byte[] image = bytearrayoutputstream.toByteArray();
                 request.image = image;
 
+                beginLoading();
                 service.sendFoundRequest(request, LoggedUser.token).enqueue(new Callback<RequestResult>() {
                     @Override
                     public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
-
+                        endLoading();
                         if (!response.isSuccessful()) {
                             ErrorUtils.showExceptionError(ItemFoundActivity.this, response.errorBody());
                             return;
@@ -142,6 +170,7 @@ public class ItemFoundActivity extends AppCompatActivity
 
                     @Override
                     public void onFailure(Call<RequestResult> call, Throwable t) {
+                        endLoading();
                         ErrorUtils.showGenServError(ItemFoundActivity.this);}
                 });
             }

@@ -1,5 +1,6 @@
 package ca.obrassard.inquirio.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -11,8 +12,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -59,6 +62,23 @@ public class ItemsDetailActivity extends AppCompatActivity
     Button btnIFoundThis;
     Button btnDeleteItem;
     Button btnContact;
+
+    ProgressDialog progressDialog ;
+
+    private void beginLoading() {
+        if (progressDialog == null)
+        progressDialog = ProgressDialog.show(ItemsDetailActivity.this,
+                "Veuillez patienter",null,true);
+    }
+
+
+    private void endLoading() {
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,9 +133,11 @@ public class ItemsDetailActivity extends AppCompatActivity
 
         //Affichage des details de l'item
         itemId = (int)getIntent().getLongExtra("item.id",0);
+        beginLoading();
         service.getItemDetail(itemId, LoggedUser.token).enqueue(new Callback<LostItem>() {
             @Override
             public void onResponse(Call<LostItem> call, Response<LostItem> response) {
+                endLoading();
                 if (!response.isSuccessful()) {
                     ErrorUtils.showExceptionError(ItemsDetailActivity.this, response.errorBody());
                     return;
@@ -155,10 +177,12 @@ public class ItemsDetailActivity extends AppCompatActivity
                 } else {
                     btnContact.setVisibility(View.GONE);
                 }
+                endLoading();
             }
 
             @Override
             public void onFailure(Call<LostItem> call, Throwable t) {
+                endLoading();
                 ErrorUtils.showGenServError(ItemsDetailActivity.this);
             }
         });
@@ -167,9 +191,11 @@ public class ItemsDetailActivity extends AppCompatActivity
         btnDeleteItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            beginLoading();
             service.deleteItem(itemId, LoggedUser.token).enqueue(new Callback<RequestResult>() {
                 @Override
                 public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
+                    endLoading();
                     if (!response.isSuccessful()) {
                         ErrorUtils.showExceptionError(ItemsDetailActivity.this, response.errorBody());
                         return;
@@ -186,6 +212,7 @@ public class ItemsDetailActivity extends AppCompatActivity
 
                 @Override
                 public void onFailure(Call<RequestResult> call, Throwable t) {
+                    endLoading();
                     ErrorUtils.showGenServError(ItemsDetailActivity.this);
                 }
             });
@@ -204,9 +231,11 @@ public class ItemsDetailActivity extends AppCompatActivity
         btnContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                beginLoading();
                 service.getFinderContactDetail(itemId,LoggedUser.token).enqueue(new Callback<FinderContactDetail>() {
                     @Override
                     public void onResponse(Call<FinderContactDetail> call, Response<FinderContactDetail> response) {
+                        endLoading();
                         if (!response.isSuccessful()) {
                             ErrorUtils.showExceptionError(ItemsDetailActivity.this, response.errorBody());
                             return;
@@ -217,6 +246,7 @@ public class ItemsDetailActivity extends AppCompatActivity
 
                     @Override
                     public void onFailure(Call<FinderContactDetail> call, Throwable t) {
+                        endLoading();
                         ErrorUtils.showGenServError(ItemsDetailActivity.this);
                     }
                 });
@@ -227,9 +257,11 @@ public class ItemsDetailActivity extends AppCompatActivity
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
+        beginLoading();
         service.getItemLocation(itemId, LoggedUser.token).enqueue(new Callback<Location>() {
             @Override
             public void onResponse(Call<Location> call, Response<Location> response) {
+                endLoading();
                 if (!response.isSuccessful()) {
                     ErrorUtils.showExceptionError(ItemsDetailActivity.this, response.errorBody());
                     return;
@@ -255,6 +287,7 @@ public class ItemsDetailActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<Location> call, Throwable t) {
+                endLoading();
                 ErrorUtils.showGenServError(ItemsDetailActivity.this);
             }
         });

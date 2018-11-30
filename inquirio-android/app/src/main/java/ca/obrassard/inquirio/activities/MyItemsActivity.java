@@ -1,5 +1,6 @@
 package ca.obrassard.inquirio.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -36,6 +38,23 @@ implements NavigationView.OnNavigationItemSelectedListener {
     MyLostItemAdapter m_adapterLostItems;
     MyFoundItemAdapter m_adapterFoundItems;
     InquirioService service = RetrofitUtil.get();
+
+    ProgressDialog progressDialog ;
+
+    private void beginLoading() {
+        if (progressDialog == null)
+        progressDialog = ProgressDialog.show(MyItemsActivity.this,
+                "Veuillez patienter",null,true);
+    }
+
+
+    private void endLoading() {
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,10 +121,11 @@ implements NavigationView.OnNavigationItemSelectedListener {
     @Override
     protected void onResume() {
         super.onResume();
+        beginLoading();
         service.getLostItemsByOwner(LoggedUser.data.userID, LoggedUser.token).enqueue(new Callback<List<LostItemSummary>>() {
             @Override
             public void onResponse(Call<List<LostItemSummary>> call, Response<List<LostItemSummary>> response) {
-
+                //endLoading();
                 if (!response.isSuccessful()) {
                     ErrorUtils.showExceptionError(MyItemsActivity.this, response.errorBody());
                     return;
@@ -119,13 +139,16 @@ implements NavigationView.OnNavigationItemSelectedListener {
 
             @Override
             public void onFailure(Call<List<LostItemSummary>> call, Throwable t) {
+                //endLoading();
                 ErrorUtils.showGenServError(MyItemsActivity.this);
             }
         });
 
+
         service.getFoundItemsByOwner(LoggedUser.data.userID, LoggedUser.token).enqueue(new Callback<List<FoundItemSummary>>() {
             @Override
             public void onResponse(Call<List<FoundItemSummary>> call, Response<List<FoundItemSummary>> response) {
+                endLoading();
                 if (!response.isSuccessful()) {
                     ErrorUtils.showExceptionError(MyItemsActivity.this, response.errorBody());
                     return;
@@ -140,6 +163,7 @@ implements NavigationView.OnNavigationItemSelectedListener {
 
             @Override
             public void onFailure(Call<List<FoundItemSummary>> call, Throwable t) {
+                endLoading();
                 ErrorUtils.showGenServError(MyItemsActivity.this);
             }
         });

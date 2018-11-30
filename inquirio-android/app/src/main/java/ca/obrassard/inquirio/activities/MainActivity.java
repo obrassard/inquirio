@@ -2,6 +2,7 @@ package ca.obrassard.inquirio.activities;
 
 import android.Manifest;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -20,6 +21,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -82,6 +84,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     LinearLayout landscapeDetailLayout;
     LinearLayout landscapeDetailLayoutEmpty;
     GoogleMap m_googleMap;
+
+    ProgressDialog progressDialog ;
+
+    private void beginLoading() {
+        if (progressDialog == null)
+        progressDialog = ProgressDialog.show(MainActivity.this,
+                "Veuillez patienter",null,true);
+    }
+
+
+    private void endLoading() {
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+    }
 
 
     @Override
@@ -171,9 +189,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             btnDeleteItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    beginLoading();
                     service.deleteItem(itemId, LoggedUser.token).enqueue(new Callback<RequestResult>() {
                         @Override
                         public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
+                            endLoading();
                             if (!response.isSuccessful()) {
                                 ErrorUtils.showExceptionError(MainActivity.this, response.errorBody());
                                 return;
@@ -192,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         @Override
                         public void onFailure(Call<RequestResult> call, Throwable t) {
+                            endLoading();
                             ErrorUtils.showGenServError(MainActivity.this);
                         }
                     });
@@ -210,9 +231,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             btnContact.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    beginLoading();
                     service.getFinderContactDetail(itemId,LoggedUser.token).enqueue(new Callback<FinderContactDetail>() {
                         @Override
                         public void onResponse(Call<FinderContactDetail> call, Response<FinderContactDetail> response) {
+                            endLoading();
                             if (!response.isSuccessful()) {
                                 ErrorUtils.showExceptionError(MainActivity.this, response.errorBody());
                                 return;
@@ -223,7 +246,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         @Override
                         public void onFailure(Call<FinderContactDetail> call, Throwable t) {
-                            ErrorUtils.showGenServError(MainActivity.this);
+                           endLoading();
+                           ErrorUtils.showGenServError(MainActivity.this);
                         }
                     });
                 }
@@ -252,9 +276,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     landscapeDetailLayout.setVisibility(View.VISIBLE);
                     landscapeDetailLayoutEmpty.setVisibility(View.GONE);
 
+                    beginLoading();
                     service.getItemDetail(itemId, LoggedUser.token).enqueue(new Callback<LostItem>() {
                         @Override
                         public void onResponse(Call<LostItem> call, Response<LostItem> response) {
+                            //endLoading();
                             if (!response.isSuccessful()) {
                                 ErrorUtils.showExceptionError(MainActivity.this, response.errorBody());
                                 return;
@@ -298,12 +324,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         @Override
                         public void onFailure(Call<LostItem> call, Throwable t) {
+                            //endLoading();
                             ErrorUtils.showGenServError(MainActivity.this);
                         }
                     });
                     service.getItemLocation(itemId, LoggedUser.token).enqueue(new Callback<ca.obrassard.inquirio.transfer.Location>() {
                         @Override
                         public void onResponse(Call<ca.obrassard.inquirio.transfer.Location> call, Response<ca.obrassard.inquirio.transfer.Location> response) {
+                            endLoading();
                             if (!response.isSuccessful()) {
                                 ErrorUtils.showExceptionError(MainActivity.this, response.errorBody());
                                 return;
@@ -330,6 +358,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         @Override
                         public void onFailure(Call<ca.obrassard.inquirio.transfer.Location> call, Throwable t) {
+                            endLoading();
                             ErrorUtils.showGenServError(MainActivity.this);
                         }
                     });
@@ -434,9 +463,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         LocationRequest request = new LocationRequest();
                         request.latitude = location.getLatitude();
                         request.longitude = location.getLongitude();
+                        beginLoading();
                         service.getNearLostItems(request, LoggedUser.token).enqueue(new Callback<List<LostItemSummary>>() {
                             @Override
                             public void onResponse(Call<List<LostItemSummary>> call, Response<List<LostItemSummary>> response) {
+                                endLoading();
                                 if (!response.isSuccessful()) {
                                     ErrorUtils.showExceptionError(MainActivity.this, response.errorBody());
                                     return;
@@ -450,6 +481,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                             @Override
                             public void onFailure(Call<List<LostItemSummary>> call, Throwable t) {
+                                endLoading();
                                 ErrorUtils.showGenServError(MainActivity.this);
                             }
                         });

@@ -1,5 +1,6 @@
 package ca.obrassard.inquirio.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -44,6 +46,28 @@ public class AddItemActivity extends AppCompatActivity
     EditText txtReward;
     Place selectedplace;
     InquirioService service;
+
+    ProgressDialog progressDialog ;
+
+    private void beginLoading() {
+        //Hide keyboard
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        if(imm.isAcceptingText()) {
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        if (progressDialog == null)
+        progressDialog = ProgressDialog.show(AddItemActivity.this,
+                "Veuillez patienter",null,true);
+    }
+
+
+    private void endLoading() {
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,10 +128,11 @@ public class AddItemActivity extends AppCompatActivity
                     item.longitude = selectedplace.getLatLng().longitude;
                     item.locationName = selectedplace.getName().toString();
 
+                    beginLoading();
                     service.addNewItem(item, LoggedUser.token).enqueue(new Callback<Integer>() {
                         @Override
                         public void onResponse(Call<Integer> call, Response<Integer> response) {
-
+                            endLoading();
                             if (!response.isSuccessful()) {
                                 ErrorUtils.showExceptionError(AddItemActivity.this, response.errorBody());
                                 return;
@@ -119,10 +144,12 @@ public class AddItemActivity extends AppCompatActivity
                             args.putLong("itemid",itemId);
                             dialog.setArguments(args);
                             dialog.show(getFragmentManager(),"dialog");
+                            beginLoading();
                         }
 
                         @Override
                         public void onFailure(Call<Integer> call, Throwable t) {
+                            endLoading();
                             ErrorUtils.showGenServError(AddItemActivity.this);
                         }
                     });
@@ -133,6 +160,7 @@ public class AddItemActivity extends AppCompatActivity
 
     //region [Méthodes de PlaceAPI]
     public void getLocationWithPlacePicker(){
+        beginLoading();
         int PLACE_PICKER_REQUEST = 1;
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         try {
@@ -146,6 +174,7 @@ public class AddItemActivity extends AppCompatActivity
 
     //Recuperation de l'emplacement séléctionné dans le placepicker
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        endLoading();
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 selectedplace = PlacePicker.getPlace(this,data);

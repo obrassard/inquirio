@@ -111,9 +111,4 @@
     <string name="TextLengthViolation_description">La description de l\'item est trop longue !</string>
     <string name="AccesDenied_reward">Veuillez vous identifier à inquirio</string>
     <string name="Forbidden">Vous n\'avez pas les autorisations requises pour accéder à cette ressource</string>
-
-
-
-
-
 </resources>

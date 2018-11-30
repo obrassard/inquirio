@@ -1,7 +1,9 @@
 package ca.obrassard.inquirio.activities;
 
+import android.app.ProgressDialog;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,8 +18,26 @@ public class MapDetail extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
+    ProgressDialog progressDialog ;
+
+    private void beginLoading() {
+        if (progressDialog == null)
+        progressDialog = ProgressDialog.show(MapDetail.this,
+                "Veuillez patienter",null,true);
+    }
+
+
+    private void endLoading() {
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        beginLoading();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_detail);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -46,5 +66,6 @@ public class MapDetail extends FragmentActivity implements OnMapReadyCallback {
         LatLng position = new LatLng(i.getDouble("lat"), i.getDouble("lng"));
         mMap.addMarker(new MarkerOptions().position(position).title("Lost item position"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+        endLoading();
     }
 }

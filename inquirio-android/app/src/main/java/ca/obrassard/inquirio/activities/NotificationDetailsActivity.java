@@ -1,5 +1,6 @@
 package ca.obrassard.inquirio.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,6 +41,22 @@ public class NotificationDetailsActivity extends AppCompatActivity
 
     InquirioService service = RetrofitUtil.get();
     String telephone = "";
+
+    ProgressDialog progressDialog ;
+
+    private void beginLoading() {
+        if (progressDialog == null)
+        progressDialog = ProgressDialog.show(NotificationDetailsActivity.this,
+                "Veuillez patienter",null,true);
+    }
+
+    private void endLoading() {
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +96,11 @@ public class NotificationDetailsActivity extends AppCompatActivity
 
         final int notifID = (int)getIntent().getLongExtra("notification.id",1);
 
+        beginLoading();
         service.getNotificationDetail(notifID, LoggedUser.token).enqueue(new Callback<Notification>() {
             @Override
             public void onResponse(Call<Notification> call, Response<Notification> response) {
-
+                endLoading();
                 if (!response.isSuccessful()) {
                     ErrorUtils.showExceptionError(NotificationDetailsActivity.this, response.errorBody());
                     return;
@@ -102,6 +121,7 @@ public class NotificationDetailsActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<Notification> call, Throwable t) {
+                endLoading();
                 ErrorUtils.showGenServError(NotificationDetailsActivity.this);
                 NotificationDetailsActivity.this.finish();
             }
@@ -110,9 +130,11 @@ public class NotificationDetailsActivity extends AppCompatActivity
         btnNon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                beginLoading();
                 service.denyCandidateNotification(notifID, LoggedUser.token).enqueue(new Callback<RequestResult>() {
                     @Override
                     public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
+                        endLoading();
                         if (!response.isSuccessful()) {
                             ErrorUtils.showExceptionError(NotificationDetailsActivity.this, response.errorBody());
                             return;
@@ -124,6 +146,7 @@ public class NotificationDetailsActivity extends AppCompatActivity
 
                     @Override
                     public void onFailure(Call<RequestResult> call, Throwable t) {
+                        endLoading();
                         ErrorUtils.showGenServError(NotificationDetailsActivity.this);
                     }
                 });
@@ -133,9 +156,11 @@ public class NotificationDetailsActivity extends AppCompatActivity
         btnOui.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                beginLoading();
                 service.acceptCandidateNotification((int) notifID, LoggedUser.token).enqueue(new Callback<FinderContactDetail>() {
                     @Override
                     public void onResponse(Call<FinderContactDetail> call, Response<FinderContactDetail> response) {
+                        endLoading();
                         if (!response.isSuccessful()) {
                             ErrorUtils.showExceptionError(NotificationDetailsActivity.this, response.errorBody());
                             return;
@@ -148,6 +173,7 @@ public class NotificationDetailsActivity extends AppCompatActivity
 
                     @Override
                     public void onFailure(Call<FinderContactDetail> call, Throwable t) {
+                        endLoading();
                         ErrorUtils.showGenServError(NotificationDetailsActivity.this);
                     }
                 });
@@ -166,7 +192,9 @@ public class NotificationDetailsActivity extends AppCompatActivity
 
     public void sendSMS(String number)
     {
+        beginLoading();
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null)));
+        endLoading();
     }
 
     //region [Evennement du tirroir]

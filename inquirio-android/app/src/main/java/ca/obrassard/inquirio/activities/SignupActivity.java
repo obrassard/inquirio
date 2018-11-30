@@ -1,11 +1,13 @@
 package ca.obrassard.inquirio.activities;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,6 +27,27 @@ public class SignupActivity extends AppCompatActivity {
 
 
     InquirioService service = RetrofitUtil.get();
+
+    ProgressDialog progressDialog ;
+
+    private void beginLoading() {
+        //Hide keyboard
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        if(imm.isAcceptingText()) {
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+
+        if (progressDialog == null)
+        progressDialog = ProgressDialog.show(SignupActivity.this,
+                "Veuillez patienter",null,true);
+    }
+
+    private void endLoading() {
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +85,14 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void signup(SignupRequest request){
+        beginLoading();
         service.signup(request).enqueue(new Callback<LoginResponse>() {
             @SuppressLint("NewApi")
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-
                 if (!response.isSuccessful()) {
                     ErrorUtils.showExceptionError(SignupActivity.this, response.errorBody());
+                    endLoading();
                     return;
                 }
 
@@ -81,14 +105,17 @@ public class SignupActivity extends AppCompatActivity {
                     Intent intent = new Intent(SignupActivity.this.getApplicationContext(), MainActivity.class);
                     intent.putExtra("firstconnexion",loginResponse.isFirstLogin);
                     startActivity(intent);
+                    endLoading();
                     SignupActivity.this.finishAffinity();
                     ActivityCompat.finishAffinity(SignupActivity.this);
 
                 }
+                endLoading();
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
+                endLoading();
                 ErrorUtils.showGenServError(SignupActivity.this);
             }
         });
