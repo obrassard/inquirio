@@ -4,7 +4,9 @@ import ca.obrassard.exception.APIErrorCodes;
 import ca.obrassard.exception.APIRequestException;
 import ca.obrassard.inquirioCommons.*;
 import ca.obrassard.jooqentities.Routines;
-import ca.obrassard.jooqentities.routines.Updatefounditemcount;
+import ca.obrassard.jooqentities.tables.records.LostitemsRecord;
+import ca.obrassard.jooqentities.tables.records.NotificationRecord;
+import ca.obrassard.jooqentities.tables.records.UsersRecord;
 import ca.obrassard.model.LostItem;
 import ca.obrassard.model.Notification;
 import ca.obrassard.model.User;
@@ -13,7 +15,6 @@ import org.joda.time.DateTime;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.ws.rs.*;
 import java.nio.charset.StandardCharsets;
@@ -21,9 +22,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.obrassard.jooqentities.tables.records.LostitemsRecord;
-import ca.obrassard.jooqentities.tables.records.NotificationRecord;
-import ca.obrassard.jooqentities.tables.records.UsersRecord;
 import static ca.obrassard.jooqentities.tables.Lostitems.LOSTITEMS;
 import static ca.obrassard.jooqentities.tables.Notification.NOTIFICATION;
 import static ca.obrassard.jooqentities.tables.Users.USERS;
@@ -44,7 +42,11 @@ public class InquirioWebService {
         this.context = DatasourceConfig.getContext();
     }
 
-    
+    private void FakeNetworkDelay() throws InterruptedException {
+        Thread.sleep(2000);
+    }
+
+
     @GET
     public String getVersion(){
         return "Inquirio Web API v1.0 - All systems are operational";
@@ -59,7 +61,8 @@ public class InquirioWebService {
     
     @POST
     @Path("checksubscription")
-    public RequestResult isSubscribed(SubscriptionCheckRequest request) throws APIRequestException {
+    public RequestResult isSubscribed(SubscriptionCheckRequest request) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
         Validator.validateEmail(request.email);
         boolean exists = context.fetchExists(context.selectOne().from(USERS).where(USERS.EMAIL.eq(request.email)));
         System.out.println("Subscription checked on " + DateTime.now().toString());
@@ -76,8 +79,8 @@ public class InquirioWebService {
     
     @POST
     @Path("login")
-    public LoginResponse login(LoginRequest loginRequest) throws APIRequestException {
-
+    public LoginResponse login(LoginRequest loginRequest) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
         Validator.validateEmail(loginRequest.email);
 
         String hashedPasswd = Hashing.sha256().hashString(loginRequest.password, StandardCharsets.UTF_8).toString();
@@ -112,8 +115,8 @@ public class InquirioWebService {
     
     @POST
     @Path("signup")
-    public LoginResponse signup(SignupRequest userInfos) throws APIRequestException {
-
+    public LoginResponse signup(SignupRequest userInfos) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
         Validator.validateEmail(userInfos.email);
         Validator.emailIsUnique(userInfos.email, context);
         Validator.validatePhone(userInfos.cellNumber);
@@ -149,8 +152,8 @@ public class InquirioWebService {
     
     @GET
     @Path("logout")
-    public LogoutResponse logout(@HeaderParam("token") int token) throws APIRequestException {
-
+    public LogoutResponse logout(@HeaderParam("token") int token) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
          //TODO : Validate token
          int authUserId = AuthValidator.validateToken(token,context);
 
@@ -175,8 +178,8 @@ public class InquirioWebService {
     
     @POST
     @Path("items/near")
-    public List<LostItemSummary> getNearLostItems(LocationRequest currentLocation, @HeaderParam("token") int token) throws APIRequestException {
-
+    public List<LostItemSummary> getNearLostItems(LocationRequest currentLocation, @HeaderParam("token") int token) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
         //TODO : Validate token
         int authUserId = AuthValidator.validateToken(token,context);
         
@@ -210,7 +213,10 @@ public class InquirioWebService {
     
     @GET
     @Path("users/{id}")
-    public User getUserDetail(@PathParam("id") int userID, @HeaderParam("token") int token) throws APIRequestException {
+    public User getUserDetail(@PathParam("id") int userID, @HeaderParam("token") int token) throws APIRequestException, InterruptedException {
+
+        FakeNetworkDelay();
+
         //TODO : Validate token 
         int authUserId = AuthValidator.validateToken(token,context);
         
@@ -239,7 +245,9 @@ public class InquirioWebService {
     
     @POST
     @Path("items")
-    public int addNewItem(LostItemCreationRequest item, @HeaderParam("token") int token) throws APIRequestException {
+    public int addNewItem(LostItemCreationRequest item, @HeaderParam("token") int token) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
+
         //TODO : Validate token
         int authUserId = AuthValidator.validateToken(token,context);
         //Validator.isAnExistantUserID(authUserId,context);
@@ -274,7 +282,9 @@ public class InquirioWebService {
     
     @GET
     @Path("items/{id}")
-    public LostItem getItemDetail(@PathParam("id") int itemID, @HeaderParam("token") int token) throws APIRequestException {
+    public LostItem getItemDetail(@PathParam("id") int itemID, @HeaderParam("token") int token) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
+
         //TODO : Validate token
         int authUserId = AuthValidator.validateToken(token,context);
         
@@ -297,7 +307,9 @@ public class InquirioWebService {
     
     @GET
     @Path("items/{id}/location")
-    public Location getItemLocation(@PathParam("id") int itemID, @HeaderParam("token") int token) throws APIRequestException {
+    public Location getItemLocation(@PathParam("id") int itemID, @HeaderParam("token") int token) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
+
         //TODO : Validate token
         int authUserId = AuthValidator.validateToken(token,context);
         
@@ -322,8 +334,8 @@ public class InquirioWebService {
     
     @DELETE
     @Path("items/{id}")
-    public RequestResult deleteItem(@PathParam("id") int itemID, @HeaderParam("token") int token) throws APIRequestException {
-        
+    public RequestResult deleteItem(@PathParam("id") int itemID, @HeaderParam("token") int token) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
         //TODO : Validate Token
         int authUserId = AuthValidator.validateToken(token,context);
 
@@ -350,8 +362,8 @@ public class InquirioWebService {
     
     @GET
     @Path("items/{id}/title")
-    public StringWrapper getItemName(@PathParam("id") int itemID, @HeaderParam("token") int token) throws APIRequestException {
-
+    public StringWrapper getItemName(@PathParam("id") int itemID, @HeaderParam("token") int token) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
         //TODO : Validate Token
         int authUserId = AuthValidator.validateToken(token,context);
         
@@ -375,7 +387,9 @@ public class InquirioWebService {
      */
     @POST
     @Path("notifications")
-    public RequestResult sendFoundRequest(FoundRequest request, @HeaderParam("token") int token) throws APIRequestException {
+    public RequestResult sendFoundRequest(FoundRequest request, @HeaderParam("token") int token) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
+
         //TODO : Validate Token
         int authUserId = AuthValidator.validateToken(token,context);
         
@@ -403,8 +417,8 @@ public class InquirioWebService {
      */
     @GET
     @Path("users/{id}/lostitems")
-    public List<LostItemSummary> getLostItemsByOwner(@PathParam("id") int userID, @HeaderParam("token") int token) throws APIRequestException {
-
+    public List<LostItemSummary> getLostItemsByOwner(@PathParam("id") int userID, @HeaderParam("token") int token) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
         //TODO : Validate Token
         int authUserId = AuthValidator.validateToken(token,context);
         if (userID != authUserId){
@@ -440,8 +454,8 @@ public class InquirioWebService {
     
     @GET
     @Path("users/{id}/founditems")
-    public List<FoundItemSummary> getFoundItemsByOwner(@PathParam("id") int userID, @HeaderParam("token") int token) throws APIRequestException {
-        
+    public List<FoundItemSummary> getFoundItemsByOwner(@PathParam("id") int userID, @HeaderParam("token") int token) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
         //TODO : Validate Real Token
         int authUserId = AuthValidator.validateToken(token,context);
         if (userID != authUserId){
@@ -477,8 +491,8 @@ public class InquirioWebService {
     
     @GET
     @Path("users/{id}/notifications")
-    public List<NotificationSummary> getPotentiallyFoundItems(@PathParam("id") int userID, @HeaderParam("token") int token) throws APIRequestException {
-
+    public List<NotificationSummary> getPotentiallyFoundItems(@PathParam("id") int userID, @HeaderParam("token") int token) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
         //TODO : Validate Real Token
         int authUserId = AuthValidator.validateToken(token,context);
         if (userID != authUserId){
@@ -517,8 +531,8 @@ public class InquirioWebService {
     
     @GET
     @Path("notifications/{id}")
-    public ca.obrassard.inquirioCommons.Notification getNotificationDetail(@PathParam("id") int notificationID, @HeaderParam("token") int token) throws APIRequestException {
-
+    public ca.obrassard.inquirioCommons.Notification getNotificationDetail(@PathParam("id") int notificationID, @HeaderParam("token") int token) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
 
         //TODO : Validate Real Token
         int authUserId = AuthValidator.validateToken(token,context);
@@ -556,12 +570,12 @@ public class InquirioWebService {
      * @param notificationID identifiant de la notif de candidat
      * @return True si la requête s'est bien déroulée
      */
-
-    //TODO : Le type de retour a été changé ici!
     
     @GET
     @Path("notifications/{id}/deny")
-    public RequestResult denyCandidateNotification(@PathParam("id") int notificationID, @HeaderParam("token") int token) throws APIRequestException {
+    public RequestResult denyCandidateNotification(@PathParam("id") int notificationID, @HeaderParam("token") int token) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
+
         //TODO : Validate Real Token
         int authUserId = AuthValidator.validateToken(token,context);
 
@@ -595,7 +609,9 @@ public class InquirioWebService {
     
     @GET
     @Path("notifications/{id}/accept")
-    public FinderContactDetail acceptCandidateNotification(@PathParam("id") int notificationID, @HeaderParam("token") int token) throws APIRequestException {
+    public FinderContactDetail acceptCandidateNotification(@PathParam("id") int notificationID, @HeaderParam("token") int token) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
+
         //TODO : Validate Real Token
         int authUserId = AuthValidator.validateToken(token,context);
 
@@ -651,8 +667,8 @@ public class InquirioWebService {
      */
     @GET
     @Path("notifications/{id}/contact")
-    public FinderContactDetail getFinderContactDetail(@PathParam("id") int itemID, @HeaderParam("token") int token) throws APIRequestException {
-
+    public FinderContactDetail getFinderContactDetail(@PathParam("id") int itemID, @HeaderParam("token") int token) throws APIRequestException, InterruptedException {
+        FakeNetworkDelay();
         //TODO : Validate Real Token
         int authUserId = AuthValidator.validateToken(token,context);
 
