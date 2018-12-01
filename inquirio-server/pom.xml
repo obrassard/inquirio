@@ -122,7 +122,10 @@
           <version>2.2</version>
           <configuration>
               <path>/</path>
-              <port>7015</port>
+              <port>0</port>
+              <httpsPort>7015</httpsPort>
+              <keystoreFile>${basedir}/keystore.jks</keystoreFile>
+              <keystorePass>password</keystorePass>
           </configuration>
         </plugin>
           <plugin>
