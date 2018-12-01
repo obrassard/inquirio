@@ -6,6 +6,7 @@ package ca.obrassard.jooqentities;
 
 import ca.obrassard.jooqentities.tables.Lostitems;
 import ca.obrassard.jooqentities.tables.Notification;
+import ca.obrassard.jooqentities.tables.Tokens;
 import ca.obrassard.jooqentities.tables.Users;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Inquirio extends SchemaImpl {
 
-    private static final long serialVersionUID = 1399301714;
+    private static final long serialVersionUID = -1535462513;
 
     /**
      * The reference instance of <code>inquirio</code>
@@ -48,6 +49,11 @@ public class Inquirio extends SchemaImpl {
      * The table <code>inquirio.Notification</code>.
      */
     public final Notification NOTIFICATION = ca.obrassard.jooqentities.tables.Notification.NOTIFICATION;
+
+    /**
+     * The table <code>inquirio.Tokens</code>.
+     */
+    public final Tokens TOKENS = ca.obrassard.jooqentities.tables.Tokens.TOKENS;
 
     /**
      * The table <code>inquirio.Users</code>.
@@ -81,6 +87,7 @@ public class Inquirio extends SchemaImpl {
         return Arrays.<Table<?>>asList(
             Lostitems.LOSTITEMS,
             Notification.NOTIFICATION,
+            Tokens.TOKENS,
             Users.USERS);
     }
 }

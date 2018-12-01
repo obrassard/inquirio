@@ -6,6 +6,7 @@ package ca.obrassard.jooqentities;
 
 import ca.obrassard.jooqentities.tables.Lostitems;
 import ca.obrassard.jooqentities.tables.Notification;
+import ca.obrassard.jooqentities.tables.Tokens;
 import ca.obrassard.jooqentities.tables.Users;
 
 import javax.annotation.Generated;
@@ -38,6 +39,8 @@ public class Indexes {
     public static final Index NOTIFICATION_FK_LOSTITEM_ITEMID = Indexes0.NOTIFICATION_FK_LOSTITEM_ITEMID;
     public static final Index NOTIFICATION_FK_USERS_SENDERID = Indexes0.NOTIFICATION_FK_USERS_SENDERID;
     public static final Index NOTIFICATION_PRIMARY = Indexes0.NOTIFICATION_PRIMARY;
+    public static final Index TOKENS_FK_TOKEN_USER_ID = Indexes0.TOKENS_FK_TOKEN_USER_ID;
+    public static final Index TOKENS_PRIMARY = Indexes0.TOKENS_PRIMARY;
     public static final Index USERS_PRIMARY = Indexes0.USERS_PRIMARY;
 
     // -------------------------------------------------------------------------
@@ -51,6 +54,8 @@ public class Indexes {
         public static Index NOTIFICATION_FK_LOSTITEM_ITEMID = Internal.createIndex("FK_LostItem_ItemID", Notification.NOTIFICATION, new OrderField[] { Notification.NOTIFICATION.ITEMID }, false);
         public static Index NOTIFICATION_FK_USERS_SENDERID = Internal.createIndex("FK_Users_SenderId", Notification.NOTIFICATION, new OrderField[] { Notification.NOTIFICATION.SENDERID }, false);
         public static Index NOTIFICATION_PRIMARY = Internal.createIndex("PRIMARY", Notification.NOTIFICATION, new OrderField[] { Notification.NOTIFICATION.ID }, true);
+        public static Index TOKENS_FK_TOKEN_USER_ID = Internal.createIndex("FK_Token_User_Id", Tokens.TOKENS, new OrderField[] { Tokens.TOKENS.USERID }, false);
+        public static Index TOKENS_PRIMARY = Internal.createIndex("PRIMARY", Tokens.TOKENS, new OrderField[] { Tokens.TOKENS.TOKENID }, true);
         public static Index USERS_PRIMARY = Internal.createIndex("PRIMARY", Users.USERS, new OrderField[] { Users.USERS.ID }, true);
     }
 }

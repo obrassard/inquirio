@@ -6,6 +6,7 @@ package ca.obrassard.jooqentities;
 
 import ca.obrassard.jooqentities.tables.Lostitems;
 import ca.obrassard.jooqentities.tables.Notification;
+import ca.obrassard.jooqentities.tables.Tokens;
 import ca.obrassard.jooqentities.tables.Users;
 
 import javax.annotation.Generated;
@@ -33,6 +34,11 @@ public class Tables {
      * The table <code>inquirio.Notification</code>.
      */
     public static final Notification NOTIFICATION = ca.obrassard.jooqentities.tables.Notification.NOTIFICATION;
+
+    /**
+     * The table <code>inquirio.Tokens</code>.
+     */
+    public static final Tokens TOKENS = ca.obrassard.jooqentities.tables.Tokens.TOKENS;
 
     /**
      * The table <code>inquirio.Users</code>.
