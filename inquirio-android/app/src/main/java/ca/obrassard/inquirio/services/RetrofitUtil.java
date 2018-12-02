@@ -35,16 +35,16 @@ import retrofit2.mock.MockRetrofit;
 import retrofit2.mock.NetworkBehavior;
 
 public class RetrofitUtil {
-    public static Retrofit retrofit;
+    private static Retrofit retrofit;
     public static InquirioService get(){
         if (retrofit == null){
             retrofit = new Retrofit.Builder()
-//                .baseUrl("https://5a5.di.college-em.info:7015/")
-                    .baseUrl("https://10.0.2.2:7015/")
-                    .addConverterFactory(buildGsonConverter())
-                    .client(getClient())
+                .baseUrl("https://5a5.di.college-em.info:7015/")
+//                    .baseUrl("https://10.0.2.2:7015/")
+                .addConverterFactory(buildGsonConverter())
+                .client(getClient())
 //                .addConverterFactory(ScalarsConverterFactory.create())
-                    .build();
+                .build();
         }
         return  retrofit.create(InquirioService.class);
     }
