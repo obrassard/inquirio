@@ -91,7 +91,7 @@ public class AccountActivity extends AppCompatActivity
         });
 
         beginLoading();
-        service.getUserDetail(LoggedUser.data.userID, LoggedUser.token).enqueue(new Callback<User>() {
+        service.getUserDetail(LoggedUser.data.userID).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 endLoading();
@@ -115,31 +115,7 @@ public class AccountActivity extends AppCompatActivity
     }
 
     private void logout (){
-        beginLoading();
-        service.logout(LoggedUser.data.userID).enqueue(new Callback<LogoutResponse>() {
-
-            @Override
-            public void onResponse(Call<LogoutResponse> call, Response<LogoutResponse> response) {
-                endLoading();
-                if (!response.isSuccessful()) {
-                    ErrorUtils.showExceptionError(AccountActivity.this, response.errorBody());
-                    return;
-                }
-                LogoutResponse lr = response.body();
-                if (lr.success){
-                    DrawerUtils.logout(AccountActivity.this);
-                } else {
-                    Toast.makeText(AccountActivity.this, lr.message, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LogoutResponse> call, Throwable t) {
-                endLoading();
-                ErrorUtils.showGenServError(AccountActivity.this);
-            }
-        });
-
+        DrawerUtils.logout(this);
     }
 
     //region [Evennement du tirroir]
@@ -179,5 +155,12 @@ public class AccountActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        endLoading();
+    }
+
     //endregion
 }

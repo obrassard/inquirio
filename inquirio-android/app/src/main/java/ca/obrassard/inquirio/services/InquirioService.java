@@ -48,14 +48,12 @@ public interface InquirioService {
     Call<LoginResponse> signup(@Body SignupRequest userInfos);
 
     /**
-     * Effectue une déconnexion de l'utlisateur spécifié
-     *
-     * @param token token de l'utilisateur à déconnecter
+     * Effectue une déconnexion de l'utlisateur
      * @return LogoutResponse
      */
     @GET
     ("api/logout")
-    Call<LogoutResponse> logout(@Header("token") int token);
+    Call<LogoutResponse> logout();
 
     /**
      * Obtiens une liste des items perdus à proximité de l'emplacement
@@ -67,7 +65,7 @@ public interface InquirioService {
 
     @POST
     ("api/items/near")
-    Call<List<LostItemSummary>> getNearLostItems(@Body LocationRequest currentLocation, @Header("token") int token);
+    Call<List<LostItemSummary>> getNearLostItems(@Body LocationRequest currentLocation);
 
     /**
      * Obtiens les details d'un utilisateur
@@ -77,7 +75,7 @@ public interface InquirioService {
      */
     @GET
     ("api/users/{id}")
-    Call<User> getUserDetail(@Path("id") int userID, @Header("token") int token);
+    Call<User> getUserDetail(@Path("id") int userID);
 
     /**
      * Ajoute un nouvel item perdu
@@ -87,7 +85,7 @@ public interface InquirioService {
      */
     @POST
     ("api/items")
-    Call<Integer> addNewItem(@Body LostItemCreationRequest item, @Header("token") int token);
+    Call<Integer> addNewItem(@Body LostItemCreationRequest item);
 
     /**
      * Obtiens les details d'un item
@@ -97,7 +95,7 @@ public interface InquirioService {
      */
     @GET
     ("api/items/{id}")
-    Call<LostItem> getItemDetail(@Path("id") int itemID, @Header("token") int token);
+    Call<LostItem> getItemDetail(@Path("id") int itemID);
 
     /**
      * Obtiens la location (lat + lng) d'un item
@@ -106,7 +104,7 @@ public interface InquirioService {
      */
     @GET
     ("api/items/{id}/location")
-    Call<Location> getItemLocation(@Path("id") int itemID, @Header("token") int token);
+    Call<Location> getItemLocation(@Path("id") int itemID);
 
     /**
      * Supprime un item
@@ -115,7 +113,7 @@ public interface InquirioService {
      */
     @DELETE
     ("api/items/{id}")
-    Call<RequestResult> deleteItem(@Path("id") int itemID, @Header("token") int token);
+    Call<RequestResult> deleteItem(@Path("id") int itemID);
 
     /**
      * Obtiens le nom d'un item
@@ -125,7 +123,7 @@ public interface InquirioService {
      */
     @GET
     ("api/items/{id}/title")
-    Call<StringWrapper> getItemName(@Path("id") int itemID, @Header("token") int token);
+    Call<StringWrapper> getItemName(@Path("id") int itemID);
 
     /**
      * Permet d'envoyer une requete pour signifier
@@ -137,7 +135,7 @@ public interface InquirioService {
 
     @POST
     ("api/notifications")
-    Call<RequestResult> sendFoundRequest(@Body FoundRequest request, @Header("token") int token);
+    Call<RequestResult> sendFoundRequest(@Body FoundRequest request);
 
     /**
      * Obtien une liste sommarisée des items
@@ -149,7 +147,7 @@ public interface InquirioService {
 
     @GET
     ("api/users/{id}/lostitems")
-    Call<List<LostItemSummary>> getLostItemsByOwner(@Path("id") int userID, @Header("token") int token);
+    Call<List<LostItemSummary>> getLostItemsByOwner(@Path("id") int userID);
 
     /**
      * Obtien une liste sommarisée des items
@@ -160,7 +158,7 @@ public interface InquirioService {
      */
     @GET
     ("api/users/{id}/founditems")
-    Call<List<FoundItemSummary>> getFoundItemsByOwner(@Path("id") int userID, @Header("token") int token);
+    Call<List<FoundItemSummary>> getFoundItemsByOwner(@Path("id") int userID);
 
     /**
      * Obtiens une liste sommarisée de notifications
@@ -171,7 +169,7 @@ public interface InquirioService {
      */
     @GET
     ("api/users/{id}/notifications")
-    Call<List<NotificationSummary>> getPotentiallyFoundItems(@Path("id") int userID, @Header("token") int token);
+    Call<List<NotificationSummary>> getPotentiallyFoundItems(@Path("id") int userID);
 
     /**
      * Obtiens les details d'une notification
@@ -182,7 +180,7 @@ public interface InquirioService {
      */
     @GET
     ("api/notifications/{id}")
-    Call<Notification> getNotificationDetail(@Path("id") int notificationID, @Header("token") int token);
+    Call<Notification> getNotificationDetail(@Path("id") int notificationID);
 
     /**
      * Défini une notification d'objet potentillement trouvé
@@ -194,7 +192,7 @@ public interface InquirioService {
 
     @GET
     ("api/notifications/{id}/deny")
-    Call<RequestResult> denyCandidateNotification(@Path("id") int notificationID, @Header("token") int token);
+    Call<RequestResult> denyCandidateNotification(@Path("id") int notificationID);
 
     /**
      * Défini l'objet candidat comme accepté
@@ -208,7 +206,7 @@ public interface InquirioService {
 
     @GET
     ("api/notifications/{id}/accept")
-    Call<FinderContactDetail> acceptCandidateNotification(@Path("id") int notificationID, @Header("token") int token);
+    Call<FinderContactDetail> acceptCandidateNotification(@Path("id") int notificationID);
 
     /**
      * Obtiens les details de contact de l'utlisateur
@@ -220,6 +218,6 @@ public interface InquirioService {
 
     @GET
     ("api/notifications/{id}/contact")
-    Call<FinderContactDetail> getFinderContactDetail(@Path("id") int notificationID, @Header("token") int token);
+    Call<FinderContactDetail> getFinderContactDetail(@Path("id") int notificationID);
 
 }

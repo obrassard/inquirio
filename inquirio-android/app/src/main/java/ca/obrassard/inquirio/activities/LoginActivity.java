@@ -97,10 +97,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (loginResponse.result){
                     LoggedUser.data = loginResponse;
-                    //TODO : RÉcupérer le token dans le loginresponse ici
-                    LoggedUser.token = loginResponse.userID;
-                    ///////////
-
                     Intent intent = new Intent(LoginActivity.this.getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     endLoading();
@@ -117,10 +113,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 endLoading();
                 ErrorUtils.showGenServError(LoginActivity.this);
-                }
+            }
         });
-
-
-
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        endLoading();
     }
 }

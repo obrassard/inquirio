@@ -79,7 +79,6 @@ public class ItemsDetailActivity extends AppCompatActivity
         }
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //region [Initialisation des éléments de navigation]
@@ -134,7 +133,7 @@ public class ItemsDetailActivity extends AppCompatActivity
         //Affichage des details de l'item
         itemId = (int)getIntent().getLongExtra("item.id",0);
         beginLoading();
-        service.getItemDetail(itemId, LoggedUser.token).enqueue(new Callback<LostItem>() {
+        service.getItemDetail(itemId).enqueue(new Callback<LostItem>() {
             @Override
             public void onResponse(Call<LostItem> call, Response<LostItem> response) {
                 endLoading();
@@ -192,7 +191,7 @@ public class ItemsDetailActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
             beginLoading();
-            service.deleteItem(itemId, LoggedUser.token).enqueue(new Callback<RequestResult>() {
+            service.deleteItem(itemId).enqueue(new Callback<RequestResult>() {
                 @Override
                 public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
                     endLoading();
@@ -232,7 +231,7 @@ public class ItemsDetailActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 beginLoading();
-                service.getFinderContactDetail(itemId,LoggedUser.token).enqueue(new Callback<FinderContactDetail>() {
+                service.getFinderContactDetail(itemId).enqueue(new Callback<FinderContactDetail>() {
                     @Override
                     public void onResponse(Call<FinderContactDetail> call, Response<FinderContactDetail> response) {
                         endLoading();
@@ -258,7 +257,7 @@ public class ItemsDetailActivity extends AppCompatActivity
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         beginLoading();
-        service.getItemLocation(itemId, LoggedUser.token).enqueue(new Callback<Location>() {
+        service.getItemLocation(itemId).enqueue(new Callback<Location>() {
             @Override
             public void onResponse(Call<Location> call, Response<Location> response) {
                 endLoading();
@@ -332,6 +331,7 @@ public class ItemsDetailActivity extends AppCompatActivity
     }
     @Override
     protected void onDestroy() {
+        endLoading();
         mapView.onDestroy();
         super.onDestroy();
     }
@@ -364,4 +364,5 @@ public class ItemsDetailActivity extends AppCompatActivity
         }
     }
     //endregion
+
 }

@@ -123,7 +123,7 @@ public class NotificationsActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v) {
                     beginLoading();
-                    service.denyCandidateNotification((int)selectedNotifId, LoggedUser.token).enqueue(new Callback<RequestResult>() {
+                    service.denyCandidateNotification((int)selectedNotifId).enqueue(new Callback<RequestResult>() {
                         @Override
                         public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
                             endLoading();
@@ -152,7 +152,7 @@ public class NotificationsActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v) {
                     beginLoading();
-                    service.acceptCandidateNotification((int) selectedNotifId, LoggedUser.token).enqueue(new Callback<FinderContactDetail>() {
+                    service.acceptCandidateNotification((int) selectedNotifId).enqueue(new Callback<FinderContactDetail>() {
                         @Override
                         public void onResponse(Call<FinderContactDetail> call, Response<FinderContactDetail> response) {
                             endLoading();
@@ -201,7 +201,7 @@ public class NotificationsActivity extends AppCompatActivity
                     landscapeDetails.setVisibility(View.VISIBLE);
                     landscapeEmpty.setVisibility(View.GONE);
                     beginLoading();
-                    service.getNotificationDetail((int)selectedNotifId, LoggedUser.token).enqueue(new Callback<Notification>() {
+                    service.getNotificationDetail((int)selectedNotifId).enqueue(new Callback<Notification>() {
                         @Override
                         public void onResponse(Call<Notification> call, Response<Notification> response) {
                             endLoading();
@@ -238,7 +238,7 @@ public class NotificationsActivity extends AppCompatActivity
 
     public void refreshlist(){
         beginLoading();
-        service.getPotentiallyFoundItems(LoggedUser.data.userID, LoggedUser.token).enqueue(new Callback<List<NotificationSummary>>() {
+        service.getPotentiallyFoundItems(LoggedUser.data.userID).enqueue(new Callback<List<NotificationSummary>>() {
             @Override
             public void onResponse(Call<List<NotificationSummary>> call, Response<List<NotificationSummary>> response) {
                 endLoading();
@@ -301,4 +301,10 @@ public class NotificationsActivity extends AppCompatActivity
         }
     }
     //endregion
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        endLoading();
+    }
 }

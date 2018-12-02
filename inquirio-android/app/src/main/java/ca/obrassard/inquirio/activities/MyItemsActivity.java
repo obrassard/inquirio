@@ -122,7 +122,7 @@ implements NavigationView.OnNavigationItemSelectedListener {
     protected void onResume() {
         super.onResume();
         beginLoading();
-        service.getLostItemsByOwner(LoggedUser.data.userID, LoggedUser.token).enqueue(new Callback<List<LostItemSummary>>() {
+        service.getLostItemsByOwner(LoggedUser.data.userID).enqueue(new Callback<List<LostItemSummary>>() {
             @Override
             public void onResponse(Call<List<LostItemSummary>> call, Response<List<LostItemSummary>> response) {
                 //endLoading();
@@ -145,7 +145,7 @@ implements NavigationView.OnNavigationItemSelectedListener {
         });
 
 
-        service.getFoundItemsByOwner(LoggedUser.data.userID, LoggedUser.token).enqueue(new Callback<List<FoundItemSummary>>() {
+        service.getFoundItemsByOwner(LoggedUser.data.userID).enqueue(new Callback<List<FoundItemSummary>>() {
             @Override
             public void onResponse(Call<List<FoundItemSummary>> call, Response<List<FoundItemSummary>> response) {
                 endLoading();
@@ -195,4 +195,10 @@ implements NavigationView.OnNavigationItemSelectedListener {
         }
     }
     //endregion
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        endLoading();
+    }
 }

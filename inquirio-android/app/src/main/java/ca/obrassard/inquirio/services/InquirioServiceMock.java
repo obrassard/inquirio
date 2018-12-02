@@ -77,17 +77,15 @@ public class InquirioServiceMock implements InquirioService {
     }
 
     /**
-     * Effectue une déconnexion de l'utlisateur spécifié
-     *
-     * @param userID Id de l'utilisateur à déconnecter
+     * Effectue une déconnexion de l'utlisateur connecté
      * @return LogoutResponse
      */
     @Override
-    public Call<LogoutResponse> logout(int userID)  {
+    public Call<LogoutResponse> logout()  {
         LogoutResponse lr = new LogoutResponse();
         lr.message="Ok";
         lr.success = true;
-        return delegate.returningResponse(lr).logout(userID);
+        return delegate.returningResponse(lr).logout();
     }
 
     /**
@@ -98,7 +96,7 @@ public class InquirioServiceMock implements InquirioService {
      * @return Une liste sommaire des items perdus à proximité
      */
     @Override
-    public Call<List<LostItemSummary>> getNearLostItems(LocationRequest currentLocation, int token)  {
+    public Call<List<LostItemSummary>> getNearLostItems(LocationRequest currentLocation)  {
         ArrayList<LostItemSummary> Lostitems = new ArrayList<>();
         LostItemSummary lis1 = new LostItemSummary();
         lis1.found = false;
@@ -122,7 +120,7 @@ public class InquirioServiceMock implements InquirioService {
         Lostitems.add(lis2);
         Lostitems.add(lis3);
 
-        return delegate.returningResponse(Lostitems).getNearLostItems(currentLocation,token);
+        return delegate.returningResponse(Lostitems).getNearLostItems(currentLocation);
     }
 
     /**
@@ -132,7 +130,7 @@ public class InquirioServiceMock implements InquirioService {
      * @return un objet User
      */
     @Override
-    public Call<User> getUserDetail(int userID, int token)  {
+    public Call<User> getUserDetail(int userID)  {
         User u = new User();
         u.Email = "tester.roger@obrassard.ca";
         u.Name = "Roger Tester";
@@ -141,7 +139,7 @@ public class InquirioServiceMock implements InquirioService {
         u.Rating = 3;
         u.Telephone = "5145782504";
 
-        return delegate.returningResponse(u).getUserDetail(userID, token);
+        return delegate.returningResponse(u).getUserDetail(userID);
     }
 
     /**
@@ -151,8 +149,8 @@ public class InquirioServiceMock implements InquirioService {
      * @return L'ID de l'item ajouté ou -1
      */
     @Override
-    public Call<Integer> addNewItem(LostItemCreationRequest item, int token)  {
-        return delegate.returningResponse(2L).addNewItem(item, token);
+    public Call<Integer> addNewItem(LostItemCreationRequest item)  {
+        return delegate.returningResponse(2L).addNewItem(item);
     }
 
 
@@ -163,7 +161,7 @@ public class InquirioServiceMock implements InquirioService {
      * @return Les details de l'item
      */
     @Override
-    public Call<LostItem> getItemDetail(int itemID, int token)  {
+    public Call<LostItem> getItemDetail(int itemID)  {
         LostItem li = new LostItem();
         li.date = new Date();
         li.description = "Il a un étuis rouge et coute très très cher...";
@@ -173,7 +171,7 @@ public class InquirioServiceMock implements InquirioService {
         li.reward = 200;
         li.title = "iPhone XS [Max]";
 
-        return delegate.returningResponse(li).getItemDetail(itemID, token);
+        return delegate.returningResponse(li).getItemDetail(itemID);
     }
 
     /**
@@ -182,12 +180,12 @@ public class InquirioServiceMock implements InquirioService {
      * @return L'emplacement de l'item
      */
     @Override
-    public Call<Location> getItemLocation(int itemID, int token)  {
+    public Call<Location> getItemLocation(int itemID)  {
         Location location = new Location();
         location.Lattitude = 45.536286;
         location.Longittude = -73.493004;
         location.Name = "Cégep Édouard-Montpetit";
-        return  delegate.returningResponse(location).getItemLocation(itemID,token);
+        return  delegate.returningResponse(location).getItemLocation(itemID);
     }
 
     /**
@@ -197,8 +195,8 @@ public class InquirioServiceMock implements InquirioService {
      * @return True si la suppression s'est bien déroulée
      */
     @Override
-    public Call<RequestResult> deleteItem(int itemID, int token)  {
-        return delegate.returningResponse(new RequestResult(true)).deleteItem(itemID,token);
+    public Call<RequestResult> deleteItem(int itemID)  {
+        return delegate.returningResponse(new RequestResult(true)).deleteItem(itemID);
     }
 
     /**
@@ -209,7 +207,7 @@ public class InquirioServiceMock implements InquirioService {
      * @return Une liste de LostItemSummary
      */
     @Override
-    public Call<List<LostItemSummary>> getLostItemsByOwner(int userID, int token)  {
+    public Call<List<LostItemSummary>> getLostItemsByOwner(int userID)  {
         ArrayList<LostItemSummary> Lostitems = new ArrayList<>();
         LostItemSummary lis1 = new LostItemSummary();
         lis1.found = false;
@@ -227,7 +225,7 @@ public class InquirioServiceMock implements InquirioService {
         Lostitems.add(lis1);
         Lostitems.add(lis2);
 
-        return delegate.returningResponse(Lostitems).getLostItemsByOwner(userID, token);
+        return delegate.returningResponse(Lostitems).getLostItemsByOwner(userID);
     }
 
     /**
@@ -238,7 +236,7 @@ public class InquirioServiceMock implements InquirioService {
      * @return Une liste de LostItemSummary
      */
     @Override
-    public Call<List<FoundItemSummary>> getFoundItemsByOwner(int userID, int token)  {
+    public Call<List<FoundItemSummary>> getFoundItemsByOwner(int userID)  {
         ArrayList<FoundItemSummary> FoundItem = new ArrayList<>();
 
         FoundItemSummary lis3 = new FoundItemSummary();
@@ -249,7 +247,7 @@ public class InquirioServiceMock implements InquirioService {
 
         FoundItem.add(lis3);
 
-        return delegate.returningResponse(FoundItem).getFoundItemsByOwner(userID,token);
+        return delegate.returningResponse(FoundItem).getFoundItemsByOwner(userID);
     }
 
     /**
@@ -259,7 +257,7 @@ public class InquirioServiceMock implements InquirioService {
      * @return Une liste de NotificationSummary
      */
     @Override
-    public Call<List<NotificationSummary>> getPotentiallyFoundItems(int userID, int token)  {
+    public Call<List<NotificationSummary>> getPotentiallyFoundItems(int userID)  {
         ArrayList<NotificationSummary> notificationSummaries = new ArrayList<>();
         NotificationSummary n1 = new NotificationSummary();
         NotificationSummary n2 = new NotificationSummary();
@@ -276,7 +274,7 @@ public class InquirioServiceMock implements InquirioService {
         notificationSummaries.add(n1);
         notificationSummaries.add(n2);
 
-        return delegate.returningResponse(notificationSummaries).getPotentiallyFoundItems(userID,token);
+        return delegate.returningResponse(notificationSummaries).getPotentiallyFoundItems(userID);
     }
 
     /**
@@ -287,7 +285,7 @@ public class InquirioServiceMock implements InquirioService {
      * @return Details de la Notification
      */
     @Override
-    public Call<Notification> getNotificationDetail(int notificationID, int token)  {
+    public Call<Notification> getNotificationDetail(int notificationID)  {
         Notification notif = new Notification();
         notif.date = new Date();
         notif.id = 1;
@@ -295,7 +293,7 @@ public class InquirioServiceMock implements InquirioService {
         notif.message = "Je l'ai trouvé près de la garre !!! Mais je garde le colier";
         notif.senderName = "Jean Pierre";
         notif.senderRating = 2.5;
-        return delegate.returningResponse(notif).getNotificationDetail(notificationID, token);
+        return delegate.returningResponse(notif).getNotificationDetail(notificationID);
     }
 
     /**
@@ -306,8 +304,8 @@ public class InquirioServiceMock implements InquirioService {
      * @return True si la requête s'est bien déroulée
      */
     @Override
-    public Call<RequestResult> denyCandidateNotification(int notificationID, int token)  {
-        return delegate.returningResponse(true).denyCandidateNotification(notificationID, token);
+    public Call<RequestResult> denyCandidateNotification(int notificationID)  {
+        return delegate.returningResponse(true).denyCandidateNotification(notificationID);
     }
 
     /**
@@ -320,9 +318,9 @@ public class InquirioServiceMock implements InquirioService {
      * @return Les informations de contact du 'Finder'
      */
     @Override
-    public Call<FinderContactDetail> acceptCandidateNotification(int notificationID, int token)  {
+    public Call<FinderContactDetail> acceptCandidateNotification(int notificationID)  {
         FinderContactDetail fcd = new FinderContactDetail("5146514567");
-        return delegate.returningResponse(fcd).acceptCandidateNotification(notificationID,token);
+        return delegate.returningResponse(fcd).acceptCandidateNotification(notificationID);
     }
 
     /**
@@ -333,10 +331,10 @@ public class InquirioServiceMock implements InquirioService {
      * @return FinderContactDetail
      */
     @Override
-    public Call<FinderContactDetail> getFinderContactDetail(int notificationID, int token)  {
+    public Call<FinderContactDetail> getFinderContactDetail(int notificationID)  {
         FinderContactDetail fcd = new FinderContactDetail("5146514567");
         fcd.phoneNumber = "5146514567";
-        return delegate.returningResponse(fcd).acceptCandidateNotification(notificationID, token);
+        return delegate.returningResponse(fcd).acceptCandidateNotification(notificationID);
     }
 
     /**
@@ -345,8 +343,8 @@ public class InquirioServiceMock implements InquirioService {
      * @return nom de l'item
      */
     @Override
-    public Call<StringWrapper> getItemName(int itemID, int token)  {
-        return delegate.returningResponse("Iphone XS").getItemName(itemID,token);
+    public Call<StringWrapper> getItemName(int itemID)  {
+        return delegate.returningResponse("Iphone XS").getItemName(itemID);
     }
 
     /**
@@ -356,8 +354,8 @@ public class InquirioServiceMock implements InquirioService {
      * @return True si tout s'est déroulé correctement
      */
     @Override
-    public Call<RequestResult> sendFoundRequest(FoundRequest request, int token)  {
-        return delegate.returningResponse(new RequestResult(true)).sendFoundRequest(request,token);
+    public Call<RequestResult> sendFoundRequest(FoundRequest request)  {
+        return delegate.returningResponse(new RequestResult(true)).sendFoundRequest(request);
     }
 
 }

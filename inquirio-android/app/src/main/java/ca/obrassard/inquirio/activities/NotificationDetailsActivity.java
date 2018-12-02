@@ -63,7 +63,7 @@ public class NotificationDetailsActivity extends AppCompatActivity
 
         boolean deviceIsLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
         if (deviceIsLandscape){
-            startActivity(new Intent(NotificationDetailsActivity.this, MainActivity.class ));
+            startActivity(new Intent(NotificationDetailsActivity.this, NotificationsActivity.class ));
             finish();
         }
 
@@ -97,7 +97,7 @@ public class NotificationDetailsActivity extends AppCompatActivity
         final int notifID = (int)getIntent().getLongExtra("notification.id",1);
 
         beginLoading();
-        service.getNotificationDetail(notifID, LoggedUser.token).enqueue(new Callback<Notification>() {
+        service.getNotificationDetail(notifID).enqueue(new Callback<Notification>() {
             @Override
             public void onResponse(Call<Notification> call, Response<Notification> response) {
                 endLoading();
@@ -131,7 +131,7 @@ public class NotificationDetailsActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 beginLoading();
-                service.denyCandidateNotification(notifID, LoggedUser.token).enqueue(new Callback<RequestResult>() {
+                service.denyCandidateNotification(notifID).enqueue(new Callback<RequestResult>() {
                     @Override
                     public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
                         endLoading();
@@ -157,7 +157,7 @@ public class NotificationDetailsActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 beginLoading();
-                service.acceptCandidateNotification((int) notifID, LoggedUser.token).enqueue(new Callback<FinderContactDetail>() {
+                service.acceptCandidateNotification((int) notifID).enqueue(new Callback<FinderContactDetail>() {
                     @Override
                     public void onResponse(Call<FinderContactDetail> call, Response<FinderContactDetail> response) {
                         endLoading();
@@ -218,4 +218,10 @@ public class NotificationDetailsActivity extends AppCompatActivity
         }
     }
     //endregion
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        endLoading();
+    }
 }

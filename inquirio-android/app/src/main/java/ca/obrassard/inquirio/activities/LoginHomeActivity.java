@@ -96,4 +96,10 @@ public class LoginHomeActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        endLoading();
+    }
 }

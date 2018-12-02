@@ -129,7 +129,7 @@ public class AddItemActivity extends AppCompatActivity
                     item.locationName = selectedplace.getName().toString();
 
                     beginLoading();
-                    service.addNewItem(item, LoggedUser.token).enqueue(new Callback<Integer>() {
+                    service.addNewItem(item).enqueue(new Callback<Integer>() {
                         @Override
                         public void onResponse(Call<Integer> call, Response<Integer> response) {
                             endLoading();
@@ -205,4 +205,10 @@ public class AddItemActivity extends AppCompatActivity
         }
     }
     //endregion
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        endLoading();
+    }
 }

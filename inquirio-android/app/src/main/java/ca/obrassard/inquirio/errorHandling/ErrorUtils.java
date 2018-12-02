@@ -1,7 +1,9 @@
 package ca.obrassard.inquirio.errorHandling;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -45,6 +47,12 @@ public class ErrorUtils {
                 key = key + "_" + ex.targetAttribute;
             }
             int ressourceid = a.getResources().getIdentifier(key, "string", a.getPackageName());
+            if (key.equals("AccesDenied")){
+                Intent i = new Intent(a,LoginHomeActivity.class);
+                a.startActivity(i);
+                Toast.makeText(a, "Vous avez été déconnecté", Toast.LENGTH_LONG).show();
+                a.finish();
+            }
             Snackbar.make(a.findViewById(android.R.id.content), ressourceid,Snackbar.LENGTH_LONG).show();
         } catch (Exception e) {
             System.err.println("ERROR :" + e.getMessage());

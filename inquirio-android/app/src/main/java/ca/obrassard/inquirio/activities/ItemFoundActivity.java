@@ -97,7 +97,7 @@ public class ItemFoundActivity extends AppCompatActivity
 
         final int itemID = getIntent().getIntExtra("item.id",0);
         beginLoading();
-        service.getItemName(itemID, LoggedUser.token).enqueue(new Callback<StringWrapper>() {
+        service.getItemName(itemID).enqueue(new Callback<StringWrapper>() {
             @Override
             public void onResponse(Call<StringWrapper> call, Response<StringWrapper> response) {
                 endLoading();
@@ -154,7 +154,7 @@ public class ItemFoundActivity extends AppCompatActivity
                 request.image = image;
 
                 beginLoading();
-                service.sendFoundRequest(request, LoggedUser.token).enqueue(new Callback<RequestResult>() {
+                service.sendFoundRequest(request).enqueue(new Callback<RequestResult>() {
                     @Override
                     public void onResponse(Call<RequestResult> call, Response<RequestResult> response) {
                         endLoading();
@@ -272,4 +272,10 @@ public class ItemFoundActivity extends AppCompatActivity
         }
     }
     //endregion
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        endLoading();
+    }
 }

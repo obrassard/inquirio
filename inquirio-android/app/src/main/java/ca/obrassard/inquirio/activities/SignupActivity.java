@@ -100,15 +100,12 @@ public class SignupActivity extends AppCompatActivity {
 
                 if (loginResponse.result){
                     LoggedUser.data = loginResponse;
-                    LoggedUser.token = loginResponse.userID; //TODO TOKEN
-
                     Intent intent = new Intent(SignupActivity.this.getApplicationContext(), MainActivity.class);
                     intent.putExtra("firstconnexion",loginResponse.isFirstLogin);
                     startActivity(intent);
                     endLoading();
                     SignupActivity.this.finishAffinity();
                     ActivityCompat.finishAffinity(SignupActivity.this);
-
                 }
                 endLoading();
             }
@@ -119,6 +116,11 @@ public class SignupActivity extends AppCompatActivity {
                 ErrorUtils.showGenServError(SignupActivity.this);
             }
         });
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        endLoading();
     }
 }
 
