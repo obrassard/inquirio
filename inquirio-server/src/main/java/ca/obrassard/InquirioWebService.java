@@ -63,7 +63,7 @@ public class InquirioWebService {
 
     private NewCookie DestroyToken(Cookie authCookie){
         if (authCookie != null){
-            context.deleteFrom(TOKENS).where(TOKENS.TOKEN.eq(authCookie.getValue()));
+            context.deleteFrom(TOKENS).where(TOKENS.TOKEN.eq(authCookie.getValue())).execute();
         }
         return new NewCookie(COOKEY,null,"/",null,null,0,true);
     }
